@@ -1,0 +1,218 @@
+[
+  {
+    "stage": "pre-item concept review",
+    "status": "REJECTED_CONCEPT",
+    "concept": "SDK subagents cannot nest",
+    "reason": "Current first-party subagent documentation explicitly permits nesting; older universal claim is stale. No item ID assigned."
+  },
+  {
+    "stage": "pre-item concept review",
+    "status": "REJECTED_CONCEPT",
+    "concept": "Only Agent SDK supports customer-controlled sandbox",
+    "reason": "Current Managed Agents overview supports self-hosted sandboxes, so ownership alone does not discriminate. No item ID assigned."
+  },
+  {
+    "stage": "pre-item concept review",
+    "status": "REJECTED_CONCEPT",
+    "concept": "Repeated context-volume delegation scenario",
+    "reason": "Legacy Q8 and Q50 already test the same distinction. New subagent items instead test inherited task context, role instructions, tool scope, definitions and identity. No item ID assigned."
+  },
+  {
+    "stage": "self-adversarial review",
+    "status": "REVISED",
+    "id": "AW-023",
+    "reason": "Explicitly excluded initial events because current Managed Agents supports starting work at session creation."
+  },
+  {
+    "stage": "self-adversarial review",
+    "status": "REVISED",
+    "id": "AW-039",
+    "reason": "Specified successful file rewind to avoid skipped-link/unsafe-path exceptions."
+  },
+  {
+    "stage": "self-adversarial review",
+    "status": "REVISED",
+    "id": "AW-040",
+    "reason": "Specified non-fork subagent so context inheritance is not overgeneralized."
+  },
+  {
+    "stage": "self-adversarial review",
+    "status": "REVIEWED",
+    "ids": [
+      "AW-001",
+      "AW-002",
+      "AW-003",
+      "AW-004",
+      "AW-005",
+      "AW-006",
+      "AW-007",
+      "AW-008",
+      "AW-009",
+      "AW-010",
+      "AW-011",
+      "AW-012",
+      "AW-013",
+      "AW-014",
+      "AW-015",
+      "AW-016",
+      "AW-017",
+      "AW-018",
+      "AW-019",
+      "AW-020",
+      "AW-021",
+      "AW-022",
+      "AW-023",
+      "AW-024",
+      "AW-025",
+      "AW-026",
+      "AW-027",
+      "AW-028",
+      "AW-029",
+      "AW-030",
+      "AW-031",
+      "AW-032",
+      "AW-033",
+      "AW-034",
+      "AW-035",
+      "AW-036",
+      "AW-037",
+      "AW-038",
+      "AW-039",
+      "AW-040",
+      "AW-041",
+      "AW-042",
+      "AW-043",
+      "AW-044",
+      "AW-045",
+      "AW-046",
+      "AW-047",
+      "AW-048",
+      "AW-049"
+    ],
+    "reason": "Each item includes an alternate-answer challenge and per-incorrect-option rationale; no candidate marked approved by drafter."
+  },
+  {
+    "stage": "semantic duplicate review",
+    "status": "REPLACED_DRAFT",
+    "id": "AW-027",
+    "oldConcept": "sdk-result-limit-state-not-success",
+    "newConcept": "sdk-budget-includes-subagent-spend",
+    "reason": "Specific limit outcome interpretation repeated AW-018 result subtype reasoning. Replaced with version-qualified cross-subagent spend scope."
+  },
+  {
+    "stage": "semantic duplicate review",
+    "status": "REPLACED_DRAFT",
+    "id": "AW-037",
+    "oldConcept": "sdk-session-transcript-versus-file-rewind",
+    "newConcept": "sdk-stateless-transcript-write-option",
+    "reason": "Resume-versus-filesystem reasoning was too close to fork/rewind state boundaries. Replaced with no-transcript-write configuration."
+  },
+  {
+    "stage": "distractor review",
+    "status": "REVISED",
+    "id": "AW-016",
+    "reason": "Improved incorrect alternatives to discriminate competing runtime/process models."
+  },
+  {
+    "stage": "central distractor review",
+    "status": "REVISED",
+    "id": "AW-010",
+    "reason": "Replaced weak alternatives with competing engineering mechanisms tied to the stem; answer key unchanged."
+  },
+  {
+    "stage": "central distractor review",
+    "status": "REVISED",
+    "id": "AW-019",
+    "reason": "Replaced weak alternatives with competing engineering mechanisms tied to the stem; answer key unchanged."
+  },
+  {
+    "stage": "central distractor review",
+    "status": "REVISED",
+    "id": "AW-024",
+    "reason": "Replaced weak alternatives with competing engineering mechanisms tied to the stem; answer key unchanged."
+  },
+  {
+    "stage": "central distractor review",
+    "status": "REVISED",
+    "id": "AW-032",
+    "reason": "Replaced weak alternatives with competing engineering mechanisms tied to the stem; answer key unchanged."
+  },
+  {
+    "stage": "central distractor review",
+    "status": "REVISED",
+    "id": "AW-036",
+    "reason": "Replaced weak alternatives with competing engineering mechanisms tied to the stem; answer key unchanged."
+  },
+  {
+    "stage": "central distractor review",
+    "status": "REVISED",
+    "id": "AW-041",
+    "reason": "Replaced weak alternatives with competing engineering mechanisms tied to the stem; answer key unchanged."
+  },
+  {
+    "stage": "central distractor review",
+    "status": "REVISED",
+    "id": "AW-043",
+    "reason": "Replaced weak alternatives with competing engineering mechanisms tied to the stem; answer key unchanged."
+  },
+  {
+    "stage": "central distractor review",
+    "status": "REVISED",
+    "id": "AW-045",
+    "reason": "Replaced weak alternatives with competing engineering mechanisms tied to the stem; answer key unchanged."
+  },
+  {
+    "stage": "central distractor review",
+    "status": "REVISED",
+    "id": "AW-047",
+    "reason": "Replaced weak alternatives with competing engineering mechanisms tied to the stem; answer key unchanged."
+  },
+  {
+    "stage": "central distractor review",
+    "status": "REVISED",
+    "id": "AW-008",
+    "reason": "Replaced weak alternatives with competing engineering mechanisms tied to the stem; answer key unchanged."
+  },
+  {
+    "stage": "cross-bank semantic review",
+    "status": "REPLACED_DRAFT",
+    "id": "AW-008",
+    "oldConcept": "parallel-dependency-critical-path",
+    "newConcept": "routing-classification-bottleneck",
+    "reason": "Same dependency-serialization discriminator as TM006 and AI050; replaced with localized routing-bottleneck diagnosis."
+  },
+  {
+    "stage": "central distractor review",
+    "status": "REVISED",
+    "id": "AW-048",
+    "reason": "Replaced weak alternatives with competing engineering mechanisms tied to the stem; answer key unchanged."
+  },
+  {
+    "stage": "cross-bank semantic review",
+    "status": "REPLACED_DRAFT",
+    "id": "AW-048",
+    "oldConcept": "sdk-context-growth-tool-observations",
+    "newConcept": "subagent-depth-versus-concurrency-controls",
+    "reason": "Broad context-contributors fact risked repeating legacyQ10; replaced with two independent orchestration limits."
+  },
+  {
+    "stage": "independent peer review",
+    "status": "REVISED",
+    "id": "AW-039",
+    "reason": "Successful rewind alone can include skipped links/unsafe paths. Stem now establishes intended regular-file restoration and no skipped paths explicitly."
+  },
+  {
+    "stage": "independent peer review",
+    "status": "REVISED",
+    "id": "AW-049",
+    "reason": "Made same programmatic agents definition an explicit retained prerequisite; question asks for remaining session/agent identifiers."
+  },
+  {
+    "stage": "cross-bank semantic review",
+    "status": "REPLACED_DRAFT",
+    "id": "AW-045",
+    "oldConcept": "agent-ui-completion-evidence-end-to-end",
+    "newConcept": "agent-feature-ledger-criteria-integrity",
+    "reason": "Running-interface completion verification duplicated AI064; replacement tests immutable acceptance criteria versus mutable agent progress status."
+  }
+]

@@ -14,7 +14,7 @@ const MODE_LABEL: Record<string, string> = {
 };
 
 function App() {
-  const { state, screen, isUnfinished, questions, actions } = useExamState();
+  const { state, screen, isUnfinished, questions, rotationNotice, actions } = useExamState();
   const { theme, toggleTheme } = useTheme();
   const [confirmingExit, setConfirmingExit] = useState(false);
 
@@ -26,6 +26,7 @@ function App() {
       theme={theme}
       onToggleTheme={toggleTheme}
     >
+      {rotationNotice && <p role="status">{rotationNotice}</p>}
       {screen === "start" && <StartScreen onStart={actions.startExam} />}
 
       {screen === "exam" && (

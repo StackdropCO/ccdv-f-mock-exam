@@ -1,0 +1,83 @@
+{
+  "seed": 71093,
+  "forms": 1400,
+  "cycles": 200,
+  "formsPerCycle": 7,
+  "quotaFailures": 0,
+  "withinCycleOverlaps": 0,
+  "resetPreviousFormOverlaps": 0,
+  "conceptRepeatForms": 79,
+  "maxConceptRepeats": 2,
+  "multipleResponsePerForm": {
+    "min": 4,
+    "max": 12
+  },
+  "singleAnswerPositions": {
+    "new": {
+      "A": 68,
+      "B": 68,
+      "C": 68,
+      "D": 66,
+      "E": 0
+    },
+    "combined": {
+      "A": 76,
+      "B": 80,
+      "C": 81,
+      "D": 73,
+      "E": 0
+    },
+    "perFormRanges": {
+      "A": {
+        "min": 8,
+        "max": 15
+      },
+      "B": {
+        "min": 9,
+        "max": 15
+      },
+      "C": {
+        "min": 9,
+        "max": 13
+      },
+      "D": {
+        "min": 9,
+        "max": 13
+      }
+    }
+  },
+  "domains": [
+    {
+      "id": "agents-workflows",
+      "quota": 8
+    },
+    {
+      "id": "applications-integration",
+      "quota": 17
+    },
+    {
+      "id": "claude-code",
+      "quota": 2
+    },
+    {
+      "id": "eval-testing-debugging",
+      "quota": 1
+    },
+    {
+      "id": "model-selection-optimization",
+      "quota": 9
+    },
+    {
+      "id": "prompt-context-engineering",
+      "quota": 6
+    },
+    {
+      "id": "security-safety",
+      "quota": 4
+    },
+    {
+      "id": "tools-mcp",
+      "quota": 6
+    }
+  ]
+}

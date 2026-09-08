@@ -2,6 +2,7 @@ import { act, cleanup, renderHook } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import { useExamState } from "../src/hooks/useExamState";
 import { useTheme } from "../src/hooks/useTheme";
+import { HISTORY_STORAGE_KEY } from "../src/lib/questionHistory";
 import { THEME_STORAGE_KEY } from "../src/lib/theme";
 
 beforeEach(() => {
@@ -11,7 +12,7 @@ beforeEach(() => {
 afterEach(() => cleanup());
 
 describe("exam progress is never written to localStorage", () => {
-  it("writes nothing to localStorage across a full start/answer/flag/submit flow", () => {
+  it("writes only completed question history after submission", () => {
     const { result } = renderHook(() => useExamState());
     act(() => result.current.actions.startExam("timed"));
     act(() => result.current.actions.selectSingle(1, "C"));
@@ -19,9 +20,13 @@ describe("exam progress is never written to localStorage", () => {
     act(() => result.current.actions.toggleFlag(4));
     act(() => result.current.actions.next());
     act(() => result.current.actions.goToReview());
+    expect(window.localStorage.length).toBe(0);
     act(() => result.current.actions.submitExam());
 
-    expect(window.localStorage.length).toBe(0);
+    expect(Object.keys(window.localStorage)).toEqual([HISTORY_STORAGE_KEY]);
+    const saved = JSON.parse(window.localStorage.getItem(HISTORY_STORAGE_KEY)!);
+    expect(Object.keys(saved).sort()).toEqual(["bankVersion", "cycle", "lastCompletedFormIds", "usedQuestionIds"]);
+    expect(saved.usedQuestionIds).toHaveLength(53);
   });
 });
 

@@ -1,0 +1,3439 @@
+[
+  {
+    "id": "AI-001",
+    "domain": "applications-integration",
+    "objective": "D2.1",
+    "conceptKey": "requirements-tail-latency",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A Claude support application must return a complete reply within three seconds for at least 95% of requests. A prototype reports only its mean response time. Which additional acceptance measurement directly tests the stated requirement?",
+    "options": [
+      {
+        "id": "A",
+        "body": "The longest response in one demonstration"
+      },
+      {
+        "id": "B",
+        "body": "The 95th percentile of complete-response latency on representative traffic"
+      },
+      {
+        "id": "C",
+        "body": "The number of API calls per day"
+      },
+      {
+        "id": "D",
+        "body": "The time until the first token for each request"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "The requirement is about the distribution of complete-response latency. A 95th-percentile measurement tests that threshold; a mean or first-token measurement does not.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The stem explicitly requires a complete reply and a percentile, excluding first-token and mean proxies.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "assertion": "The requirement is about the distribution of complete-response latency. A 95th-percentile measurement tests that threshold; a mean or first-token measurement does not."
+        }
+      ],
+      "distractorRationales": {
+        "A": "A single maximum is not the stated 95% criterion.",
+        "C": "Volume does not measure response latency.",
+        "D": "First-token timing can pass while completion misses the deadline."
+      },
+      "ambiguityChallenge": "The stem explicitly requires a complete reply and a percentile, excluding first-token and mean proxies.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator requirements-tail-latency. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-002",
+    "domain": "applications-integration",
+    "objective": "D2.1",
+    "conceptKey": "requirements-critical-subset",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A ticket classifier achieves 97% overall accuracy, but the business requirement is to miss at most 1% of urgent tickets. Urgent tickets make up only 2% of traffic. Which acceptance criterion must be measured directly?",
+    "options": [
+      {
+        "id": "A",
+        "body": "At least 97% accuracy on the full traffic mix"
+      },
+      {
+        "id": "B",
+        "body": "At most 1% of all traffic classified as urgent"
+      },
+      {
+        "id": "C",
+        "body": "At least 99% recall on genuinely urgent tickets"
+      },
+      {
+        "id": "D",
+        "body": "At least 99% precision among predictions labeled urgent"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "Recall on the urgent subset measures how many genuine urgent cases are caught. Overall accuracy and precision answer different questions and can conceal missed urgent tickets.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The binding requirement is missed true urgent cases, not false alarms; recall uniquely matches it.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "assertion": "Recall on the urgent subset measures how many genuine urgent cases are caught. Overall accuracy and precision answer different questions and can conceal missed urgent tickets."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Overall accuracy can conceal failures in a rare subset.",
+        "B": "The desired prediction frequency is not specified and does not measure misses.",
+        "D": "Precision measures false alarms among predictions, not missed urgent cases."
+      },
+      "ambiguityChallenge": "The binding requirement is missed true urgent cases, not false alarms; recall uniquely matches it.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator requirements-critical-subset. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-003",
+    "domain": "applications-integration",
+    "objective": "D2.1",
+    "conceptKey": "requirements-deadline-batch",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A team proposes Message Batches for a user-triggered eligibility check. The contract requires a final decision within ten seconds for each request; the batch job would use the same model and prompt as the working realtime prototype. What requirement invalidates the proposal?",
+    "options": [
+      {
+        "id": "A",
+        "body": "The hard ten-second per-request decision deadline"
+      },
+      {
+        "id": "B",
+        "body": "The need to correlate each decision with its source request"
+      },
+      {
+        "id": "C",
+        "body": "The need to preserve the validated model and prompt"
+      },
+      {
+        "id": "D",
+        "body": "The need to handle each input’s failure independently"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Message Batches target work that does not need immediate responses and can run until the batch expiration window. They are not a way to guarantee a ten-second interactive decision.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Initial alternatives were irrelevant/absurd. Revised as proposed design-assessment claims; the hard deadline is the only supported objection.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+          "assertion": "Message Batches target work that does not need immediate responses and can run until the batch expiration window. They are not a way to guarantee a ten-second interactive decision."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Batch custom_id supports correlation.",
+        "C": "Batch items can retain the same model and prompt.",
+        "D": "Batch results expose individual outcomes."
+      },
+      "ambiguityChallenge": "Initial alternatives were irrelevant/absurd. Revised as proposed design-assessment claims; the hard deadline is the only supported objection.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator requirements-deadline-batch. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-004",
+    "domain": "applications-integration",
+    "objective": "D2.1",
+    "conceptKey": "requirements-multidimensional-contract",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A summarization pilot passes factuality tests but exceeds the service budget and frequently finishes after the user has left. Before accepting a redesign, which TWO requirements must be added to the existing factuality criterion? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "A measurable per-workload cost limit"
+      },
+      {
+        "id": "B",
+        "body": "A rule that all summaries must have identical wording"
+      },
+      {
+        "id": "C",
+        "body": "An acceptable response-time target measured on representative requests"
+      },
+      {
+        "id": "D",
+        "body": "A requirement to use the newest model irrespective of tests"
+      },
+      {
+        "id": "E",
+        "body": "A requirement to maximize every response length"
+      }
+    ],
+    "correctAnswers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Success criteria should include operational constraints such as price and latency alongside task fidelity. Those are the two unmet requirements described in this pilot.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The stem names two observed failures while preserving factuality; no inferred aesthetic preference is needed.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "assertion": "Success criteria should include operational constraints such as price and latency alongside task fidelity. Those are the two unmet requirements described in this pilot."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Identical wording is neither requested nor necessary for factual summaries.",
+        "D": "Model recency is an implementation choice, not the missing success measure.",
+        "E": "Maximizing length does not address either failure."
+      },
+      "ambiguityChallenge": "The stem names two observed failures while preserving factuality; no inferred aesthetic preference is needed.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator requirements-multidimensional-contract. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-005",
+    "domain": "applications-integration",
+    "objective": "D2.1",
+    "conceptKey": "missing-task-policy",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A Claude ticket router must assign cases to the right specialist team. Two teams use the same label for different services, and no rule says who owns a ticket spanning both. What requirements work should precede prompt optimization?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Use only product names as categories and ignore priority"
+      },
+      {
+        "id": "B",
+        "body": "Let each API response invent category names without a shared definition"
+      },
+      {
+        "id": "C",
+        "body": "Select categories by ticket length alone"
+      },
+      {
+        "id": "D",
+        "body": "Define the support teams’ intended categories and how ambiguous cases should be routed"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "A routing integration needs well-defined intent categories and an understanding of how the support team handles edge cases. Resolving service ownership provides the classification contract that prompt optimization must implement.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/about-claude/use-case-guides/ticket-routing"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Original semantic-consistency item overlapped legacyQ3. Replaced with requirements discovery for a taxonomy where service ownership is explicitly unresolved.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/about-claude/use-case-guides/ticket-routing",
+          "assertion": "A routing integration needs well-defined intent categories and an understanding of how the support team handles edge cases. Resolving service ownership provides the classification contract that prompt optimization must implement."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Product names alone omit the required routing criteria.",
+        "B": "Unbounded per-response labels cannot implement the agreed routing taxonomy.",
+        "C": "Text length does not establish the described service ownership."
+      },
+      "ambiguityChallenge": "Original semantic-consistency item overlapped legacyQ3. Replaced with requirements discovery for a taxonomy where service ownership is explicitly unresolved.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator requirements-taxonomy-ownership. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-006",
+    "domain": "applications-integration",
+    "objective": "D2.1",
+    "conceptKey": "requirements-boundary-case-policy",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A Claude routing prototype is being specified for incoming support tickets. Some real tickets contain no useful text. The requirements currently cover only well-formed tickets. What should the team define before judging readiness?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Use the average valid-ticket accuracy as the acceptance rule for all inputs"
+      },
+      {
+        "id": "B",
+        "body": "Expected behavior and acceptance cases for missing or irrelevant input"
+      },
+      {
+        "id": "C",
+        "body": "Choose the most frequent category as the correct label without confirming business policy"
+      },
+      {
+        "id": "D",
+        "body": "Exclude missing inputs from testing while continuing to accept them in production"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "Task-specific evaluations should include edge cases such as nonexistent or irrelevant inputs. The application needs an explicit expected outcome for those cases before readiness can be measured.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Plausible shortcuts replaced unrelated knobs. The missing expected behavior must be specified, not silently chosen.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "assertion": "Task-specific evaluations should include edge cases such as nonexistent or irrelevant inputs. The application needs an explicit expected outcome for those cases before readiness can be measured."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Aggregate valid-ticket performance does not define empty-input behavior.",
+        "C": "A default label could be valid only if the business explicitly chooses it.",
+        "D": "Exclusion leaves a real accepted input class untested."
+      },
+      "ambiguityChallenge": "Plausible shortcuts replaced unrelated knobs. The missing expected behavior must be specified, not silently chosen.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator requirements-boundary-case-policy. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-007",
+    "domain": "applications-integration",
+    "objective": "D2.1",
+    "conceptKey": "requirements-rubric-operationalization",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A content assistant must sound professional, but two reviewers disagree on whether its outputs qualify. The team needs repeatable acceptance judgments. What should be specified next?",
+    "options": [
+      {
+        "id": "A",
+        "body": "A concrete rating rubric with examples of acceptable and unacceptable tone"
+      },
+      {
+        "id": "B",
+        "body": "A requirement that reviewers use their personal impressions independently"
+      },
+      {
+        "id": "C",
+        "body": "One polished reference response required byte-for-byte for every input"
+      },
+      {
+        "id": "D",
+        "body": "A pass criterion based only on response length"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Qualitative criteria become more repeatable when they use a defined scale and explicit rubric. Token counts and deployment size do not resolve what professional tone means.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced infrastructure distractors with competing evaluation definitions; repeatable tone judgments are the constraint.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "assertion": "Qualitative criteria become more repeatable when they use a defined scale and explicit rubric. Token counts and deployment size do not resolve what professional tone means."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Independent unspecified impressions are the source of disagreement.",
+        "C": "A fixed sentence cannot judge professional tone for varied inputs.",
+        "D": "Length alone does not assess professional tone."
+      },
+      "ambiguityChallenge": "Replaced infrastructure distractors with competing evaluation definitions; repeatable tone judgments are the constraint.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator requirements-rubric-operationalization. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-008",
+    "domain": "applications-integration",
+    "objective": "D2.1",
+    "conceptKey": "requirements-context-dependent-followups",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A conversational assistant must correctly answer follow-up questions whose referents appear earlier in the same conversation. The evaluation currently sends only isolated single-turn questions. Which change addresses this missing requirement?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Grade isolated responses against a style guide"
+      },
+      {
+        "id": "B",
+        "body": "Add more isolated questions with unrelated topics"
+      },
+      {
+        "id": "C",
+        "body": "Add multi-turn cases that require using earlier conversation facts"
+      },
+      {
+        "id": "D",
+        "body": "Increase the number of isolated one-turn samples and assume that covers context use"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "Context utilization must be tested with cases that actually depend on earlier turns. Isolated questions cannot demonstrate that the assistant meets the follow-up requirement.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Alternative test changes are plausible evaluation work but do not contain the required multi-turn dependence.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "assertion": "Context utilization must be tested with cases that actually depend on earlier turns. Isolated questions cannot demonstrate that the assistant meets the follow-up requirement."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Style does not measure earlier-turn referents.",
+        "B": "Topic diversity alone supplies no earlier context.",
+        "D": "Larger one-turn volume still does not test the required dependency."
+      },
+      "ambiguityChallenge": "Alternative test changes are plausible evaluation work but do not contain the required multi-turn dependence.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator requirements-context-dependent-followups. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-009",
+    "domain": "applications-integration",
+    "objective": "D2.1",
+    "conceptKey": "requirements-workload-budget-estimate",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A planned Claude service has a fixed monthly inference budget. The team knows expected request volume but has measured only input sizes. Which TWO additional inputs are directly needed for a realistic token-cost estimate? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "Expected output-token usage per request"
+      },
+      {
+        "id": "B",
+        "body": "The selected model pricing applicable to input and output usage"
+      },
+      {
+        "id": "C",
+        "body": "Average response time used as a substitute for output-token usage"
+      },
+      {
+        "id": "D",
+        "body": "A fixed input-token price applied to output tokens without checking pricing"
+      },
+      {
+        "id": "E",
+        "body": "Character counts treated as exact billed token counts"
+      }
+    ],
+    "correctAnswers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Inference budgeting needs expected input and output usage, request frequency, and the applicable model prices. The stem already provides volume and input measurements, leaving output usage and pricing.",
+    "difficultyEstimate": "foundational",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced obviously irrelevant distractors with realistic budgeting mistakes. Stem supplies only volume/input sizes; output usage and actual prices are missing.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "assertion": "Inference budgeting needs expected input and output usage, request frequency, and the applicable model prices. The stem already provides volume and input measurements, leaving output usage and pricing."
+        }
+      ],
+      "distractorRationales": {
+        "C": "Latency cannot substitute for output-token usage in token accounting.",
+        "D": "Input and output pricing must be checked rather than assumed identical.",
+        "E": "Characters are not exact token counts."
+      },
+      "ambiguityChallenge": "Replaced obviously irrelevant distractors with realistic budgeting mistakes. Stem supplies only volume/input sizes; output usage and actual prices are missing.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator requirements-workload-budget-estimate. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-010",
+    "domain": "applications-integration",
+    "objective": "D2.1",
+    "conceptKey": "requirements-baseline-achievability",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A sponsor demands 100% correctness on every possible free-form request, but offers no examples or definition of correctness. What is the most defensible next requirement-setting step?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Commit to a target using only one carefully selected demo"
+      },
+      {
+        "id": "B",
+        "body": "Use fluency as a proxy for every aspect of correctness"
+      },
+      {
+        "id": "C",
+        "body": "Measure only requests with a previously known easy answer while claiming all requests are covered"
+      },
+      {
+        "id": "D",
+        "body": "Define the intended task distribution and measurable criteria, then use representative experiments to establish achievable targets"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "Success criteria should be specific, measurable, relevant, and achievable. An undefined universal correctness promise cannot be validated; scope and evidence are needed before committing to a target.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced absurd output-length choice with plausible but inadequate evidence strategies.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "assertion": "Success criteria should be specific, measurable, relevant, and achievable. An undefined universal correctness promise cannot be validated; scope and evidence are needed before committing to a target."
+        }
+      ],
+      "distractorRationales": {
+        "A": "A selected demo does not establish a universal target.",
+        "B": "Fluency does not define task correctness.",
+        "C": "Easy-only sampling cannot support the claimed general scope."
+      },
+      "ambiguityChallenge": "Replaced absurd output-length choice with plausible but inadequate evidence strategies.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator requirements-baseline-achievability. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-011",
+    "domain": "applications-integration",
+    "objective": "D2.1",
+    "conceptKey": "requirements-privacy-specificity",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An internal assistant requirement says only “preserve privacy.” The team wants an acceptance test for whether answers reveal prohibited customer identifiers supplied in test prompts. Which specification is most useful?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Define only an average response-length threshold"
+      },
+      {
+        "id": "B",
+        "body": "Require a privacy disclaimer and count disclaimers as successful protection"
+      },
+      {
+        "id": "C",
+        "body": "Define the prohibited identifier categories, test corpus, and measurable disclosure threshold"
+      },
+      {
+        "id": "D",
+        "body": "Use overall helpfulness ratings as the sole privacy acceptance measure"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "Privacy criteria must specify the information and behavior being measured. Defined prohibited categories and a disclosure metric permit testing; disclaimers and answer length do not establish privacy preservation.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Distractors are now alternative measurable proxies that fail the actual privacy requirement.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "assertion": "Privacy criteria must specify the information and behavior being measured. Defined prohibited categories and a disclosure metric permit testing; disclaimers and answer length do not establish privacy preservation."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Short text can disclose identifiers.",
+        "B": "A disclaimer can coexist with a disclosure.",
+        "D": "Helpfulness does not measure prohibited-identifier disclosure."
+      },
+      "ambiguityChallenge": "Distractors are now alternative measurable proxies that fail the actual privacy requirement.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator requirements-privacy-specificity. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-012",
+    "domain": "applications-integration",
+    "objective": "D2.2",
+    "conceptKey": "lifecycle-deprecated-versus-retired",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An application uses a Claude model marked deprecated with a future retirement date. Requests still succeed. A maintainer concludes that no maintenance is required until errors appear. Which lifecycle action is justified?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Wait for the retirement date before running compatibility tests"
+      },
+      {
+        "id": "B",
+        "body": "Assume successful requests today mean the published retirement no longer applies"
+      },
+      {
+        "id": "C",
+        "body": "Plan and test migration before the announced retirement date"
+      },
+      {
+        "id": "D",
+        "body": "Keep the same model ID and change only the SDK package version"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "Deprecated models may still work, but retired models are unavailable and requests fail. Testing and migrating before retirement avoids making failure the migration trigger.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/about-claude/model-deprecations"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced deletion-of-tests distractor with plausible incomplete maintenance actions.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+          "assertion": "Deprecated models may still work, but retired models are unavailable and requests fail. Testing and migrating before retirement avoids making failure the migration trigger."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Testing after retirement risks an avoidable outage.",
+        "B": "Current success is consistent with deprecated status and does not cancel retirement.",
+        "D": "Updating a client package does not change the retired model being requested."
+      },
+      "ambiguityChallenge": "Replaced deletion-of-tests distractor with plausible incomplete maintenance actions.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator lifecycle-deprecated-versus-retired. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-013",
+    "domain": "applications-integration",
+    "objective": "D2.2",
+    "conceptKey": "lifecycle-provider-retirement-scope",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A company invokes Claude through both the direct Claude API and a partner-operated cloud platform. It sees a retirement date on Anthropic’s model-deprecations page. What must its maintenance plan account for?",
+    "options": [
+      {
+        "id": "A",
+        "body": "That partner-operated platforms can have separate retirement schedules"
+      },
+      {
+        "id": "B",
+        "body": "That the direct API retirement date is automatically binding on every provider"
+      },
+      {
+        "id": "C",
+        "body": "That a currently successful partner request proves indefinite future availability"
+      },
+      {
+        "id": "D",
+        "body": "That keeping the same model display name guarantees identical lifecycle dates"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Anthropic distinguishes its operated-platform retirement dates from partner-operated schedules. A multi-provider maintenance plan must check the relevant provider dates rather than assume one universal deadline.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/about-claude/model-deprecations"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "All alternatives now concern cross-provider lifecycle assumptions, not unrelated SDK language.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+          "assertion": "Anthropic distinguishes its operated-platform retirement dates from partner-operated schedules. A multi-provider maintenance plan must check the relevant provider dates rather than assume one universal deadline."
+        }
+      ],
+      "distractorRationales": {
+        "B": "The documentation explicitly says provider schedules can differ.",
+        "C": "Present success does not prove perpetual support.",
+        "D": "A shared name does not impose a shared provider schedule."
+      },
+      "ambiguityChallenge": "All alternatives now concern cross-provider lifecycle assumptions, not unrelated SDK language.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator lifecycle-provider-retirement-scope. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-014",
+    "domain": "applications-integration",
+    "objective": "D2.2",
+    "conceptKey": "lifecycle-inventory-deprecated-usage",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A deprecated model must be removed before retirement, but the team has several API keys and cannot identify all callers. Which documented evidence most directly helps scope the migration?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Search only the source code of the team’s most recently deployed service"
+      },
+      {
+        "id": "B",
+        "body": "An export of API usage broken down by key and model"
+      },
+      {
+        "id": "C",
+        "body": "Inspect only the application currently producing the most tokens"
+      },
+      {
+        "id": "D",
+        "body": "Read the deprecation notice again without identifying actual callers"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "The model-deprecation guide describes exporting usage by API key and model to locate remaining usage. That inventory identifies migration scope across callers.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/about-claude/model-deprecations"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced irrelevant choices with incomplete but plausible migration-inventory approaches.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/about-claude/model-deprecations",
+          "assertion": "The model-deprecation guide describes exporting usage by API key and model to locate remaining usage. That inventory identifies migration scope across callers."
+        }
+      ],
+      "distractorRationales": {
+        "A": "One service does not inventory all active callers.",
+        "C": "Highest volume alone can miss smaller callers requiring migration.",
+        "D": "A deadline notice does not identify usage by key/model."
+      },
+      "ambiguityChallenge": "Replaced irrelevant choices with incomplete but plausible migration-inventory approaches.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator lifecycle-inventory-deprecated-usage. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-015",
+    "domain": "applications-integration",
+    "objective": "D2.2",
+    "conceptKey": "lifecycle-holdout-after-tuning",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An engineer repeatedly adjusts a classification prompt after inspecting failures on the same evaluation set. That set now scores very well. Which evidence is still needed before claiming the improvement generalizes?",
+    "options": [
+      {
+        "id": "A",
+        "body": "A repeat of the tuning set using the final prompt"
+      },
+      {
+        "id": "B",
+        "body": "Agreement between the final prompt author and the generated answers on tuning examples"
+      },
+      {
+        "id": "C",
+        "body": "A higher score after removing the hardest tuning cases"
+      },
+      {
+        "id": "D",
+        "body": "Performance on representative held-out cases not used to tune the prompt"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "A held-out set tests task performance beyond the cases used for iteration. Reusing only the tuning examples cannot establish how the revised prompt behaves on unseen representative inputs.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Alternative evidence is plausible but still contaminated or nonrepresentative; no long-explanation strawman.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "assertion": "A held-out set tests task performance beyond the cases used for iteration. Reusing only the tuning examples cannot establish how the revised prompt behaves on unseen representative inputs."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Repeated tuning-set performance is not unseen-case evidence.",
+        "B": "Author agreement on observed cases does not measure generalization.",
+        "C": "Removing hard cases changes the measurement instead of validating improvement."
+      },
+      "ambiguityChallenge": "Alternative evidence is plausible but still contaminated or nonrepresentative; no long-explanation strawman.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator lifecycle-holdout-after-tuning. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-016",
+    "domain": "applications-integration",
+    "objective": "D2.2",
+    "conceptKey": "lifecycle-new-category-maintenance",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "After launch, a support product adds a new service category. Its Claude router still uses the original category definitions and tests. Which TWO updates directly address this lifecycle change? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "Update the permitted category definitions and routing expectations"
+      },
+      {
+        "id": "B",
+        "body": "Add representative examples of the new category to evaluation coverage"
+      },
+      {
+        "id": "C",
+        "body": "Keep the old categories unchanged and treat every new case as model randomness"
+      },
+      {
+        "id": "D",
+        "body": "Increase concurrency without changing classification requirements"
+      },
+      {
+        "id": "E",
+        "body": "Remove all old-category regression cases"
+      }
+    ],
+    "correctAnswers": [
+      "A",
+      "B"
+    ],
+    "explanation": "Evolving intent categories require updated definitions and evaluation examples. Capacity changes do not teach the router the new classification contract, and old-category coverage remains useful for regressions.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/about-claude/use-case-guides/ticket-routing"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "This tests maintaining application requirements after a business taxonomy change, not generic retraining.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/about-claude/use-case-guides/ticket-routing",
+          "assertion": "Evolving intent categories require updated definitions and evaluation examples. Capacity changes do not teach the router the new classification contract, and old-category coverage remains useful for regressions."
+        }
+      ],
+      "distractorRationales": {
+        "C": "The missing business category is a defined change, not random noise.",
+        "D": "Concurrency does not change category meaning.",
+        "E": "Old behaviors still need preservation unless deliberately changed."
+      },
+      "ambiguityChallenge": "This tests maintaining application requirements after a business taxonomy change, not generic retraining.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator lifecycle-new-category-maintenance. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-017",
+    "domain": "applications-integration",
+    "objective": "D2.2",
+    "conceptKey": "lifecycle-regression-case-from-incident",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A deployed Claude assistant repeatedly mishandles a previously untested ambiguous ticket pattern. A prompt fix works on the incident example. Which maintenance step provides ongoing protection against this failure class?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Hide the incident from the evaluation set to preserve the old score"
+      },
+      {
+        "id": "B",
+        "body": "Add representative cases of that pattern with agreed expected behavior to regression evaluations"
+      },
+      {
+        "id": "C",
+        "body": "Replace all tests with the single incident example"
+      },
+      {
+        "id": "D",
+        "body": "Treat the successful incident rerun as permanent evidence that the class is solved"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "Task-specific evaluations should cover real edge cases. Adding representative cases makes the discovered failure class part of future regression checks rather than a one-time demonstration.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Expected behavior must be agreed for ambiguous inputs; it is explicit rather than silently assuming a label.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "assertion": "Task-specific evaluations should cover real edge cases. Adding representative cases makes the discovered failure class part of future regression checks rather than a one-time demonstration."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Excluding the pattern hides the known risk.",
+        "C": "One incident cannot replace broad task coverage.",
+        "D": "One successful rerun does not protect later changes."
+      },
+      "ambiguityChallenge": "Expected behavior must be agreed for ambiguous inputs; it is explicit rather than silently assuming a label.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator lifecycle-regression-case-from-incident. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-018",
+    "domain": "applications-integration",
+    "objective": "D2.2",
+    "conceptKey": "lifecycle-grader-validation",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A team replaces slow human grading with an LLM judge for nuanced response quality. Before scaling that judge across release evaluations, which step is required to justify relying on its scores?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Assume using a different model as judge alone establishes grading reliability"
+      },
+      {
+        "id": "B",
+        "body": "Validate only that the judge always outputs a number"
+      },
+      {
+        "id": "C",
+        "body": "Check its reliability against the established rubric and trusted reference judgments"
+      },
+      {
+        "id": "D",
+        "body": "Use the candidate response’s own confidence as the judge score"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "Anthropic recommends testing the reliability of LLM-based grading before scaling. A defined rubric and reference judgments provide evidence that the automated scores measure the intended quality.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "All options are grading implementation approaches; format and independence alone are insufficient.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+          "assertion": "Anthropic recommends testing the reliability of LLM-based grading before scaling. A defined rubric and reference judgments provide evidence that the automated scores measure the intended quality."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Different-model grading still needs reliability validation.",
+        "B": "Numeric formatting does not establish correct judgments.",
+        "D": "Self-confidence is not demonstrated agreement with the required rubric."
+      },
+      "ambiguityChallenge": "All options are grading implementation approaches; format and independence alone are insufficient.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator lifecycle-grader-validation. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-019",
+    "domain": "applications-integration",
+    "objective": "D2.2",
+    "conceptKey": "lifecycle-changing-traffic-distribution",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A multilingual service was evaluated only on its original English traffic. After expansion, half its users submit other languages. What makes the original readiness evidence insufficient for ongoing operation?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Treat aggregate historical English accuracy as sufficient for every language"
+      },
+      {
+        "id": "B",
+        "body": "Measure only whether the new-language requests return HTTP success"
+      },
+      {
+        "id": "C",
+        "body": "Translate the evaluation report while leaving all test inputs in English"
+      },
+      {
+        "id": "D",
+        "body": "The test distribution no longer represents the workload, so language-specific task performance must be evaluated"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "Task evaluations should reflect real usage, and the ticket-routing guide calls for measuring performance across languages. The original English-only result cannot establish quality for the changed traffic mix.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/about-claude/use-case-guides/ticket-routing"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Distractors now represent believable but inadequate ongoing-validation strategies.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/about-claude/use-case-guides/ticket-routing",
+          "assertion": "Task evaluations should reflect real usage, and the ticket-routing guide calls for measuring performance across languages. The original English-only result cannot establish quality for the changed traffic mix."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The changed mix includes unmeasured task behavior.",
+        "B": "Transport success does not establish correct routing.",
+        "C": "Translating a report does not test multilingual inputs."
+      },
+      "ambiguityChallenge": "Distractors now represent believable but inadequate ongoing-validation strategies.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator lifecycle-changing-traffic-distribution. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-020",
+    "domain": "applications-integration",
+    "objective": "D2.2",
+    "conceptKey": "lifecycle-artifact-retention",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A batch-analysis application needs to retain its generated results for six months. Its current implementation stores only Message Batch IDs and expects to download results whenever an auditor asks. What must change?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Persist the needed results in application-controlled storage while they are available"
+      },
+      {
+        "id": "B",
+        "body": "Store only the batch ID and rely on indefinitely repeatable downloads"
+      },
+      {
+        "id": "C",
+        "body": "Delay all result retrieval until the six-month audit date"
+      },
+      {
+        "id": "D",
+        "body": "Treat the retained batch status record as a substitute for the generated result content"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Batch result downloads have a limited retention period. Six-month application retention therefore requires storing the needed result artifacts outside that temporary download window.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "All options are plausible artifact-retention designs; only result persistence meets the six-month requirement.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+          "assertion": "Batch result downloads have a limited retention period. Six-month application retention therefore requires storing the needed result artifacts outside that temporary download window."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Download retention is limited.",
+        "C": "Results may no longer be downloadable at that time.",
+        "D": "Job metadata is not the generated answer artifact."
+      },
+      "ambiguityChallenge": "All options are plausible artifact-retention designs; only result persistence meets the six-month requirement.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator lifecycle-artifact-retention. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-021",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "batch-mixed-outcomes",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A Message Batch has processing_status `ended`, with 80 succeeded, 3 errored, and 2 expired requests. Which TWO statements are supported? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "All 85 requests produced valid model answers"
+      },
+      {
+        "id": "B",
+        "body": "The 80 succeeded entries include successful message results"
+      },
+      {
+        "id": "C",
+        "body": "Ended means the batch has finished processing, even though some entries failed"
+      },
+      {
+        "id": "D",
+        "body": "The expired entries are still queued to run in that same ended batch"
+      },
+      {
+        "id": "E",
+        "body": "One errored entry invalidates every succeeded entry"
+      }
+    ],
+    "correctAnswers": [
+      "B",
+      "C"
+    ],
+    "explanation": "Ended describes completion of batch processing, not universal success. Each request has its own outcome and must be handled accordingly.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Converted to an exact two-statement set to test both container completion and individual success.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+          "assertion": "Ended describes completion of batch processing, not universal success. Each request has its own outcome and must be handled accordingly."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Ended permits terminal failures.",
+        "D": "Expired is a terminal result for that batch.",
+        "E": "Per-item outcomes remain independent."
+      },
+      "ambiguityChallenge": "Converted to an exact two-statement set to test both container completion and individual success.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator batch-mixed-outcomes. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-022",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "batch-dual-cap-partitioning",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A batch-building service has two candidate payloads: one exceeds the documented request-count cap but fits the byte-size cap; the other fits the count cap but exceeds the byte-size cap. Which submission policy is valid?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Submit the entire batch because only request count is limited"
+      },
+      {
+        "id": "B",
+        "body": "Submit the entire batch because only byte size is limited"
+      },
+      {
+        "id": "C",
+        "body": "Split it into batches satisfying both the request-count cap and byte-size cap"
+      },
+      {
+        "id": "D",
+        "body": "Enable streaming on the batch so neither limit applies"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "Message Batches are limited by both request count and payload size, whichever is reached first. A submission must satisfy both limits; meeting just one does not make it valid.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Original custom_id item duplicated legacyQ29; reject that complete variant and replace with independent dual-limit request construction.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+          "assertion": "Message Batches are limited by both request count and payload size, whichever is reached first. A submission must satisfy both limits; meeting just one does not make it valid."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The documented byte-size cap also applies.",
+        "B": "The documented request-count cap also applies.",
+        "D": "Batch streaming is unsupported and does not bypass limits."
+      },
+      "ambiguityChallenge": "Original custom_id item duplicated legacyQ29; reject that complete variant and replace with independent dual-limit request construction.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator batch-dual-cap-partitioning. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-023",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "batch-cancel-partial-success",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "An operator cancels a Message Batch after some requests have already completed. Which TWO statements should guide reconciliation? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "After cancellation finishes, inspect the per-item results for completed answers"
+      },
+      {
+        "id": "B",
+        "body": "Treat every originally submitted request as canceled"
+      },
+      {
+        "id": "C",
+        "body": "Expect completed requests to be undone by cancellation"
+      },
+      {
+        "id": "D",
+        "body": "The batch can end with a mixture of succeeded and canceled item outcomes"
+      },
+      {
+        "id": "E",
+        "body": "Expect canceling to be the permanent terminal status"
+      }
+    ],
+    "correctAnswers": [
+      "A",
+      "D"
+    ],
+    "explanation": "Cancellation passes through canceling to ended and can leave partial successful results. Inspecting per-request outcomes preserves completed answers.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Converted to two distinct lifecycle conclusions; preserves completed-work and terminal-state reasoning.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+          "assertion": "Cancellation passes through canceling to ended and can leave partial successful results. Inspecting per-request outcomes preserves completed answers."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Processed requests can retain successful results.",
+        "C": "Cancellation is not a rollback of completed work.",
+        "E": "Cancellation proceeds to ended."
+      },
+      "ambiguityChallenge": "Converted to two distinct lifecycle conclusions; preserves completed-work and terminal-state reasoning.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator batch-cancel-partial-success. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-024",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "execution-data-dependency",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A report requires first extracting a customer ID and then querying Claude with that extracted ID. A developer puts both Messages requests into one batch and expects the second to receive the first response automatically. What is the flaw?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Submit the dependent item immediately after the first array entry to enforce a dependency"
+      },
+      {
+        "id": "B",
+        "body": "Use matching custom_id values so the API shares output between the two items"
+      },
+      {
+        "id": "C",
+        "body": "Put both requests in the same batch to share the first request’s runtime state"
+      },
+      {
+        "id": "D",
+        "body": "Obtain the first result, then construct and submit the request that depends on it"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "Requests in a Message Batch are processed independently. A batch is not a dependency graph that injects one result into another request.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced absurd claims with three plausible incorrect dependency mechanisms.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+          "assertion": "Requests in a Message Batch are processed independently. A batch is not a dependency graph that injects one result into another request."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Input order is not a dependency specification.",
+        "B": "custom_id correlates items and must be unique; it does not route outputs.",
+        "C": "Batch membership provides no shared mutable state."
+      },
+      "ambiguityChallenge": "Replaced absurd claims with three plausible incorrect dependency mechanisms.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator batch-dependent-requests. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-025",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "batch-parameter-validation-timing",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "Batch creation succeeds, but later entries report invalid_request_error for their Messages params. Which TWO conclusions or actions follow from the documented interface? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "Successful batch creation proves every item’s Messages params are valid"
+      },
+      {
+        "id": "B",
+        "body": "Per-item params may be validated asynchronously after creation"
+      },
+      {
+        "id": "C",
+        "body": "Test representative params with the realtime Messages API before a large batch submission"
+      },
+      {
+        "id": "D",
+        "body": "Treat every invalid_request_error as a successful classification label"
+      },
+      {
+        "id": "E",
+        "body": "Resubmit the same invalid params indefinitely without correction"
+      }
+    ],
+    "correctAnswers": [
+      "B",
+      "C"
+    ],
+    "explanation": "Per-item Messages parameter validation occurs asynchronously. Testing request shapes with the Messages API and inspecting item results is necessary even after batch creation succeeds.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Converted to two source-established actions/conclusions; validation timing and preflight request verification are complementary.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+          "assertion": "Per-item Messages parameter validation occurs asynchronously. Testing request shapes with the Messages API and inspecting item results is necessary even after batch creation succeeds."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Creation is not proof of per-item validation.",
+        "D": "The error is not model-generated task output.",
+        "E": "Invalid parameters must be corrected."
+      },
+      "ambiguityChallenge": "Converted to two source-established actions/conclusions; validation timing and preflight request verification are complementary.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator batch-parameter-validation-timing. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-026",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "batch-no-live-stream-parameter",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An engineer copies a working streaming Messages request into a batch item, retaining `stream: true`. Which minimal change is required by the batch interface?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Keep stream: true and poll the batch more frequently"
+      },
+      {
+        "id": "B",
+        "body": "Move stream: true from params to custom_id"
+      },
+      {
+        "id": "C",
+        "body": "Remove stream: true and consume the completed batch result file instead"
+      },
+      {
+        "id": "D",
+        "body": "Replace stream: true with speed so tokens arrive sooner"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "Batch requests do not support stream: true because results are delivered as a result file. Streaming that file during download is different from live token streaming within a batch item.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Competing changes now resemble transport adaptations rather than unrelated model choices.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+          "assertion": "Batch requests do not support stream: true because results are delivered as a result file. Streaming that file during download is different from live token streaming within a batch item."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Polling frequency does not make the unsupported parameter valid.",
+        "B": "custom_id is not request configuration.",
+        "D": "speed is also unsupported for batch requests."
+      },
+      "ambiguityChallenge": "Competing changes now resemble transport adaptations rather than unrelated model choices.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator batch-no-live-stream-parameter. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-027",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "stream-content-block-index",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A direct Messages SSE parser receives text deltas for index 0 and tool-input deltas for index 1. It appends all deltas into one string. Which implementation change preserves the response structure?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Maintain separate accumulators by content-block index and apply each delta according to its type"
+      },
+      {
+        "id": "B",
+        "body": "Use a single JSON accumulator for both text and input_json_delta fragments"
+      },
+      {
+        "id": "C",
+        "body": "Start a new assistant message for each content_block_delta"
+      },
+      {
+        "id": "D",
+        "body": "Treat each block index as a tool-call ID for executing the call"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Content-block indices identify positions in the final content array, and delta types identify the field being updated. Separate typed accumulation preserves text and tool-input blocks.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Alternatives now reflect realistic response-adapter mistakes.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/streaming",
+          "assertion": "Content-block indices identify positions in the final content array, and delta types identify the field being updated. Separate typed accumulation preserves text and tool-input blocks."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Text deltas and tool-input fragments are different fields/representations.",
+        "C": "Deltas belong to blocks within a message.",
+        "D": "A block index identifies array position, not the tool_use ID."
+      },
+      "ambiguityChallenge": "Alternatives now reflect realistic response-adapter mistakes.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator stream-content-block-index. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-028",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "stream-partial-json-assembly",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A tool input arrives as input_json_delta fragments `{\"city\":` and `\"Oslo\"}`. JSON parsing fails on the first fragment. What should a parser without partial-JSON support do?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Parse each partial_json string as an independent full object"
+      },
+      {
+        "id": "B",
+        "body": "Fill missing closing braces after each fragment and execute immediately"
+      },
+      {
+        "id": "C",
+        "body": "Concatenate fragments across all tool blocks into one object"
+      },
+      {
+        "id": "D",
+        "body": "Accumulate fragments for that block and parse when its content_block_stop arrives"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "Tool-input deltas are partial JSON strings. Accumulate the strings for the block and parse the completed input rather than requiring every fragment to be standalone JSON.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Alternative implementations are plausible parser shortcuts; only completed per-block assembly preserves arguments.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/streaming",
+          "assertion": "Tool-input deltas are partial JSON strings. Accumulate the strings for the block and parse the completed input rather than requiring every fragment to be standalone JSON."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Individual fragments are not required to be complete JSON.",
+        "B": "Early repair/execution may use incomplete or wrong arguments.",
+        "C": "Fragments from different blocks represent different inputs."
+      },
+      "ambiguityChallenge": "Alternative implementations are plausible parser shortcuts; only completed per-block assembly preserves arguments.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator stream-partial-json-assembly. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-029",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "stream-cumulative-usage",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A stream sends message_delta usage output_tokens values of 10, then 18, then 25. An accounting function sums them and records 53 tokens. What is wrong?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Count only changes in the number of message_delta events"
+      },
+      {
+        "id": "B",
+        "body": "Those token counts are cumulative; the latest total is 25, not their sum"
+      },
+      {
+        "id": "C",
+        "body": "Use the first total because later updates are duplicates"
+      },
+      {
+        "id": "D",
+        "body": "Average the three values to estimate final usage"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "Usage token counts in message_delta events are cumulative. Summing successive totals double-counts earlier tokens.",
+    "difficultyEstimate": "foundational",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced dollars/new-request choices with realistic aggregation errors.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/streaming",
+          "assertion": "Usage token counts in message_delta events are cumulative. Summing successive totals double-counts earlier tokens."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Event count is not token usage.",
+        "C": "Later updates include newly generated tokens.",
+        "D": "Averaging cumulative totals understates final usage."
+      },
+      "ambiguityChallenge": "Replaced dollars/new-request choices with realistic aggregation errors.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator stream-cumulative-usage. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-030",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "stream-block-stop-not-message-stop",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A streaming response finishes a text block and then starts a second content block. The UI has already marked the response complete on content_block_stop. Which event represents completion of the message stream?",
+    "options": [
+      {
+        "id": "A",
+        "body": "content_block_stop"
+      },
+      {
+        "id": "B",
+        "body": "message_delta"
+      },
+      {
+        "id": "C",
+        "body": "message_stop"
+      },
+      {
+        "id": "D",
+        "body": "The last text_delta observed so far"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "content_block_stop ends one block, while message_stop ends the message stream. A response can contain multiple blocks before the final event.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "All options are stream events or plausible completion heuristics; message_stop uniquely ends the stream.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/streaming",
+          "assertion": "content_block_stop ends one block, while message_stop ends the message stream. A response can contain multiple blocks before the final event."
+        }
+      ],
+      "distractorRationales": {
+        "A": "This ends only one content block.",
+        "B": "Top-level deltas may precede the terminal event.",
+        "D": "No text delta alone guarantees the stream is finished."
+      },
+      "ambiguityChallenge": "All options are stream events or plausible completion heuristics; message_stop uniquely ends the stream.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator stream-block-stop-not-message-stop. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-031",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "forward-compatible-enumeration",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A parser supports all required documented SSE events but encounters a newly added informational event. Which TWO statements align with Anthropic’s compatibility guidance? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "Continue processing known event types after gracefully handling the unknown informational type"
+      },
+      {
+        "id": "B",
+        "body": "Assume pinning anthropic-version prevents all new event types"
+      },
+      {
+        "id": "C",
+        "body": "Document that additive event types may appear within a supported API version"
+      },
+      {
+        "id": "D",
+        "body": "Interpret any unknown event as answer text"
+      },
+      {
+        "id": "E",
+        "body": "Abort every response whose event list differs from a stored fixture"
+      }
+    ],
+    "correctAnswers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Anthropic may add event types within a version and recommends handling unknown types gracefully. An informational extension should not be mistaken for text or a tool call.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Converted to two supported compatibility statements; avoids claim that unknown event equals tool or text.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/streaming",
+          "assertion": "Anthropic may add event types within a version and recommends handling unknown types gracefully. An informational extension should not be mistaken for text or a tool call."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Versioning permits new enum-like event variants.",
+        "D": "Unknown metadata is not necessarily text.",
+        "E": "Graceful handling is the documented policy."
+      },
+      "ambiguityChallenge": "Converted to two supported compatibility statements; avoids claim that unknown event equals tool or text.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator forward-compatible-enumeration. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-032",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "stream-ping-not-answer",
+    "type": "single",
+    "selectCount": 1,
+    "body": "During a long response, the SSE consumer receives ping events between content deltas. The product should show only Claude’s answer text. Which treatment is correct?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Append every ping payload to the answer buffer"
+      },
+      {
+        "id": "B",
+        "body": "Treat ping as the terminal event and close the stream"
+      },
+      {
+        "id": "C",
+        "body": "Restart the content-block index whenever ping arrives"
+      },
+      {
+        "id": "D",
+        "body": "Handle ping as a keepalive and continue processing content events"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "Ping events can appear throughout a stream and do not represent answer content. They should not erase or be appended to the generated text.",
+    "difficultyEstimate": "foundational",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "All distractors now concern realistic event-handler mistakes.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/streaming",
+          "assertion": "Ping events can appear throughout a stream and do not represent answer content. They should not erase or be appended to the generated text."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Ping is not answer text.",
+        "B": "message_stop, not ping, marks stream completion.",
+        "C": "Ping does not reset the block structure."
+      },
+      "ambiguityChallenge": "All distractors now concern realistic event-handler mistakes.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator stream-ping-not-answer. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-033",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "messages-synthetic-history",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A test harness constructs a multi-turn Messages request containing a user turn, a manually written assistant turn, and another user turn. The assistant turn is historical context, not a final prefill. Is that necessarily invalid?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Yes; historical assistant turns must carry evidence that the same SDK client generated them"
+      },
+      {
+        "id": "B",
+        "body": "No; historical assistant messages may be supplied synthetically as context"
+      },
+      {
+        "id": "C",
+        "body": "Yes; any assistant role anywhere in input is a forbidden response prefill"
+      },
+      {
+        "id": "D",
+        "body": "No; synthetic historical turns cause permanent fine-tuning of the model"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "Historical assistant messages can be synthetic. Including one supplies context; it does not create automatic server-side conversation memory.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/working-with-messages"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Distinguishes historical assistant context from model-dependent prefill; avoids overlapping legacy stateless question in answer.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/working-with-messages",
+          "assertion": "Historical assistant messages can be synthetic. Including one supplies context; it does not create automatic server-side conversation memory."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Synthetic historical assistant messages are allowed.",
+        "C": "The explicit historical placement differs from a final prefill.",
+        "D": "Supplying context does not retrain model weights."
+      },
+      "ambiguityChallenge": "Distinguishes historical assistant context from model-dependent prefill; avoids overlapping legacy stateless question in answer.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator messages-synthetic-history. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-034",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "typed-image-source",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A service sends a PNG as a long base64 string inside a plain text block and expects the vision interface to decode it as an image. Which request representation directly supplies an image to the documented API?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Wrap the base64 bytes in a text block with media_type as an extra text property"
+      },
+      {
+        "id": "B",
+        "body": "Set Content-Type: image/png for the entire Messages JSON request"
+      },
+      {
+        "id": "C",
+        "body": "Use an image block with a base64 source, image/png media_type, and encoded data"
+      },
+      {
+        "id": "D",
+        "body": "Send only the local filesystem path as the user’s text"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "The vision request shape uses a typed image content block with a source describing the encoded image. Plain text containing base64 is not that image-input representation.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/working-with-messages"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced irrelevant fields with likely multimodal serialization mistakes.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/working-with-messages",
+          "assertion": "The vision request shape uses a typed image content block with a source describing the encoded image. Plain text containing base64 is not that image-input representation."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The source belongs to a typed image block.",
+        "B": "The request is still JSON containing image data, not an image body.",
+        "D": "A local path alone does not attach its bytes."
+      },
+      "ambiguityChallenge": "Replaced irrelevant fields with likely multimodal serialization mistakes.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator messages-image-content-block. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-035",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "typed-image-source",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An application has a publicly fetchable JPEG URL and wants to provide that image to Claude without downloading and base64-encoding it locally. Which supported representation meets the requirement?",
+    "options": [
+      {
+        "id": "A",
+        "body": "An image content block with source type url and the image URL"
+      },
+      {
+        "id": "B",
+        "body": "A text block containing only the JPEG URL, relying on automatic attachment conversion"
+      },
+      {
+        "id": "C",
+        "body": "An image block with source type base64 but raw URL text in data"
+      },
+      {
+        "id": "D",
+        "body": "A tool_result block containing the URL without a matching tool call"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "The Messages vision interface accepts a URL source for an image block. This supplies the image directly without a local base64 conversion step.",
+    "difficultyEstimate": "foundational",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/working-with-messages"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Alternative representations are plausible shape confusions rather than unrelated tokens; public fetchability explicit.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/working-with-messages",
+          "assertion": "The Messages vision interface accepts a URL source for an image block. This supplies the image directly without a local base64 conversion step."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Plain text does not implement the documented image source representation.",
+        "C": "A base64 source requires encoded image data, not URL text.",
+        "D": "A tool result is not the specified standalone image input mechanism."
+      },
+      "ambiguityChallenge": "Alternative representations are plausible shape confusions rather than unrelated tokens; public fetchability explicit.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator messages-url-image-source. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-036",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "stop-sequence-identification",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An integration configures two custom stop sequences. A response has stop_reason `stop_sequence`, and the application must identify which configured sequence matched using the dedicated response metadata. Which field contains that value?",
+    "options": [
+      {
+        "id": "A",
+        "body": "stop_reason"
+      },
+      {
+        "id": "B",
+        "body": "content"
+      },
+      {
+        "id": "C",
+        "body": "usage"
+      },
+      {
+        "id": "D",
+        "body": "stop_sequence"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "For stop_reason stop_sequence, the response’s stop_sequence field identifies the matched sequence. Other metadata fields do not encode that match.",
+    "difficultyEstimate": "foundational",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced absurd message-ID discriminator with actual response fields.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons",
+          "assertion": "For stop_reason stop_sequence, the response’s stop_sequence field identifies the matched sequence. Other metadata fields do not encode that match."
+        }
+      ],
+      "distractorRationales": {
+        "A": "stop_reason identifies the category, not which configured sequence matched.",
+        "B": "The documented dedicated metadata field identifies the match.",
+        "C": "Usage reports tokens, not matched sequence identity."
+      },
+      "ambiguityChallenge": "Replaced absurd message-ID discriminator with actual response fields.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator stop-sequence-identification. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-037",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "api-version-header-not-model-id",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A custom HTTP client supplies a valid Claude model ID and authentication, but omits the API protocol version header. What must the direct API request also include?",
+    "options": [
+      {
+        "id": "A",
+        "body": "An anthropic-version header containing a supported API version"
+      },
+      {
+        "id": "B",
+        "body": "A model release date supplied only in the model field"
+      },
+      {
+        "id": "C",
+        "body": "A user message containing the desired protocol date"
+      },
+      {
+        "id": "D",
+        "body": "An HTTP Accept header used as a replacement for anthropic-version"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Direct requests must include anthropic-version; official SDKs normally supply it automatically. The API protocol version is separate from the model identifier.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/api/versioning"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced absurd method/length distractors with likely protocol-versus-payload confusions.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/api/versioning",
+          "assertion": "Direct requests must include anthropic-version; official SDKs normally supply it automatically. The API protocol version is separate from the model identifier."
+        }
+      ],
+      "distractorRationales": {
+        "B": "A model identifier does not supply the required header.",
+        "C": "Prompt text cannot replace HTTP protocol metadata.",
+        "D": "Content negotiation does not replace the API-version header."
+      },
+      "ambiguityChallenge": "Replaced absurd method/length distractors with likely protocol-versus-payload confusions.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator api-version-header-not-model-id. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-038",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "forward-compatible-enumeration",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A service pins the supported anthropic-version header and validates that every response has exactly the set of fields seen in one fixture. A newly added optional output field breaks it. Which assumption was invalid?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Pinning anthropic-version pins the exact number of response properties"
+      },
+      {
+        "id": "B",
+        "body": "A new optional response field always requires a new model ID"
+      },
+      {
+        "id": "C",
+        "body": "The versioning policy allows additive output information within the same version"
+      },
+      {
+        "id": "D",
+        "body": "Only streaming responses may receive additive information"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "The API versioning policy preserves existing parameters but permits additional output values and optional inputs. A consumer should not mistake an additive response field for a protocol-breaking change.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/api/versioning"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "All distractors now concern real compatibility/versioning misconceptions.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/api/versioning",
+          "assertion": "The API versioning policy preserves existing parameters but permits additional output values and optional inputs. A consumer should not mistake an additive response field for a protocol-breaking change."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The policy allows additions to output information.",
+        "B": "Protocol output additions are not model ID changes.",
+        "D": "The documented additive policy is not limited to streams."
+      },
+      "ambiguityChallenge": "All distractors now concern real compatibility/versioning misconceptions.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator api-version-additive-output. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-039",
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "batch-create-response-not-result",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A user interface calls the Message Batches creation endpoint and tries to render response.content immediately. The returned object has id, processing_status, and request_counts. Which operation is missing?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Call the creation endpoint again until it returns response.content"
+      },
+      {
+        "id": "B",
+        "body": "Track the batch until processing ends and then retrieve its results"
+      },
+      {
+        "id": "C",
+        "body": "Parse request_counts as if it contained the generated answers"
+      },
+      {
+        "id": "D",
+        "body": "Treat a nonempty batch ID as a completed successful answer"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "Creation returns a batch tracking object. The application must wait for processing to end and retrieve per-request results through the batch result interface.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "All options now represent concrete asynchronous resource-handling approaches.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+          "assertion": "Creation returns a batch tracking object. The application must wait for processing to end and retrieve per-request results through the batch result interface."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Repeating creation submits new work.",
+        "C": "Counts summarize status, not content.",
+        "D": "A tracking ID establishes neither completion nor generated answer content."
+      },
+      "ambiguityChallenge": "All options now represent concrete asynchronous resource-handling approaches.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator batch-create-response-not-result. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-040",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "sdk-retry-layer-multiplication",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An outer retry loop invokes a Python SDK call up to three times. The SDK is explicitly configured with max_retries=2. Every HTTP attempt receives a retryable 500 and no cancellation occurs. What is the maximum number of HTTP attempts?",
+    "options": [
+      {
+        "id": "A",
+        "body": "3"
+      },
+      {
+        "id": "B",
+        "body": "5"
+      },
+      {
+        "id": "C",
+        "body": "6"
+      },
+      {
+        "id": "D",
+        "body": "9"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "Each SDK invocation can make one initial attempt plus two retries. Three outer invocations can therefore produce nine HTTP attempts, so retry layers must be accounted for together.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The stem explicitly fixes all retry limits and outcomes; no undocumented default or server override is assumed.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python",
+          "assertion": "Each SDK invocation can make one initial attempt plus two retries. Three outer invocations can therefore produce nine HTTP attempts, so retry layers must be accounted for together."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Three counts only the outer invocations.",
+        "B": "Adding layer counts does not model nested retries.",
+        "C": "Two retries omit each invocation’s initial attempt."
+      },
+      "ambiguityChallenge": "The stem explicitly fixes all retry limits and outcomes; no undocumented default or server override is assumed.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator sdk-retry-layer-multiplication. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-041",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "sdk-single-owner-retries",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An application already has a central retry controller with a measured backoff policy. It requires each invocation of the Python SDK to make exactly one HTTP attempt so the controller owns retries. Which SDK setting meets this requirement?",
+    "options": [
+      {
+        "id": "A",
+        "body": "max_retries=1"
+      },
+      {
+        "id": "B",
+        "body": "max_retries=0"
+      },
+      {
+        "id": "C",
+        "body": "A longer request timeout while retaining retries"
+      },
+      {
+        "id": "D",
+        "body": "An outer loop limited to one SDK invocation while retaining SDK retries"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "Setting max_retries=0 disables the SDK’s automatic retries. A value of one permits an additional attempt, while timeout and output length do not establish retry ownership.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Alternatives now reflect realistic ways engineers mistakenly try to suppress retries.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python",
+          "assertion": "Setting max_retries=0 disables the SDK’s automatic retries. A value of one permits an additional attempt, while timeout and output length do not establish retry ownership."
+        }
+      ],
+      "distractorRationales": {
+        "A": "One allows an additional attempt.",
+        "C": "A longer timeout does not disable retries.",
+        "D": "One invocation can still contain multiple HTTP attempts."
+      },
+      "ambiguityChallenge": "Alternatives now reflect realistic ways engineers mistakenly try to suppress retries.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator sdk-single-owner-retries. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-042",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "sdk-per-request-retry-isolation",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A shared Python SDK client serves interactive calls and a one-off background request. Only the background request needs max_retries=5. Which approach applies that change without replacing the shared client’s default retry policy?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Use client.with_options(max_retries=5) for the background call"
+      },
+      {
+        "id": "B",
+        "body": "Mutate a private retry attribute on the shared client before calling it"
+      },
+      {
+        "id": "C",
+        "body": "Add max_retries to the user prompt"
+      },
+      {
+        "id": "D",
+        "body": "Change the global client default while interactive requests are running"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "The Python SDK supports per-request overrides through with_options. That gives the background request its policy without changing the shared default used by other calls.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Scoped configuration is the binding requirement; the question does not claim only one possible client architecture exists.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python",
+          "assertion": "The Python SDK supports per-request overrides through with_options. That gives the background request its policy without changing the shared default used by other calls."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Private mutation is not the documented scoped override and affects shared state.",
+        "C": "Prompt content does not configure client retries.",
+        "D": "A global change violates the requirement to preserve other requests’ policy."
+      },
+      "ambiguityChallenge": "Scoped configuration is the binding requirement; the question does not claim only one possible client architecture exists.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator sdk-per-request-retry-isolation. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-043",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "sdk-timeout-not-total-retry-deadline",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A Python integration sets a five-second request timeout but leaves automatic retries enabled. The owner assumes the entire SDK operation must return within five seconds including retries. Why is that conclusion unsafe?",
+    "options": [
+      {
+        "id": "A",
+        "body": "The timeout applies only after all configured retries have finished"
+      },
+      {
+        "id": "B",
+        "body": "Setting timeout automatically disables retries"
+      },
+      {
+        "id": "C",
+        "body": "Timed-out requests can be retried, so the complete operation can exceed one attempt’s timeout"
+      },
+      {
+        "id": "D",
+        "body": "Backoff delays are automatically included in a single hard five-second operation budget"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "The Python SDK retries timed-out requests under its retry policy. A per-request timeout is not by itself a total wall-clock budget across attempts and backoff.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "All alternatives are plausible interpretations of timeout/retry boundaries.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python",
+          "assertion": "The Python SDK retries timed-out requests under its retry policy. A per-request timeout is not by itself a total wall-clock budget across attempts and backoff."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Attempt timeout can occur before another retry.",
+        "B": "The SDK documents retrying timeouts.",
+        "D": "The attempt timeout does not establish that overall deadline."
+      },
+      "ambiguityChallenge": "All alternatives are plausible interpretations of timeout/retry boundaries.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator sdk-timeout-not-total-retry-deadline. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-044",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "json-escaping-user-content",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A service builds a Messages HTTP body by concatenating a user’s text into a JSON string. A user enters quotation marks and a newline, breaking the body. Which fix preserves the exact user text and valid JSON?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Remove every quotation mark and newline from user input"
+      },
+      {
+        "id": "B",
+        "body": "Replace all double quotes in the whole payload with single quotes"
+      },
+      {
+        "id": "C",
+        "body": "Encode the entire HTTP body as a JSON string twice"
+      },
+      {
+        "id": "D",
+        "body": "Build a data object and use a JSON serializer for the body"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "A JSON serializer escapes quotation marks and control characters within string values while preserving their decoded content. Manual stripping changes the input, and double encoding changes the body type.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://www.rfc-editor.org/rfc/rfc8259"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The requirement is lossless valid serialization; prompt escaping/security claims are not conflated.",
+      "sourceAssertions": [
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc8259",
+          "assertion": "A JSON serializer escapes quotation marks and control characters within string values while preserving their decoded content. Manual stripping changes the input, and double encoding changes the body type."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Stripping fails the exact-content requirement.",
+        "B": "Single-quoted strings are not standard JSON.",
+        "C": "Double serialization produces a string containing JSON, not the intended object."
+      },
+      "ambiguityChallenge": "The requirement is lossless valid serialization; prompt escaping/security claims are not conflated.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator json-escaping-user-content. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-045",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "json-duplicate-member-interoperability",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A configuration generator emits `{ \"max_tokens\": 100, \"max_tokens\": 900 }`. Different consumers disagree about the value. What change is required for interoperable interpretation?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Keep only one max_tokens member with the intended value"
+      },
+      {
+        "id": "B",
+        "body": "Always assume the first occurrence wins in every JSON parser"
+      },
+      {
+        "id": "C",
+        "body": "Always assume the last occurrence wins in every JSON parser"
+      },
+      {
+        "id": "D",
+        "body": "Sort the duplicate members alphabetically"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "JSON object names should be unique for interoperable interpretation. Duplicate-name handling differs among parsers, so neither first-wins nor last-wins is a universal rule.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://www.rfc-editor.org/rfc/rfc8259"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Does not falsely call all duplicate-member documents syntactically invalid; interoperability is the stated requirement.",
+      "sourceAssertions": [
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc8259",
+          "assertion": "JSON object names should be unique for interoperable interpretation. Duplicate-name handling differs among parsers, so neither first-wins nor last-wins is a universal rule."
+        }
+      ],
+      "distractorRationales": {
+        "B": "The RFC documents differing consumer behavior.",
+        "C": "Last-wins is common but not universal.",
+        "D": "Sorting equal names does not remove ambiguity."
+      },
+      "ambiguityChallenge": "Does not falsely call all duplicate-member documents syntactically invalid; interoperability is the stated requirement.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator json-duplicate-member-interoperability. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-046",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "json-object-order-versus-array-order",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A response adapter receives the same object fields in a different order and the same message content array in a different order. Which distinction should a review enforce? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "Do not depend on JSON object member ordering for field lookup"
+      },
+      {
+        "id": "B",
+        "body": "Treat content-array order as irrelevant because JSON never has ordering"
+      },
+      {
+        "id": "C",
+        "body": "Preserve array element order when it carries message-content sequence"
+      },
+      {
+        "id": "D",
+        "body": "Require alphabetical ordering of every object before it is valid JSON"
+      },
+      {
+        "id": "E",
+        "body": "Convert arrays to sets before displaying their content"
+      }
+    ],
+    "correctAnswers": [
+      "A",
+      "C"
+    ],
+    "explanation": "JSON objects and arrays have different ordering semantics: object-member order should not be relied upon, while arrays are ordered sequences. An adapter must preserve meaningful content-array order.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://www.rfc-editor.org/rfc/rfc8259"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The stem explicitly makes array order carry message sequence; this is serialization semantics, not model output nondeterminism.",
+      "sourceAssertions": [
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc8259",
+          "assertion": "JSON objects and arrays have different ordering semantics: object-member order should not be relied upon, while arrays are ordered sequences. An adapter must preserve meaningful content-array order."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Arrays are ordered.",
+        "D": "Alphabetic ordering is not required for valid JSON.",
+        "E": "A set discards meaningful sequence and duplicates."
+      },
+      "ambiguityChallenge": "The stem explicitly makes array order carry message sequence; this is serialization semantics, not model output nondeterminism.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator json-object-order-versus-array-order. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-047",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "json-literal-versus-string",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A downstream contract expects a JSON boolean field approved. Which payload has the correct JSON type?",
+    "options": [
+      {
+        "id": "A",
+        "body": "{\"approved\": \"true\"}"
+      },
+      {
+        "id": "B",
+        "body": "{\"approved\": true}"
+      },
+      {
+        "id": "C",
+        "body": "{\"approved\": 1}"
+      },
+      {
+        "id": "D",
+        "body": "{\"approved\": \"yes\"}"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "The JSON literal true is a boolean; quoted values are strings and 1 is a number. Type-sensitive consumers must receive the type the contract requires.",
+    "difficultyEstimate": "foundational",
+    "sourceRefs": [
+      "https://www.rfc-editor.org/rfc/rfc8259"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The contract is explicitly type-sensitive; no coercion policy is assumed.",
+      "sourceAssertions": [
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc8259",
+          "assertion": "The JSON literal true is a boolean; quoted values are strings and 1 is a number. Type-sensitive consumers must receive the type the contract requires."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Quoted true is a string.",
+        "C": "One is numeric, even if some languages treat it as truthy.",
+        "D": "Yes is a string rather than a JSON boolean."
+      },
+      "ambiguityChallenge": "The contract is explicitly type-sensitive; no coercion policy is assumed.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator json-literal-versus-string. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-048",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "json-nan-wire-format",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A preprocessing calculation produces NaN. The service must send standards-compliant JSON to an external integration. What must it do before serialization?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Serialize bare NaN and assume every standard JSON consumer accepts it"
+      },
+      {
+        "id": "B",
+        "body": "Replace NaN with bare Infinity"
+      },
+      {
+        "id": "C",
+        "body": "Map or reject the value under an explicit application policy because NaN is not a JSON number"
+      },
+      {
+        "id": "D",
+        "body": "Silently replace NaN with numeric zero even when the application contract distinguishes missing calculations from zero"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "NaN and Infinity are not permitted by the standard JSON number grammar. The application needs an explicit valid representation or rejection policy for non-finite calculation results.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://www.rfc-editor.org/rfc/rfc8259"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Added explicit semantic discriminator to a superficially plausible numeric fallback.",
+      "sourceAssertions": [
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc8259",
+          "assertion": "NaN and Infinity are not permitted by the standard JSON number grammar. The application needs an explicit valid representation or rejection policy for non-finite calculation results."
+        }
+      ],
+      "distractorRationales": {
+        "A": "NaN is not standard JSON.",
+        "B": "Infinity also violates the number grammar.",
+        "D": "Zero would change the specified application meaning."
+      },
+      "ambiguityChallenge": "Added explicit semantic discriminator to a superficially plausible numeric fallback.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator json-nan-wire-format. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-049",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "json-numeric-identifier-loss",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An integration sends identifiers larger than the exact integer range of its JavaScript Number consumer. The contract can be updated, and identifiers require no arithmetic. Which representation best preserves every digit across that boundary?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Round identifiers to the closest representable Number"
+      },
+      {
+        "id": "B",
+        "body": "Convert identifiers to exponent notation but still parse as Number"
+      },
+      {
+        "id": "C",
+        "body": "Split the identifier into multiple JSON numeric fields without updating the receiving contract"
+      },
+      {
+        "id": "D",
+        "body": "Represent identifiers as decimal strings and update the contract accordingly"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "JSON numeric precision is limited by consumer implementations. A decimal string preserves an identifier’s digits when the receiving numeric type cannot represent them exactly.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://www.rfc-editor.org/rfc/rfc8259"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced packet-size distractor with a plausible but contract-incompatible encoding design.",
+      "sourceAssertions": [
+        {
+          "url": "https://www.rfc-editor.org/rfc/rfc8259",
+          "assertion": "JSON numeric precision is limited by consumer implementations. A decimal string preserves an identifier’s digits when the receiving numeric type cannot represent them exactly."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Rounding changes identifiers.",
+        "B": "Notation cannot increase Number precision.",
+        "C": "The receiving contract would not reassemble the original identifier."
+      },
+      "ambiguityChallenge": "Replaced packet-size distractor with a plausible but contract-incompatible encoding design.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator json-numeric-identifier-loss. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-050",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "execution-data-dependency",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An async application first extracts a document ID with Claude and then calls a lookup coroutine requiring that ID. A proposed refactor schedules both at once before the ID exists. Which dependency must remain?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Await extraction before constructing the lookup call that uses its result"
+      },
+      {
+        "id": "B",
+        "body": "Schedule lookup with a placeholder ID and use the first completed response"
+      },
+      {
+        "id": "C",
+        "body": "Pass the extraction coroutine object to lookup as the document ID"
+      },
+      {
+        "id": "D",
+        "body": "Start both in gather and assume argument order delays the second until the first finishes"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Awaiting a coroutine provides its result for the dependent operation. Concurrency does not remove a data dependency or turn a coroutine object into its resolved value.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://docs.python.org/3/library/asyncio-task.html"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The wrong concurrency designs are realistic and their data-dependency failures explicit.",
+      "sourceAssertions": [
+        {
+          "url": "https://docs.python.org/3/library/asyncio-task.html",
+          "assertion": "Awaiting a coroutine provides its result for the dependent operation. Concurrency does not remove a data dependency or turn a coroutine object into its resolved value."
+        }
+      ],
+      "distractorRationales": {
+        "B": "The lookup requires the real extracted ID.",
+        "C": "A coroutine object is not its resolved value.",
+        "D": "gather schedules concurrently; input order is not sequencing."
+      },
+      "ambiguityChallenge": "The wrong concurrency designs are realistic and their data-dependency failures explicit.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator async-dependency-before-parallelism. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-051",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "async-independent-result-order",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A Python service runs `results = await asyncio.gather(classify(a), classify(b))`. Both succeed, but b finishes first. In what order are the returned results?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Completion order: b, then a"
+      },
+      {
+        "id": "B",
+        "body": "Random order determined by the model"
+      },
+      {
+        "id": "C",
+        "body": "Argument order: a, then b"
+      },
+      {
+        "id": "D",
+        "body": "Sorted by the contents of the generated answers"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "asyncio.gather returns successful results in the order of its input awaitables. Completion timing does not reorder that result list.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://docs.python.org/3/library/asyncio-task.html"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Both calls succeed, excluding exception policy; distinct from batch results which do not guarantee input order.",
+      "sourceAssertions": [
+        {
+          "url": "https://docs.python.org/3/library/asyncio-task.html",
+          "assertion": "asyncio.gather returns successful results in the order of its input awaitables. Completion timing does not reorder that result list."
+        }
+      ],
+      "distractorRationales": {
+        "A": "That is not gather’s documented result ordering.",
+        "B": "The language primitive fixes order independent of the model.",
+        "D": "gather does not sort result content."
+      },
+      "ambiguityChallenge": "Both calls succeed, excluding exception policy; distinct from batch results which do not guarantee input order.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator async-independent-result-order. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-052",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "async-gather-per-item-errors",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A Python evaluation runner needs every independent call to finish and needs to inspect failures alongside successes. It uses asyncio.gather. Which configuration supports collecting exceptions in its result list?",
+    "options": [
+      {
+        "id": "A",
+        "body": "return_exceptions=False and ignore the first exception"
+      },
+      {
+        "id": "B",
+        "body": "return_exceptions=True, followed by explicit inspection of each result"
+      },
+      {
+        "id": "C",
+        "body": "Call gather without awaiting it and count scheduled tasks as successes"
+      },
+      {
+        "id": "D",
+        "body": "Treat every exception object as a successful model answer"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "With return_exceptions=True, gather aggregates exceptions alongside returned values. The application must inspect those entries and distinguish failures from successful answers.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://docs.python.org/3/library/asyncio-task.html"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The stem requests collect-all behavior, making fail-fast alternatives inappropriate.",
+      "sourceAssertions": [
+        {
+          "url": "https://docs.python.org/3/library/asyncio-task.html",
+          "assertion": "With return_exceptions=True, gather aggregates exceptions alongside returned values. The application must inspect those entries and distinguish failures from successful answers."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Default propagation does not supply the requested complete result list.",
+        "C": "Scheduling does not establish completion or success.",
+        "D": "Exception objects represent failures, not model answers."
+      },
+      "ambiguityChallenge": "The stem requests collect-all behavior, making fail-fast alternatives inappropriate.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator async-gather-per-item-errors. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-053",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "async-taskgroup-fail-fast",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A Python 3.11+ workflow runs several related coroutines. If one raises a normal exception, the requirement is to cancel the remaining work and wait for cleanup before leaving the group. Which primitive supplies that behavior?",
+    "options": [
+      {
+        "id": "A",
+        "body": "asyncio.gather with return_exceptions=True"
+      },
+      {
+        "id": "B",
+        "body": "asyncio.gather with default exception behavior"
+      },
+      {
+        "id": "C",
+        "body": "Independent create_task calls without group cancellation logic"
+      },
+      {
+        "id": "D",
+        "body": "asyncio.TaskGroup"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "TaskGroup cancels remaining tasks when a member fails with a non-cancellation exception and waits for tasks on exit. That matches the stated structured failure behavior.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://docs.python.org/3/library/asyncio-task.html"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced absurd event-loop option with actual competing async constructs; TaskGroup uniquely supplies the stated group semantics.",
+      "sourceAssertions": [
+        {
+          "url": "https://docs.python.org/3/library/asyncio-task.html",
+          "assertion": "TaskGroup cancels remaining tasks when a member fails with a non-cancellation exception and waits for tasks on exit. That matches the stated structured failure behavior."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Collect-all behavior does not cancel siblings on normal failure.",
+        "B": "Default gather propagates the exception without canceling other awaitables.",
+        "C": "Independent tasks alone do not supply the required group behavior."
+      },
+      "ambiguityChallenge": "Replaced absurd event-loop option with actual competing async constructs; TaskGroup uniquely supplies the stated group semantics.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator async-taskgroup-fail-fast. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-054",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "async-cancellation-cleanup-propagation",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An async Claude workflow catches CancelledError while cleaning up a temporary artifact. Its caller relies on cancellation to stop the workflow. What should it normally do after cleanup?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Propagate CancelledError rather than report an ordinary successful result"
+      },
+      {
+        "id": "B",
+        "body": "Return a cached empty answer and mark the task successful"
+      },
+      {
+        "id": "C",
+        "body": "Treat cancellation like a transient API failure and immediately retry the operation"
+      },
+      {
+        "id": "D",
+        "body": "Suppress the exception so the parent cannot observe an incomplete result"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Python recommends cleanup in try/finally and generally propagating CancelledError after cleanup. Swallowing cancellation can interfere with structured concurrency and the caller’s stop request.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://docs.python.org/3/library/asyncio-task.html"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced generic absurd restart option with a plausible but incorrect retry classification.",
+      "sourceAssertions": [
+        {
+          "url": "https://docs.python.org/3/library/asyncio-task.html",
+          "assertion": "Python recommends cleanup in try/finally and generally propagating CancelledError after cleanup. Swallowing cancellation can interfere with structured concurrency and the caller’s stop request."
+        }
+      ],
+      "distractorRationales": {
+        "B": "This hides the requested cancellation.",
+        "C": "The caller requested termination, not an automatic retry.",
+        "D": "Suppressing cancellation violates the caller’s stop contract."
+      },
+      "ambiguityChallenge": "Replaced generic absurd restart option with a plausible but incorrect retry classification.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator async-cancellation-cleanup-propagation. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-055",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "async-bounded-concurrency",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "An asyncio service may have at most four outbound Claude calls in flight. Which TWO implementation choices enforce this bound and preserve capacity after failures? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "Limit input processing to four requests per second without limiting call duration"
+      },
+      {
+        "id": "B",
+        "body": "Use a shared asyncio.Semaphore(4) around outbound call execution"
+      },
+      {
+        "id": "C",
+        "body": "Release the acquired semaphore permit in cleanup so failure does not permanently consume capacity"
+      },
+      {
+        "id": "D",
+        "body": "Create a new independent Semaphore(4) inside every task"
+      },
+      {
+        "id": "E",
+        "body": "Acquire the permit only after the HTTP call finishes"
+      }
+    ],
+    "correctAnswers": [
+      "B",
+      "C"
+    ],
+    "explanation": "A shared semaphore limits concurrent entries to the outbound-call region. Releasing each acquired permit in cleanup, commonly with async with, ensures failures do not permanently reduce capacity.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://docs.python.org/3/library/asyncio-sync.html"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Converted to two enforceable requirements, sharing and lifecycle cleanup; each wrong alternative can fail under the stated concurrent workload.",
+      "sourceAssertions": [
+        {
+          "url": "https://docs.python.org/3/library/asyncio-sync.html",
+          "assertion": "A shared semaphore limits concurrent entries to the outbound-call region. Releasing each acquired permit in cleanup, commonly with async with, ensures failures do not permanently reduce capacity."
+        }
+      ],
+      "distractorRationales": {
+        "A": "A rate bound does not impose an in-flight bound when calls overlap.",
+        "D": "Separate semaphores do not share a global count.",
+        "E": "Acquiring after execution cannot limit in-flight work."
+      },
+      "ambiguityChallenge": "Converted to two enforceable requirements, sharing and lifecycle cleanup; each wrong alternative can fail under the stated concurrent workload.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator async-bounded-concurrency. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-056",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "http-post-retry-uncertain-side-effect",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A Claude tool calls an internal POST endpoint that creates a purchase. The connection drops before the client reads a response. The endpoint provides no documented deduplication guarantee. Why is an automatic identical retry unsafe?",
+    "options": [
+      {
+        "id": "A",
+        "body": "POST is always a read-only method"
+      },
+      {
+        "id": "B",
+        "body": "A lost response proves the purchase was never created"
+      },
+      {
+        "id": "C",
+        "body": "The original purchase might have been created, and a second POST could create another"
+      },
+      {
+        "id": "D",
+        "body": "HTTP forbids any retry of any method"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "HTTP does not generally guarantee POST is idempotent. Losing the response does not establish that the server did not apply the request, so a duplicate side effect is possible.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://httpwg.org/specs/rfc9110.html"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "This concerns an explicitly non-deduplicated application endpoint, not an unverified claim about Anthropic billing or idempotency headers.",
+      "sourceAssertions": [
+        {
+          "url": "https://httpwg.org/specs/rfc9110.html",
+          "assertion": "HTTP does not generally guarantee POST is idempotent. Losing the response does not establish that the server did not apply the request, so a duplicate side effect is possible."
+        }
+      ],
+      "distractorRationales": {
+        "A": "POST is not inherently read-only.",
+        "B": "Response loss does not establish whether processing occurred.",
+        "D": "Retries can be appropriate when semantics or other evidence make them safe."
+      },
+      "ambiguityChallenge": "This concerns an explicitly non-deduplicated application endpoint, not an unverified claim about Anthropic billing or idempotency headers.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator http-post-retry-uncertain-side-effect. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-057",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "http-accepted-not-completed",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A tool’s internal REST service returns HTTP 202 for a queued export. The assistant must tell the user only what that status establishes. Which statement is justified?",
+    "options": [
+      {
+        "id": "A",
+        "body": "The export has finished successfully."
+      },
+      {
+        "id": "B",
+        "body": "The service rejected the job before processing."
+      },
+      {
+        "id": "C",
+        "body": "The response must contain the completed export file."
+      },
+      {
+        "id": "D",
+        "body": "The service accepted the job, but completion is not established."
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "HTTP 202 means processing has been accepted but is not complete. The application needs the service’s completion mechanism before claiming the export succeeded.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://httpwg.org/specs/rfc9110.html"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Converted to two precise HTTP202 conclusions, avoiding duplicate statement as a separate action.",
+      "sourceAssertions": [
+        {
+          "url": "https://httpwg.org/specs/rfc9110.html",
+          "assertion": "HTTP 202 means processing has been accepted but is not complete. The application needs the service’s completion mechanism before claiming the export succeeded."
+        }
+      ],
+      "distractorRationales": {
+        "A": "202 does not establish finished processing.",
+        "B": "202 is acceptance, not rejection.",
+        "C": "202 does not require a completed result payload."
+      },
+      "ambiguityChallenge": "Acceptance alone establishes neither completion nor rejection; only D states the limited conclusion.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator http-accepted-not-completed. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-058",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "http-no-content-response-parser",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A documented internal DELETE tool endpoint succeeds with HTTP 204 and no content. The adapter always parses successful response bodies as JSON and throws. What correction matches the endpoint contract?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Treat the valid 204 as success without requiring a JSON body"
+      },
+      {
+        "id": "B",
+        "body": "Classify the empty response as truncated JSON and retry automatically"
+      },
+      {
+        "id": "C",
+        "body": "Wait for response content to arrive after the 204 headers"
+      },
+      {
+        "id": "D",
+        "body": "Require the endpoint to return a model-generated JSON acknowledgement before accepting its documented success"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "HTTP 204 indicates successful fulfillment with no response content. A body parser must respect that status instead of requiring JSON where the contract provides none.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://httpwg.org/specs/rfc9110.html"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "All wrong approaches now concern response-parser contract mistakes.",
+      "sourceAssertions": [
+        {
+          "url": "https://httpwg.org/specs/rfc9110.html",
+          "assertion": "HTTP 204 indicates successful fulfillment with no response content. A body parser must respect that status instead of requiring JSON where the contract provides none."
+        }
+      ],
+      "distractorRationales": {
+        "B": "The documented response has no body to truncate.",
+        "C": "A204 has no content; waiting for JSON misunderstands the status.",
+        "D": "The existing success contract does not require generated acknowledgement."
+      },
+      "ambiguityChallenge": "All wrong approaches now concern response-parser contract mistakes.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator http-no-content-response-parser. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-059",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "git-revert-shared-history",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A faulty non-merge commit changed a Claude application’s request adapter. It is already shared, later unrelated commits must remain, and the team forbids rewriting branch history. Assuming a clean working tree, which operation records an inverse change?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Force-reset the branch to before the faulty commit"
+      },
+      {
+        "id": "B",
+        "body": "Delete the repository’s history and recommit the files"
+      },
+      {
+        "id": "C",
+        "body": "git revert of the faulty commit, resolving any conflicts and verifying the result"
+      },
+      {
+        "id": "D",
+        "body": "Amend the faulty commit and force-push"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "git revert records a new commit reversing an earlier patch. It preserves the existing history, unlike rewriting the branch to remove or amend the published commit.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://git-scm.com/docs/git-revert"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Non-merge commit and clean tree are explicit; conflict resolution/verification avoids promising automatic perfect rollback.",
+      "sourceAssertions": [
+        {
+          "url": "https://git-scm.com/docs/git-revert",
+          "assertion": "git revert records a new commit reversing an earlier patch. It preserves the existing history, unlike rewriting the branch to remove or amend the published commit."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Resetting removes later history from the branch and violates the constraint.",
+        "B": "Deleting history violates the requirement.",
+        "D": "Amending a published ancestor rewrites history."
+      },
+      "ambiguityChallenge": "Non-merge commit and clean tree are explicit; conflict resolution/verification avoids promising automatic perfect rollback.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator git-revert-shared-history. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-060",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "git-staged-diff-review",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A developer staged the intended request-parser fix, then made additional unstaged experiments. Before committing only the staged fix, which command shows exactly the staged changes relative to HEAD?",
+    "options": [
+      {
+        "id": "A",
+        "body": "git diff"
+      },
+      {
+        "id": "B",
+        "body": "git diff --cached"
+      },
+      {
+        "id": "C",
+        "body": "git diff HEAD"
+      },
+      {
+        "id": "D",
+        "body": "git status --short"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "git diff --cached compares the index with HEAD by default. Plain git diff shows unstaged changes, while git diff HEAD includes working-tree changes beyond the staged patch.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://git-scm.com/docs/git-diff"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The precise staged-versus-unstaged state makes the command choice uniquely defensible.",
+      "sourceAssertions": [
+        {
+          "url": "https://git-scm.com/docs/git-diff",
+          "assertion": "git diff --cached compares the index with HEAD by default. Plain git diff shows unstaged changes, while git diff HEAD includes working-tree changes beyond the staged patch."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Plain diff compares working tree to index.",
+        "C": "HEAD diff includes staged and unstaged working-tree changes.",
+        "D": "Status lists file states but not the patch content requested."
+      },
+      "ambiguityChallenge": "The precise staged-versus-unstaged state makes the command choice uniquely defensible.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator git-staged-diff-review. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-061",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "git-review-branch-delta",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A feature branch for a Claude integration diverged from main, and main has since advanced independently. Reviewers want changes on the feature branch since the common ancestor. Which diff form directly expresses that comparison?",
+    "options": [
+      {
+        "id": "A",
+        "body": "git diff main feature"
+      },
+      {
+        "id": "B",
+        "body": "git diff --cached"
+      },
+      {
+        "id": "C",
+        "body": "git diff feature main"
+      },
+      {
+        "id": "D",
+        "body": "git diff main...feature"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "The three-dot diff compares the merge base of the branches with the feature tip. That isolates the feature’s changes since divergence instead of comparing two independently advanced tips.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://git-scm.com/docs/git-diff"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Branches have diverged and main advanced, so two-dot and three-dot are materially different.",
+      "sourceAssertions": [
+        {
+          "url": "https://git-scm.com/docs/git-diff",
+          "assertion": "The three-dot diff compares the merge base of the branches with the feature tip. That isolates the feature’s changes since divergence instead of comparing two independently advanced tips."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Two-tip comparison can include differences caused by independent main changes.",
+        "B": "Cached diff concerns local staged changes.",
+        "C": "Reverse tip comparison has the same ancestry issue and wrong direction."
+      },
+      "ambiguityChallenge": "Branches have diverged and main advanced, so two-dot and three-dot are materially different.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator git-review-branch-delta. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-062",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "code-review-executable-evidence",
+    "type": "single",
+    "selectCount": 1,
+    "body": "Claude reports that a request-validation refactor is finished, but the task required malformed-input rejection and unchanged valid-input behavior. Which evidence most directly verifies those requirements?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Passing executable cases for malformed and valid inputs against the changed implementation"
+      },
+      {
+        "id": "B",
+        "body": "Passing a test that checks only the function name exists"
+      },
+      {
+        "id": "C",
+        "body": "Comparing patch line count with the previous implementation"
+      },
+      {
+        "id": "D",
+        "body": "Reading a generated explanation that repeats the required behavior"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Claude Code guidance recommends giving the agent checks it can run and showing evidence. Executable cases for both required behaviors verify the contract more directly than prose or patch size.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/best-practices"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Verification distractors now represent inadequate review evidence rather than an unrelated setting.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/best-practices",
+          "assertion": "Claude Code guidance recommends giving the agent checks it can run and showing evidence. Executable cases for both required behaviors verify the contract more directly than prose or patch size."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Existence alone does not exercise either requirement.",
+        "C": "Patch length is not behavior evidence.",
+        "D": "Restating requirements does not execute their implementation."
+      },
+      "ambiguityChallenge": "Verification distractors now represent inadequate review evidence rather than an unrelated setting.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator code-review-executable-evidence. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-063",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "refactor-behavior-versus-golden-transport",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A pure request adapter is being refactored; it must produce the same JSON field values for fixed inputs. The model itself is not called in this test. Which regression check is appropriate?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Replace structural assertions with semantic similarity scoring of serialized payloads"
+      },
+      {
+        "id": "B",
+        "body": "Assert only that the adapter returns valid JSON"
+      },
+      {
+        "id": "C",
+        "body": "Compare parsed request structures against fixed expected structures"
+      },
+      {
+        "id": "D",
+        "body": "Test only the current live model answer for the fixed input"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "Deterministic adapter behavior can be tested against explicit expected structures. Generative variability does not excuse changes to a pure serialization contract.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/best-practices"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Replaced nondeterminism strawman with plausible but insufficient testing strategies.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/best-practices",
+          "assertion": "Deterministic adapter behavior can be tested against explicit expected structures. Generative variability does not excuse changes to a pure serialization contract."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Similarity can accept a wrong field value even though the contract is exact.",
+        "B": "Valid syntax alone does not establish required field values.",
+        "D": "A model answer does not isolate or verify the pure adapter contract."
+      },
+      "ambiguityChallenge": "Replaced nondeterminism strawman with plausible but insufficient testing strategies.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator refactor-behavior-versus-golden-transport. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  },
+  {
+    "id": "AI-064",
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "verification-ui-running-artifact",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A Claude-assisted change claims to fix clipped controls on a small-screen form. Unit tests pass, but none renders that viewport. What additional verification directly addresses the claimed fix?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Run only a formatter and check that CSS syntax is accepted"
+      },
+      {
+        "id": "B",
+        "body": "Render the running form at the target viewport and inspect the controls"
+      },
+      {
+        "id": "C",
+        "body": "Re-run the same non-rendering unit suite several more times"
+      },
+      {
+        "id": "D",
+        "body": "Inspect only a screenshot from a wider desktop viewport"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "For UI changes, Claude Code guidance recommends visual verification against the intended result. Rendering the affected viewport provides evidence for clipping that non-rendering unit tests do not.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/best-practices"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Alternatives are plausible QA steps but fail the explicitly affected visual condition.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/best-practices",
+          "assertion": "For UI changes, Claude Code guidance recommends visual verification against the intended result. Rendering the affected viewport provides evidence for clipping that non-rendering unit tests do not."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Formatting/syntax does not establish small-screen layout.",
+        "C": "Repeated non-rendering tests do not cover the viewport.",
+        "D": "A wider viewport can conceal the target clipping defect."
+      },
+      "ambiguityChallenge": "Alternatives are plausible QA steps but fail the explicitly affected visual condition.",
+      "duplicateCheck": "Reviewed assigned batch and legacy53; concept discriminator verification-ui-running-artifact. Central cross-bank adjudication pending.",
+      "reviewedAt": "2026-09-08"
+    }
+  }
+]

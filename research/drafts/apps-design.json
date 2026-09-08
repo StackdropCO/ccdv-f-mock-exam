@@ -1,0 +1,2481 @@
+[
+  {
+    "id": "AI-065",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "pdf-visual-content-preservation",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A document assistant must interpret a chart that appears only as a graphic in a PDF. The surrounding extracted text does not contain the chart values. Which input design preserves the evidence the task needs?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Send the PDF as a supported document block for combined text and visual analysis"
+      },
+      {
+        "id": "B",
+        "body": "Submit only an OCR transcript of the surrounding prose"
+      },
+      {
+        "id": "C",
+        "body": "Index the extracted text and retrieve the most relevant paragraphs"
+      },
+      {
+        "id": "D",
+        "body": "Summarize each page from its extracted text before asking about the chart"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "PDF processing supplies page images together with extracted text, preserving visual evidence that a text-only extraction would discard.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/pdf-support"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The answer must retain the chart rather than reconstruct missing values.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/pdf-support",
+          "assertion": "PDF processing supplies page images together with extracted text, preserving visual evidence that a text-only extraction would discard."
+        }
+      ],
+      "distractorRationales": {
+        "B": "The stem says the chart values exist only in the graphic, so this transcript omits them.",
+        "C": "Text retrieval cannot recover evidence discarded during extraction.",
+        "D": "A text-only intermediate summary still omits the graphic-only values."
+      },
+      "ambiguityChallenge": "The answer must retain the chart rather than reconstruct missing values. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: pdf-visual-content-preservation; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-066",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "uploaded-file-reference-reuse",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An application asks several different questions about the same supported PDF. It wants to avoid uploading the PDF bytes for every request, without assuming the model remembers prior calls. What should it do?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Enable prompt caching but continue sending the full PDF bytes each time"
+      },
+      {
+        "id": "B",
+        "body": "Upload the file once and include its file_id in each relevant Messages request"
+      },
+      {
+        "id": "C",
+        "body": "Store only the returned file_id in a local variable and omit all document blocks from later requests"
+      },
+      {
+        "id": "D",
+        "body": "Compress the PDF before resending its full bytes for each question"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "The Files API returns a file_id that can be referenced in later Messages requests without uploading the bytes again. The document reference still belongs in each request that needs it.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/files"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The requirement concerns file transport reuse, not conversation persistence.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/files",
+          "assertion": "The Files API returns a file_id that can be referenced in later Messages requests without uploading the bytes again. The document reference still belongs in each request that needs it."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Caching may reduce inference costs but this arrangement still uploads bytes every time.",
+        "C": "A locally stored ID supplies no document reference to the subsequent API request.",
+        "D": "Compression reduces bytes but does not satisfy the no-repeat-upload requirement."
+      },
+      "ambiguityChallenge": "The requirement concerns file transport reuse, not conversation persistence. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: uploaded-file-reference-reuse; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-067",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "files-immutable-replacement",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An uploaded policy PDF is corrected. Future requests must use the corrected content; existing requests are already finished. Which update strategy matches the Files API lifecycle?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Update the existing file’s filename and assume future reads use the corrected local file"
+      },
+      {
+        "id": "B",
+        "body": "Replace the existing file’s content through an in-place update request"
+      },
+      {
+        "id": "C",
+        "body": "Upload the corrected PDF, update the application reference, then delete the obsolete file"
+      },
+      {
+        "id": "D",
+        "body": "Keep the old file_id and attach a correction note while treating the stored document as updated"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "Uploaded files cannot be modified or renamed. Updating content requires a new upload; the application should switch its reference and retire the old file.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/files"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "All old requests have finished, removing a concurrent-use retirement ambiguity.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/files",
+          "assertion": "Uploaded files cannot be modified or renamed. Updating content requires a new upload; the application should switch its reference and retire the old file."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Neither renaming nor binding the upload to later local edits is supported.",
+        "B": "Uploaded files are immutable; no supported in-place replacement is established.",
+        "D": "A correction note does not replace the stored PDF content required for future requests."
+      },
+      "ambiguityChallenge": "All old requests have finished, removing a concurrent-use retirement ambiguity. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: files-immutable-replacement; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-068",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "files-original-download-contract",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A product promises that customers can download their original uploaded documents later. A developer plans to use the Files API as the only copy. Which design correction is required by the documented download behavior?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Use retrieve_metadata to obtain and return the original file bytes"
+      },
+      {
+        "id": "B",
+        "body": "Call the content-download endpoint for any uploaded file_id after checking that upload succeeded"
+      },
+      {
+        "id": "C",
+        "body": "Remove file expiration so original uploads become downloadable"
+      },
+      {
+        "id": "D",
+        "body": "Retain originals in application-controlled storage; Files API downloads are for generated downloadable files"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "Files uploaded by the application are not downloadable through the Files API. Preserve originals separately if the product must return them later.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/files"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The promise concerns originals, not files created by code execution or skills.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/files",
+          "assertion": "Files uploaded by the application are not downloadable through the Files API. Preserve originals separately if the product must return them later."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Metadata retrieval does not download original content.",
+        "B": "Successful upload does not make the original downloadable.",
+        "C": "Retention duration does not change uploaded-file download eligibility."
+      },
+      "ambiguityChallenge": "The promise concerns originals, not files created by code execution or skills. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: files-original-download-contract; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-069",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "file-id-application-user-binding",
+    "type": "single",
+    "selectCount": 1,
+    "body": "Two customers share an application workspace. The UI sends arbitrary file_id values supplied by the browser to the Claude API. What is the direct design flaw?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Workspace file access does not enforce the application’s customer ownership; resolve file IDs through an authorized server-side mapping"
+      },
+      {
+        "id": "B",
+        "body": "The API automatically restricts each file to the browser session that first referenced it"
+      },
+      {
+        "id": "C",
+        "body": "A valid file_id is sufficient evidence that the current customer owns that file"
+      },
+      {
+        "id": "D",
+        "body": "Changing the conversation ID creates an API-enforced ownership boundary for files"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Files are accessible across the API workspace rather than scoped to an application user or conversation. Treat IDs as server-side references and enforce the user-to-file mapping.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/files"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "This tests the integration’s ownership boundary, not general prompt injection.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/files",
+          "assertion": "Files are accessible across the API workspace rather than scoped to an application user or conversation. Treat IDs as server-side references and enforce the user-to-file mapping."
+        }
+      ],
+      "distractorRationales": {
+        "B": "The API file boundary is workspace-level rather than browser-session-level.",
+        "C": "Existence of a workspace file does not establish application-user authorization.",
+        "D": "Workspace files are not scoped to application conversations."
+      },
+      "ambiguityChallenge": "This tests the integration’s ownership boundary, not general prompt injection. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: file-id-application-user-binding; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-070",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "citation-scanned-text-limitation",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A scan-only PDF has no extractable text. Claude can visually discuss it, but the product requires native citations to its passages. Which change addresses the documented limitation?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Request page-number references in prose and treat them as native text citations"
+      },
+      {
+        "id": "B",
+        "body": "Provide a verified text-bearing representation of the scan for text citations"
+      },
+      {
+        "id": "C",
+        "body": "Enable native citations on the unchanged scan and assume visual OCR makes it citable"
+      },
+      {
+        "id": "D",
+        "body": "Convert the scan to an image block and request native image-region citations"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "Native citations currently reference text, and scan-only PDFs without extractable text are not citable. A verified text representation supplies citable content.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/citations"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Visual understanding is explicitly distinguished from native text citation support.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/citations",
+          "assertion": "Native citations currently reference text, and scan-only PDFs without extractable text are not citable. A verified text representation supplies citable content."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Model-authored page references do not create native citations to nonextractable text.",
+        "C": "The documentation explicitly excludes scans without extractable text from native PDF text citations.",
+        "D": "Image citations are not supported."
+      },
+      "ambiguityChallenge": "Visual understanding is explicitly distinguished from native text citation support. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: citation-scanned-text-limitation; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-071",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "citations-json-output-incompatibility",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A single API request enables citations on supplied documents and also sets output_config.format to a JSON schema. Both features work separately. What explains the request failure?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Each feature requires a separate API key, even when the model supports both"
+      },
+      {
+        "id": "B",
+        "body": "Citations are unsupported whenever input contains multiple documents"
+      },
+      {
+        "id": "C",
+        "body": "Native citations and structured JSON outputs cannot be enabled together in that request"
+      },
+      {
+        "id": "D",
+        "body": "The combination is rejected only on streaming requests and will work unchanged synchronously"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "Citations interleave citation information with text output and are incompatible with structured output formatting in the same request. The documented result is a 400 error.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/citations"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Both configurations are individually valid, isolating the incompatible combination.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/citations",
+          "assertion": "Citations interleave citation information with text output and are incompatible with structured output formatting in the same request. The documented result is a 400 error."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The documentation identifies feature incompatibility rather than a per-feature key requirement.",
+        "B": "Citations support multiple documents; that is not the specified failure.",
+        "D": "The documented incompatibility applies to the request combination, not only streaming."
+      },
+      "ambiguityChallenge": "Both configurations are individually valid, isolating the incompatible combination. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: citations-json-output-incompatibility; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-072",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "rag-native-source-attribution",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An internal retrieval service already returns approved passages and stable article identifiers. The UI needs native citations carrying those identifiers. Which content design directly supports that requirement?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Append an unlabeled bibliography after concatenating all retrieved passages"
+      },
+      {
+        "id": "B",
+        "body": "Keep passage identifiers only in the database and send Claude the passage text without attribution"
+      },
+      {
+        "id": "C",
+        "body": "Ask Claude to infer each passage’s internal article identifier from its wording"
+      },
+      {
+        "id": "D",
+        "body": "Supply search_result blocks with source, title, text content, and citations enabled"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "Search-result blocks let an application provide its own retrieved content with source and title metadata for native citations.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/search-results"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Retrieval is already complete; the missing component is structured attribution.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/search-results",
+          "assertion": "Search-result blocks let an application provide its own retrieved content with source and title metadata for native citations."
+        }
+      ],
+      "distractorRationales": {
+        "A": "This loses structured passage-to-source associations needed for native citations.",
+        "B": "The model response cannot preserve native metadata that was not supplied.",
+        "C": "Inferred identifiers do not preserve the authoritative metadata already available."
+      },
+      "ambiguityChallenge": "Retrieval is already complete; the missing component is structured attribution. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: rag-native-source-attribution; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-073",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "citation-block-granularity",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A search result contains a whole manual as one text block. Every native citation returns an unhelpfully large passage. How can the application obtain finer citation boundaries without changing the manual’s words?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Split the content into smaller, focused text blocks"
+      },
+      {
+        "id": "B",
+        "body": "Ask for shorter citation text while leaving the manual as a single block"
+      },
+      {
+        "id": "C",
+        "body": "Shorten the result title and source identifier"
+      },
+      {
+        "id": "D",
+        "body": "Keep one content block but add paragraph labels inside its text"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Search-result citations reference whole content blocks. Splitting the same text into focused blocks gives the model finer citation boundaries.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/search-results"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The text must remain the same; only citation unit boundaries need changing.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/search-results",
+          "assertion": "Search-result citations reference whole content blocks. Splitting the same text into focused blocks gives the model finer citation boundaries."
+        }
+      ],
+      "distractorRationales": {
+        "B": "The native citable unit remains the complete block.",
+        "C": "Metadata length does not change citation content boundaries.",
+        "D": "Labels inside a block do not create separate native citation units."
+      },
+      "ambiguityChallenge": "The text must remain the same; only citation unit boundaries need changing. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: citation-block-granularity; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-074",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "search-result-container-homogeneity",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A custom retrieval tool returns a tool_result whose content array contains two search_result blocks and one plain text summary. The request is rejected. What is the valid way to retain the summary alongside these results?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Keep the mixed array but disable citations on its search results"
+      },
+      {
+        "id": "B",
+        "body": "Put the summary text inside a search_result content array"
+      },
+      {
+        "id": "C",
+        "body": "Move the plain summary before the search_result blocks in the same content array"
+      },
+      {
+        "id": "D",
+        "body": "Change the summary’s type to search_result without adding the required source/title/content fields"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "If a tool_result contains search_result blocks, all its top-level content blocks must be search_result. Supporting text can be placed inside one result’s text content array.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/search-results"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The rejection is specifically caused by mixing block types inside one tool result.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/search-results",
+          "assertion": "If a tool_result contains search_result blocks, all its top-level content blocks must be search_result. Supporting text can be placed inside one result’s text content array."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The mixed-block tool-result shape remains invalid independently of citation use.",
+        "C": "Changing order does not eliminate mixed top-level block types.",
+        "D": "Relabeling incomplete content does not make a valid search result."
+      },
+      "ambiguityChallenge": "The rejection is specifically caused by mixing block types inside one tool result. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: search-result-container-homogeneity; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-075",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "schema-external-reference-resolution",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A team reuses a JSON output schema that references a definition at an external HTTPS URL. It wants constrained JSON output from the API. What must change?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Include the external URL in a schema description while retaining the unsupported external reference"
+      },
+      {
+        "id": "B",
+        "body": "Make the schema URL public and allow unauthenticated HTTPS access"
+      },
+      {
+        "id": "C",
+        "body": "Resolve the external definition into a supported self-contained schema before submission"
+      },
+      {
+        "id": "D",
+        "body": "Configure a longer HTTP timeout for remote definition fetching"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "Structured outputs do not support external schema references. Resolve external definitions into a supported schema before sending it.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The reference is external; ordinary supported internal references are not being rejected.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
+          "assertion": "Structured outputs do not support external schema references. Resolve external definitions into a supported schema before sending it."
+        }
+      ],
+      "distractorRationales": {
+        "A": "A description does not remove the unsupported reference.",
+        "B": "External references remain unsupported even when reachable.",
+        "D": "The API does not support this external-reference fetching mechanism."
+      },
+      "ambiguityChallenge": "The reference is external; ordinary supported internal references are not being rejected. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: schema-external-reference-resolution; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-076",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "schema-unsupported-numeric-constraints",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A Python parsing helper transforms a Pydantic field with minimum: 100 into a simpler schema for the API. The application still requires that minimum. Which account of enforcement is correct?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Only constrained decoding enforces the minimum, so downstream validation can be removed"
+      },
+      {
+        "id": "B",
+        "body": "The description makes minimum a hard decoder constraint equivalent to the original keyword"
+      },
+      {
+        "id": "C",
+        "body": "Validation against the simplified transmitted schema alone preserves the original minimum"
+      },
+      {
+        "id": "D",
+        "body": "The helper validates the response against the original schema, so application-side validation still enforces the constraint"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "The SDK can remove unsupported constraints from the transmitted schema while retaining their descriptions, then validate responses against the original schema. That validation preserves the application’s numeric requirement.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The stem specifies the documented parsing helper’s transformation, not arbitrary raw API code.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
+          "assertion": "The SDK can remove unsupported constraints from the transmitted schema while retaining their descriptions, then validate responses against the original schema. That validation preserves the application’s numeric requirement."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The transmitted simplified schema lacks the numerical constraint; validation of the original schema matters.",
+        "B": "Descriptions guide generation but do not reinstate a removed grammar constraint.",
+        "C": "That simplified schema no longer contains the bound."
+      },
+      "ambiguityChallenge": "The stem specifies the documented parsing helper’s transformation, not arbitrary raw API code. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: schema-sdk-transformed-constraint-validation; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-077",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "sdk-preset-additive-instructions",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A TypeScript Agent SDK application uses the Claude Code preset. One request needs an additional review focus while retaining the preset instructions. Which systemPrompt configuration is designed for this?",
+    "options": [
+      {
+        "id": "A",
+        "body": "The claude_code preset object with an append string"
+      },
+      {
+        "id": "B",
+        "body": "Set systemPrompt to a custom string containing only the additional review focus"
+      },
+      {
+        "id": "C",
+        "body": "Set systemPrompt to the claude_code preset without an append field"
+      },
+      {
+        "id": "D",
+        "body": "Set systemPrompt to a custom string containing only the project’s CLAUDE.md contents"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "The preset object’s append field adds instructions while preserving the Claude Code preset. A standalone custom string replaces the preset prompt.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The required operation is additive, not total prompt replacement.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts",
+          "assertion": "The preset object’s append field adds instructions while preserving the Claude Code preset. A standalone custom string replaces the preset prompt."
+        }
+      ],
+      "distractorRationales": {
+        "B": "A custom string replaces the preset instead of retaining it.",
+        "C": "That preserves the preset but omits the required additional focus.",
+        "D": "That replaces the preset with project context instead of applying the requested additive focus."
+      },
+      "ambiguityChallenge": "The required operation is additive, not total prompt replacement. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: sdk-preset-additive-instructions; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-078",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "sdk-filesystem-config-opt-out-boundary",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A hosted SDK service sets settingSources: [] and assumes it has disabled every host-provided input. Which statement correctly limits that assumption?",
+    "options": [
+      {
+        "id": "A",
+        "body": "It disables project files but always keeps user and local settings enabled"
+      },
+      {
+        "id": "B",
+        "body": "It excludes user/project/local settings, but managed policy and global configuration are still read"
+      },
+      {
+        "id": "C",
+        "body": "It disables managed policy whenever user settings are disabled"
+      },
+      {
+        "id": "D",
+        "body": "It prevents host auto memory and global configuration from being read"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "An empty settingSources list excludes user, project, and local settings. It does not disable managed policy or global configuration and is not filesystem isolation.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/agent-sdk/claude-code-features"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "This asks about an explicit empty list, avoiding changed default-loading behavior.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/agent-sdk/claude-code-features",
+          "assertion": "An empty settingSources list excludes user, project, and local settings. It does not disable managed policy or global configuration and is not filesystem isolation."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The explicit empty list excludes all three listed filesystem settings sources.",
+        "C": "Managed policy is outside this option’s suppression scope.",
+        "D": "Those inputs are explicitly outside settingSources control."
+      },
+      "ambiguityChallenge": "This asks about an explicit empty list, avoiding changed default-loading behavior. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: sdk-filesystem-config-opt-out-boundary; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-079",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "sdk-plugin-local-materialization",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A deployment receives a plugin’s Git repository URL and passes it directly as a plugins entry with type: git. The current Agent SDK accepts only local plugin entries. What is the supported deployment arrangement?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Pass the repository URL as a local path and rely on the SDK to clone it"
+      },
+      {
+        "id": "B",
+        "body": "Pass a marketplace identifier as the plugin type and omit the local directory"
+      },
+      {
+        "id": "C",
+        "body": "Materialize the plugin on disk and pass its root path with type: local"
+      },
+      {
+        "id": "D",
+        "body": "Put the repository URL in settingSources so filesystem discovery downloads the plugin"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "The Agent SDK’s plugin option accepts local directories. Download or check out remotely distributed plugins first, then provide the plugin root path.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/agent-sdk/plugins"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The restriction is explicitly on the SDK plugins option, not CLI marketplace installation.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/agent-sdk/plugins",
+          "assertion": "The Agent SDK’s plugin option accepts local directories. Download or check out remotely distributed plugins first, then provide the plugin root path."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The local-path option expects already materialized files.",
+        "B": "The SDK option accepts type local rather than marketplace transport types.",
+        "D": "settingSources chooses settings scopes and does not materialize remote plugin repositories."
+      },
+      "ambiguityChallenge": "The restriction is explicitly on the SDK plugins option, not CLI marketplace installation. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: sdk-plugin-local-materialization; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-080",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "plugin-distribution-package-choice",
+    "type": "single",
+    "selectCount": 1,
+    "body": "Several repositories need the same maintained combination of skills, hooks, and MCP configuration, released as one versioned unit. Which Claude Code packaging approach fits?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Distribute only a shared CLAUDE.md import and leave hooks and MCP configuration outside the release"
+      },
+      {
+        "id": "B",
+        "body": "Install the bundle in one developer’s project-local settings and rely on coworkers to discover it"
+      },
+      {
+        "id": "C",
+        "body": "Put all components into one skill’s prose and omit hook/MCP configuration files"
+      },
+      {
+        "id": "D",
+        "body": "Package the components as a reusable plugin"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "Plugins bundle skills, hooks, agents, and MCP servers for reusable, versioned distribution across projects and teams.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/plugins"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The unit contains several extension component types and must be versioned together.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/plugins",
+          "assertion": "Plugins bundle skills, hooks, agents, and MCP servers for reusable, versioned distribution across projects and teams."
+        }
+      ],
+      "distractorRationales": {
+        "A": "This does not package the required executable/configuration components as one release.",
+        "B": "Project-local configuration is not a team-distributed versioned unit.",
+        "C": "Describing components in prose does not configure or package the actual hook/MCP components."
+      },
+      "ambiguityChallenge": "The unit contains several extension component types and must be versioned together. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: plugin-distribution-package-choice; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-081",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "plugin-namespaced-skill-disambiguation",
+    "type": "single",
+    "selectCount": 1,
+    "body": "Two loaded plugins both define a review skill. The application must explicitly invoke the one from billing-audit. What should it send?",
+    "options": [
+      {
+        "id": "A",
+        "body": "/billing-audit:review"
+      },
+      {
+        "id": "B",
+        "body": "/review, relying on the most recently installed plugin"
+      },
+      {
+        "id": "C",
+        "body": "/billing-audit/review"
+      },
+      {
+        "id": "D",
+        "body": "/review:billing-audit"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Plugin skills use the plugin-name:skill-name namespace. Explicitly invoking /billing-audit:review disambiguates the intended skill.",
+    "difficultyEstimate": "foundational",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/agent-sdk/plugins"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The task demands explicit selection between same-named skills.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/agent-sdk/plugins",
+          "assertion": "Plugin skills use the plugin-name:skill-name namespace. Explicitly invoking /billing-audit:review disambiguates the intended skill."
+        }
+      ],
+      "distractorRationales": {
+        "B": "The explicit plugin namespace is required to disambiguate the named plugin skill.",
+        "C": "This uses a path separator instead of the documented plugin-skill namespace.",
+        "D": "This reverses the documented plugin-name:skill-name order."
+      },
+      "ambiguityChallenge": "The task demands explicit selection between same-named skills. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: plugin-namespaced-skill-disambiguation; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-082",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "plugin-cache-root-path-portability",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A copied marketplace plugin works in its author’s checkout but its hook script cannot be found after installation elsewhere. The script is bundled in the plugin. Which path design is appropriate?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Resolve the script relative to the author’s development checkout recorded at build time"
+      },
+      {
+        "id": "B",
+        "body": "Resolve the script from CLAUDE_PLUGIN_ROOT"
+      },
+      {
+        "id": "C",
+        "body": "Resolve the script relative to the consuming application’s working directory"
+      },
+      {
+        "id": "D",
+        "body": "Resolve bundled script paths from CLAUDE_PLUGIN_DATA alone"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "Installed plugins run from their installed location. CLAUDE_PLUGIN_ROOT provides the plugin root so bundled resources can be referenced portably.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/plugins-reference"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The resource is bundled with the plugin, not stored in the consuming project.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/plugins-reference",
+          "assertion": "Installed plugins run from their installed location. CLAUDE_PLUGIN_ROOT provides the plugin root so bundled resources can be referenced portably."
+        }
+      ],
+      "distractorRationales": {
+        "A": "That checkout need not exist on an installation machine.",
+        "C": "The bundled script belongs to the installed plugin, not necessarily the application project.",
+        "D": "The persistent data directory is not the installed bundled-code root."
+      },
+      "ambiguityChallenge": "The resource is bundled with the plugin, not stored in the consuming project. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: plugin-cache-root-path-portability; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-083",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "pdf-encryption-supported-input-boundary",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A document-processing service receives a password-protected PDF. The customer has authorized processing, and the service can unlock it using the supplied password. The application must submit a supported PDF document input to the direct Claude API. Which preparation step is required?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Send the encrypted PDF unchanged and put its password in the user message"
+      },
+      {
+        "id": "B",
+        "body": "Upload the encrypted bytes through the Files API and assume file_id removes the encryption limitation"
+      },
+      {
+        "id": "C",
+        "body": "Unlock the document in authorized application processing and submit a standard unencrypted PDF"
+      },
+      {
+        "id": "D",
+        "body": "Base64-encode the encrypted file and treat encoding as decryption"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "PDF input must be a standard PDF without password protection or encryption. Unlock it through authorized preprocessing; a file reference, password in prose, or base64 encoding does not remove encryption.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/pdf-support"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The source is password-protected, permission and password are available, and the required API input is a supported PDF.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/pdf-support",
+          "assertion": "PDF support requirements specify standard PDF with no passwords or encryption."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The document interface does not accept encrypted PDF input with a password supplied in prose.",
+        "B": "Referencing uploaded bytes does not change the underlying PDF format or encryption.",
+        "D": "Base64 is an encoding of bytes, not removal of PDF encryption."
+      },
+      "ambiguityChallenge": "Authorization and ability to unlock are explicit; no unsupported password-processing behavior is assumed. All three alternatives leave the PDF encrypted.",
+      "duplicateCheck": "Replaces visual-token-budget overlap with legacy38. No other apps-design item tests encrypted-input normalization."
+    }
+  },
+  {
+    "id": "AI-084",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "vision-input-quality-debugging",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An invoice reader starts misreading small text after a new image-compression step. The original images are legible. Which investigation most directly addresses this changed input condition?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Tighten the output schema while leaving the compressed input unchanged"
+      },
+      {
+        "id": "B",
+        "body": "Evaluate prompts against the original images while production keeps sending compressed images"
+      },
+      {
+        "id": "C",
+        "body": "Inspect only the original high-resolution images and declare input quality unchanged"
+      },
+      {
+        "id": "D",
+        "body": "Inspect the actual compressed images sent to Claude and reduce damaging compression"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "Lossy compression can introduce artifacts that make text hard to read. Inspect the actual submitted images rather than assuming they preserve the originals’ legibility.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/vision"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "A concrete preprocessing change precedes the regression, isolating the relevant evidence.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/vision",
+          "assertion": "Lossy compression can introduce artifacts that make text hard to read. Inspect the actual submitted images rather than assuming they preserve the originals’ legibility."
+        }
+      ],
+      "distractorRationales": {
+        "A": "An output schema does not restore visual evidence lost in compression.",
+        "B": "That evaluates different inputs and misses the actual preprocessing regression.",
+        "C": "The model receives the transformed images, so originals alone cannot establish submitted quality."
+      },
+      "ambiguityChallenge": "A concrete preprocessing change precedes the regression, isolating the relevant evidence. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: vision-input-quality-debugging; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-085",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "vision-approximate-count-product-contract",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A parts-inspection prototype counts many tiny overlapping objects in photographs. The product contract requires exact counts with no unchecked errors. What is the defensible design decision?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Add an independent verification step instead of treating Claude’s image count as guaranteed exact"
+      },
+      {
+        "id": "B",
+        "body": "Use temperature zero and accept the resulting count without independent checks"
+      },
+      {
+        "id": "C",
+        "body": "Ask for a confidence score and accept every count labeled certain"
+      },
+      {
+        "id": "D",
+        "body": "Require a valid integer in JSON and treat schema validity as count verification"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Image object counts can be approximate, especially for many small objects. A product requiring exactness needs independent verification rather than relying on output formatting or confidence wording.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/vision"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The explicit exactness contract excludes unchecked approximate counts.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/vision",
+          "assertion": "Image object counts can be approximate, especially for many small objects. A product requiring exactness needs independent verification rather than relying on output formatting or confidence wording."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Sampling controls do not guarantee exact image object counts.",
+        "C": "A model confidence statement does not independently verify the count.",
+        "D": "Structural validity does not establish the factual count."
+      },
+      "ambiguityChallenge": "The explicit exactness contract excludes unchecked approximate counts. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: vision-approximate-count-product-contract; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-086",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "citation-render-source-passage-validation",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A document-answering UI discards all citation metadata and renders only response text. Reviewers need to inspect the source passages supporting individual claims. Which change directly enables this?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Show a bibliography of all input documents but discard claim-to-passage locations"
+      },
+      {
+        "id": "B",
+        "body": "Preserve and render citation locations and cited text alongside the associated answer spans"
+      },
+      {
+        "id": "C",
+        "body": "Show only one citation for the entire answer, regardless of the API’s per-span attribution"
+      },
+      {
+        "id": "D",
+        "body": "Replace cited passages with a confidence badge for each sentence"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "Citation metadata provides source locations and cited passages for checking an answer. The renderer must retain that association to support source inspection.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/citations"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The backend already returns citations; the failure is losing attribution in rendering.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/citations",
+          "assertion": "Citation metadata provides source locations and cited passages for checking an answer. The renderer must retain that association to support source inspection."
+        }
+      ],
+      "distractorRationales": {
+        "A": "A document list alone does not let reviewers inspect passages supporting individual claims.",
+        "C": "Collapsing all attribution loses the required individual-claim association.",
+        "D": "Confidence badges are not inspectable source passages."
+      },
+      "ambiguityChallenge": "The backend already returns citations; the failure is losing attribution in rendering. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: citation-render-source-passage-validation; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-087",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "sdk-context-sharing-cli-instructions",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A team maintains project conventions in CLAUDE.md for interactive Claude Code. Its SDK service must use that same maintained file rather than a copied string. Which explicit configuration supports this?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Set settingSources to user only and assume repository instructions are included"
+      },
+      {
+        "id": "B",
+        "body": "Set settingSources to an empty list while relying on automatic project discovery"
+      },
+      {
+        "id": "C",
+        "body": "Include project in settingSources and run with the intended project cwd"
+      },
+      {
+        "id": "D",
+        "body": "Include project settings but point cwd at an unrelated directory without the maintained file in its hierarchy"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "Including project settings loads project CLAUDE.md context. The SDK’s cwd determines project-level discovery, allowing the CLI and SDK to share the maintained file.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/agent-sdk/claude-code-features"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The requirement is shared filesystem instructions with explicit loading, not manual prompt duplication.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/agent-sdk/claude-code-features",
+          "assertion": "Including project settings loads project CLAUDE.md context. The SDK’s cwd determines project-level discovery, allowing the CLI and SDK to share the maintained file."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The explicit user-only scope does not load the required project source.",
+        "B": "The explicit empty list excludes project settings discovery.",
+        "D": "Project discovery in the wrong location does not load the intended repository instructions."
+      },
+      "ambiguityChallenge": "The requirement is shared filesystem instructions with explicit loading, not manual prompt duplication. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: sdk-context-sharing-cli-instructions; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-088",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "instruction-guidance-not-hard-precedence",
+    "type": "single",
+    "selectCount": 1,
+    "body": "Two CLAUDE.md files loaded into an SDK agent contain contradictory formatting instructions. A reviewer assumes the nested file mechanically replaces the parent file. What should the application designer recognize?",
+    "options": [
+      {
+        "id": "A",
+        "body": "The SDK chooses exactly one file using the JSON-settings precedence stack"
+      },
+      {
+        "id": "B",
+        "body": "The parent’s text is discarded whenever a child file has any content"
+      },
+      {
+        "id": "C",
+        "body": "The SDK refuses to start whenever two instruction files express contradictory preferences"
+      },
+      {
+        "id": "D",
+        "body": "Instruction files are additive context; remove the conflict rather than assume settings-style replacement"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "CLAUDE.md sources are combined as context, not merged under a hard settings precedence rule. Conflicting instructions should be reconciled explicitly.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/agent-sdk/claude-code-features"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The files are already known to be loaded; the issue is interpreting conflicting context.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/agent-sdk/claude-code-features",
+          "assertion": "CLAUDE.md sources are combined as context, not merged under a hard settings precedence rule. Conflicting instructions should be reconciled explicitly."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Instruction context does not follow that exclusive replacement rule.",
+        "B": "Both loaded files are additive rather than child replacing parent.",
+        "C": "No such deterministic prose contradiction check is established."
+      },
+      "ambiguityChallenge": "The files are already known to be loaded; the issue is interpreting conflicting context. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: instruction-guidance-not-hard-precedence; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-089",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "files-expiration-versus-erasure",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A product needs a precise promise that file bytes are permanently erased at an exact timestamp. An engineer proposes using Files API expires_at as proof. What is the correct assessment?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Expiration stops API content availability but is not a guaranteed permanent-erasure deadline"
+      },
+      {
+        "id": "B",
+        "body": "Expiration guarantees simultaneous erasure of both metadata and underlying bytes"
+      },
+      {
+        "id": "C",
+        "body": "Expiration provides a guaranteed permanent-erasure deadline once the file disappears from list results"
+      },
+      {
+        "id": "D",
+        "body": "An expired file can still be supplied to new inference requests until metadata disappears"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "File expiration is a lifecycle control, not a guaranteed-deletion control. Content becomes unavailable through the API, while limited retention and metadata visibility can continue.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/files"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The product promise is exact permanent erasure, a stronger claim than API unavailability.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/files",
+          "assertion": "File expiration is a lifecycle control, not a guaranteed-deletion control. Content becomes unavailable through the API, while limited retention and metadata visibility can continue."
+        }
+      ],
+      "distractorRationales": {
+        "B": "The docs explicitly distinguish lifecycle expiry from guaranteed deletion.",
+        "C": "Listing visibility does not establish exact underlying erasure timing.",
+        "D": "Expired references fail before inference even while metadata remains."
+      },
+      "ambiguityChallenge": "The product promise is exact permanent erasure, a stronger claim than API unavailability. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: files-expiration-versus-erasure; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-090",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "search-input-citation-consistency",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A RAG request includes several search_result blocks. Some enable citations and others disable them. All passages are intended to be used as evidence. Which repair follows the API’s citation-control rule?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Enable citations on retrieved results but disable them on prefetched results in the same request"
+      },
+      {
+        "id": "B",
+        "body": "Use the same citation-enabled setting on every search result in the request"
+      },
+      {
+        "id": "C",
+        "body": "Leave the settings mixed but place disabled results later in the message"
+      },
+      {
+        "id": "D",
+        "body": "Leave the settings mixed and disable streaming"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "Search-result citation settings must be consistent across a request. Enable citations on all results when the application wants them all available as cited evidence.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/search-results"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Every passage is intended as cited evidence, so enabling all is unambiguous.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/search-results",
+          "assertion": "Search-result citation settings must be consistent across a request. Enable citations on all results when the application wants them all available as cited evidence."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Transport origin does not exempt results from citation-setting consistency.",
+        "C": "Ordering does not resolve the all-or-nothing setting rule.",
+        "D": "The consistency requirement is not limited to streaming."
+      },
+      "ambiguityChallenge": "Every passage is intended as cited evidence, so enabling all is unambiguous. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: search-input-citation-consistency; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-091",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "plugin-root-component-placement",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An SDK deployment points its plugin path to .claude-plugin/, but the skills and hooks directories are siblings of that directory. Which path should the application provide?",
+    "options": [
+      {
+        "id": "A",
+        "body": "The plugin.json manifest file path"
+      },
+      {
+        "id": "B",
+        "body": "The skills directory alone"
+      },
+      {
+        "id": "C",
+        "body": "The plugin root directory containing .claude-plugin, skills, and hooks"
+      },
+      {
+        "id": "D",
+        "body": "The directory above the actual plugin root"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "The SDK plugin path points to the plugin root, the parent of the component directories and optional manifest directory.",
+    "difficultyEstimate": "foundational",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/agent-sdk/plugins"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The supplied path is one directory too deep for the actual package layout.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/agent-sdk/plugins",
+          "assertion": "The SDK plugin path points to the plugin root, the parent of the component directories and optional manifest directory."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The option expects a plugin directory root, not a manifest file.",
+        "B": "That is a component directory and omits sibling hook/configuration components.",
+        "D": "That path is also misaligned with the described component layout."
+      },
+      "ambiguityChallenge": "The supplied path is one directory too deep for the actual package layout. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: plugin-root-component-placement; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-092",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "schema-unsupported-numeric-constraints",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A service sends raw JSON-schema output configuration directly to the API, including minimum and maximum constraints. It does not use an SDK schema-transforming helper. The API returns an unsupported-schema error. Which change preserves the business checks?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Resubmit the same unsupported schema using a longer request timeout"
+      },
+      {
+        "id": "B",
+        "body": "Keep the numerical keywords but set strict output formatting again at a second configuration location"
+      },
+      {
+        "id": "C",
+        "body": "Remove the numeric constraints everywhere and accept any schema-valid number"
+      },
+      {
+        "id": "D",
+        "body": "Send a supported schema and enforce the numeric bounds in application validation"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "Numerical constraints such as minimum and maximum are unsupported in the transmitted structured-output schema. A supported schema plus application validation preserves the business bounds.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Raw API use distinguishes this from the separate SDK transformation question.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
+          "assertion": "Numerical constraints such as minimum and maximum are unsupported in the transmitted structured-output schema. A supported schema plus application validation preserves the business bounds."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Timeout does not add unsupported schema capabilities.",
+        "B": "Duplicate strict-format configuration does not make unsupported keywords valid.",
+        "C": "This discards the explicit business bounds."
+      },
+      "ambiguityChallenge": "Raw API use distinguishes this from the separate SDK transformation question. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: schema-raw-api-unsupported-constraints; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-093",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "document-binary-office-conversion",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A service submits a binary .docx file as a document block because it contains text. It must preserve the document’s layout for analysis. Which preprocessing choice matches the supported document interface?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Convert the document to a supported PDF representation"
+      },
+      {
+        "id": "B",
+        "body": "Change only its filename extension to .pdf"
+      },
+      {
+        "id": "C",
+        "body": "Set media_type to text/plain while keeping the binary DOCX bytes"
+      },
+      {
+        "id": "D",
+        "body": "Send the binary bytes as an ordinary text string"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "Binary .docx files are not supported directly in document blocks. Convert to a supported representation such as PDF; relabeling the same binary content is not conversion.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/build-with-claude/pdf-support"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The source is binary DOCX, and layout preservation favors actual PDF conversion.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/build-with-claude/pdf-support",
+          "assertion": "Binary .docx files are not supported directly in document blocks. Convert to a supported representation such as PDF; relabeling the same binary content is not conversion."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Renaming does not produce a valid PDF.",
+        "C": "Changing the MIME label does not convert binary content to text.",
+        "D": "Raw binary as text does not preserve a supported document representation."
+      },
+      "ambiguityChallenge": "The source is binary DOCX, and layout preservation favors actual PDF conversion. Each alternative fails the explicit interface requirement.",
+      "duplicateCheck": "Replaced overlapping draft; distinct document-binary-office-conversion. Cross-bank review remains central."
+    }
+  },
+  {
+    "id": "AI-094",
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "sdk-plugin-load-verification",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A hosted SDK app must fail its own readiness check if a required plugin is absent. A nonexistent local plugin path may be skipped while the session continues. Which TWO checks directly establish readiness? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "Treat successful session initialization alone as proof every requested plugin loaded"
+      },
+      {
+        "id": "B",
+        "body": "Verify the deployed plugin directory exists and is readable"
+      },
+      {
+        "id": "C",
+        "body": "Inspect the initialization message’s loaded plugins list for the required plugin"
+      },
+      {
+        "id": "D",
+        "body": "Verify only that the plugin was installed on the developer’s machine"
+      },
+      {
+        "id": "E",
+        "body": "Check that the configured path string is nonempty without checking the directory or inventory"
+      }
+    ],
+    "correctAnswers": [
+      "B",
+      "C"
+    ],
+    "explanation": "The SDK may skip a missing plugin path without ending the session. Verify the local path and the initialization message’s plugins inventory before declaring the required capability ready.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/agent-sdk/plugins"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Readiness explicitly requires the named plugin, not merely a running model session.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/agent-sdk/plugins",
+          "assertion": "The SDK may skip a missing plugin path without ending the session. Verify the local path and the initialization message’s plugins inventory before declaring the required capability ready."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The session may continue while a missing plugin is skipped.",
+        "D": "The hosted deployment may not contain the same directory.",
+        "E": "A nonempty path can still refer to a nonexistent location."
+      },
+      "ambiguityChallenge": "Readiness explicitly requires the named plugin, not merely a running model session. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: sdk-plugin-load-verification; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-095",
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "config-personal-project-scope",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A developer wants a personal setting for one Claude Code project without changing coworkers’ configuration or other projects. Which TWO actions fit? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "Edit only the committed shared project settings"
+      },
+      {
+        "id": "B",
+        "body": "Use .claude/settings.local.json for the personal override"
+      },
+      {
+        "id": "C",
+        "body": "Ensure the local file stays untracked, adding it to .gitignore if created manually"
+      },
+      {
+        "id": "D",
+        "body": "Use only the user settings file for the override"
+      },
+      {
+        "id": "E",
+        "body": "Place the personal override in managed settings distributed to the team"
+      }
+    ],
+    "correctAnswers": [
+      "B",
+      "C"
+    ],
+    "explanation": "Project-local settings scope an override to one developer’s project. If the file is created manually, explicitly keep it out of version control.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/settings"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The setting must be both project-specific and private to the developer.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/settings",
+          "assertion": "Project-local settings scope an override to one developer’s project. If the file is created manually, explicitly keep it out of version control."
+        }
+      ],
+      "distractorRationales": {
+        "A": "That changes the shared team configuration.",
+        "D": "User settings apply beyond the one project.",
+        "E": "Managed team-wide policy violates the personal project scope."
+      },
+      "ambiguityChallenge": "The setting must be both project-specific and private to the developer. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: config-personal-project-scope; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-096",
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "config-list-merge-not-scalar-override",
+    "type": "single",
+    "selectCount": 1,
+    "body": "User settings allow one Bash command and project settings allow a different one. No deny rules apply. A maintainer assumes the project allow list replaces the user list. What does the documented merge rule say?",
+    "options": [
+      {
+        "id": "A",
+        "body": "The higher-precedence project list replaces the complete user list"
+      },
+      {
+        "id": "B",
+        "body": "Only commands appearing in both lists remain allowed by the combined allow configuration"
+      },
+      {
+        "id": "C",
+        "body": "The user list replaces the project list because personal grants always override shared grants"
+      },
+      {
+        "id": "D",
+        "body": "Permission allow lists combine across settings sources"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "List settings such as permissions.allow are combined across sources rather than resolved like a single scalar value.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/settings"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "No deny rule or special model-list key changes the comparison.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/settings",
+          "assertion": "List settings such as permissions.allow are combined across sources rather than resolved like a single scalar value."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Permission allow lists merge rather than behaving as scalars.",
+        "B": "The merge is not set intersection.",
+        "C": "Neither this precedence nor replacement describes the documented list merge."
+      },
+      "ambiguityChallenge": "No deny rule or special model-list key changes the comparison. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: config-list-merge-not-scalar-override; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-097",
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "config-session-override-no-file-write",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A developer needs to test a supported non-managed setting in exactly one Claude Code session. Existing files must remain unchanged. Which option fits?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Start Claude Code with an appropriate --settings JSON override"
+      },
+      {
+        "id": "B",
+        "body": "Edit the global user settings file before launching and leave the override there"
+      },
+      {
+        "id": "C",
+        "body": "Commit the override into the project’s shared settings file"
+      },
+      {
+        "id": "D",
+        "body": "Use the project-local settings file and assume it is discarded when the session ends"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "The --settings option applies supported overrides for that session without changing saved settings files.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/settings"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The key is supported and non-managed, and persistence is explicitly forbidden.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/settings",
+          "assertion": "The --settings option applies supported overrides for that session without changing saved settings files."
+        }
+      ],
+      "distractorRationales": {
+        "B": "That persists across sessions.",
+        "C": "That changes persistent files and team configuration.",
+        "D": "Project-local settings remain on disk across sessions."
+      },
+      "ambiguityChallenge": "The key is supported and non-managed, and persistence is explicitly forbidden. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: config-session-override-no-file-write; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-098",
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "claudemd-import-relative-origin",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A CLAUDE.md file imports @guides/testing.md. Claude Code is launched from a different directory. Where does the relative import resolve?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Against the process’s current working directory regardless of the importer location"
+      },
+      {
+        "id": "B",
+        "body": "Against the directory containing the importing file"
+      },
+      {
+        "id": "C",
+        "body": "Against the Git repository root regardless of which file imports it"
+      },
+      {
+        "id": "D",
+        "body": "Against the user-level ~/.claude directory for every import"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "Relative CLAUDE.md imports resolve relative to the file containing the import, not the process working directory.",
+    "difficultyEstimate": "foundational",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/memory"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The distinction is importing-file origin versus launch-directory origin.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/memory",
+          "assertion": "Relative CLAUDE.md imports resolve relative to the file containing the import, not the process working directory."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Relative imports resolve from the importing file.",
+        "C": "The repository root is not an unconditional import origin.",
+        "D": "User configuration location does not anchor all relative imports."
+      },
+      "ambiguityChallenge": "The distinction is importing-file origin versus launch-directory origin. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: claudemd-import-relative-origin; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-099",
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "config-strict-json-syntax",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A committed Claude Code settings file contains // comments and a trailing comma. The intended setting is supported. Which TWO changes/checks address the configuration failure? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "Treat the file as JSONC because its extension is .json"
+      },
+      {
+        "id": "B",
+        "body": "Restart repeatedly while leaving the invalid syntax unchanged"
+      },
+      {
+        "id": "C",
+        "body": "Remove the comments and trailing comma to produce strict JSON"
+      },
+      {
+        "id": "D",
+        "body": "Verify which settings sources loaded after fixing the file"
+      },
+      {
+        "id": "E",
+        "body": "Change only the setting value while retaining the comment and trailing comma"
+      }
+    ],
+    "correctAnswers": [
+      "C",
+      "D"
+    ],
+    "explanation": "Claude Code settings files use strict JSON. Fix the syntax, then inspect settings-source status to confirm the repaired file loaded.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/settings"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The setting is supported; invalid JSON syntax is the stated fault.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/settings",
+          "assertion": "Claude Code settings files use strict JSON. Fix the syntax, then inspect settings-source status to confirm the repaired file loaded."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The settings parser requires strict JSON, not JSONC comments.",
+        "B": "Reloading unchanged invalid JSON does not repair it.",
+        "E": "The syntax errors remain even if the value is valid."
+      },
+      "ambiguityChallenge": "The setting is supported; invalid JSON syntax is the stated fault. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: config-strict-json-syntax; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-100",
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "claudemd-import-literal-path",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A maintainer wants CLAUDE.md to mention @legacy-notes.md literally, without importing that file into every session. Which edit matches the import parser?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Move the reference under a Markdown heading without code formatting"
+      },
+      {
+        "id": "B",
+        "body": "Add the same reference to a bullet list without code formatting"
+      },
+      {
+        "id": "C",
+        "body": "Add a blank line before the unquoted reference"
+      },
+      {
+        "id": "D",
+        "body": "Wrap the reference in a Markdown code span"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "CLAUDE.md import parsing skips code spans and fenced code blocks. A code span preserves a literal @path mention without importing its content.",
+    "difficultyEstimate": "foundational",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/memory"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The requirement is a literal path mention, not removing the reference.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/memory",
+          "assertion": "CLAUDE.md import parsing skips code spans and fenced code blocks. A code span preserves a literal @path mention without importing its content."
+        }
+      ],
+      "distractorRationales": {
+        "A": "A heading does not suppress import parsing.",
+        "B": "A list does not suppress imports.",
+        "C": "Whitespace does not turn an import into a literal reference."
+      },
+      "ambiguityChallenge": "The requirement is a literal path mention, not removing the reference. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: claudemd-import-literal-path; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-101",
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "config-managed-policy-versus-guidance",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "An administrator must centrally enforce a blocked tool action and also distribute coding-style guidance. Which TWO assignments use the appropriate Claude Code mechanisms? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "Put the enforced restriction in managed permission settings"
+      },
+      {
+        "id": "B",
+        "body": "Put both requirements solely in managed CLAUDE.md"
+      },
+      {
+        "id": "C",
+        "body": "Put coding-style guidance in managed CLAUDE.md"
+      },
+      {
+        "id": "D",
+        "body": "Put the restriction only in a repository’s optional local guidance file"
+      },
+      {
+        "id": "E",
+        "body": "Let project prompts override the managed block when they request an exception"
+      }
+    ],
+    "correctAnswers": [
+      "A",
+      "C"
+    ],
+    "explanation": "Managed settings enforce supported restrictions, while managed CLAUDE.md supplies behavioral guidance. Markdown instructions are not a hard enforcement layer.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/memory"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "Two requirements deliberately need different configuration mechanisms.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/memory",
+          "assertion": "Managed settings enforce supported restrictions, while managed CLAUDE.md supplies behavioral guidance. Markdown instructions are not a hard enforcement layer."
+        }
+      ],
+      "distractorRationales": {
+        "B": "Prose guidance alone does not enforce the blocked tool action.",
+        "D": "Optional local prose is not centrally enforced policy.",
+        "E": "Prompt text does not override managed technical enforcement."
+      },
+      "ambiguityChallenge": "Two requirements deliberately need different configuration mechanisms. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: config-managed-policy-versus-guidance; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-102",
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "plugin-node-dependency-install-contract",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A copied marketplace plugin has package.json and a matching package-lock.json. Its dependency needs a postinstall build. Under the documented automatic dependency-install process, which outcome must the maintainer account for?",
+    "options": [
+      {
+        "id": "A",
+        "body": "The matching lockfile causes lifecycle build scripts to run automatically during this install"
+      },
+      {
+        "id": "B",
+        "body": "Dependencies install with lifecycle scripts disabled, so the build needs a separately supported setup path"
+      },
+      {
+        "id": "C",
+        "body": "The installer resolves newer dependency versions instead of using the matching lockfile"
+      },
+      {
+        "id": "D",
+        "body": "A successful dependency download proves native postinstall build artifacts were created"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "Automatic installation uses npm ci --ignore-scripts for this lockfile. Dependencies requiring lifecycle-script builds need a separate supported setup path.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/plugins-reference"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The question is scoped to copied marketplace dependency installation, not initial npm-source fetching.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/plugins-reference",
+          "assertion": "Automatic installation uses npm ci --ignore-scripts for this lockfile. Dependencies requiring lifecycle-script builds need a separate supported setup path."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The documented install uses --ignore-scripts.",
+        "C": "The installation uses frozen lockfile resolution.",
+        "D": "Scripts are disabled, so download success does not prove that build occurred."
+      },
+      "ambiguityChallenge": "The question is scoped to copied marketplace dependency installation, not initial npm-source fetching. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: plugin-node-dependency-install-contract; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-103",
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "plugin-source-versus-runtime-state",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A plugin writes durable user state into its installed version directory. Updates install another version directory. Which TWO design choices address this lifecycle? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "Store required user state only alongside code in the version-specific installed directory"
+      },
+      {
+        "id": "B",
+        "body": "Assume a plugin update copies every runtime-created state file from the old version directory"
+      },
+      {
+        "id": "C",
+        "body": "Keep bundled code/resources relative to CLAUDE_PLUGIN_ROOT"
+      },
+      {
+        "id": "D",
+        "body": "Store durable plugin state in CLAUDE_PLUGIN_DATA"
+      },
+      {
+        "id": "E",
+        "body": "Treat CLAUDE_PLUGIN_ROOT as the same physical directory across all releases"
+      }
+    ],
+    "correctAnswers": [
+      "C",
+      "D"
+    ],
+    "explanation": "The installed plugin root is version-specific, whereas CLAUDE_PLUGIN_DATA is intended for persistent data that outlives a plugin version. Keep code and durable state in their appropriate locations.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/plugins-reference"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The state must survive plugin version changes; the question does not claim it survives uninstall by default.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/plugins-reference",
+          "assertion": "The installed plugin root is version-specific, whereas CLAUDE_PLUGIN_DATA is intended for persistent data that outlives a plugin version. Keep code and durable state in their appropriate locations."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Version-specific code directories do not provide persistent cross-version state.",
+        "B": "That automatic state migration is not the documented persistence mechanism.",
+        "E": "Installed roots can be distinct for different versions."
+      },
+      "ambiguityChallenge": "The state must survive plugin version changes; the question does not claim it survives uninstall by default. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: plugin-source-versus-runtime-state; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-104",
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "config-scoped-rules-token-loading",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A large repository has test-writing guidance relevant only to test files. Loading all of it into every unrelated editing task wastes context. Which arrangement is designed for this?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Keep all test guidance in root CLAUDE.md for unconditional loading"
+      },
+      {
+        "id": "B",
+        "body": "Use an unconditional import from root CLAUDE.md"
+      },
+      {
+        "id": "C",
+        "body": "Put the full guidance in user-level instructions that apply to every project"
+      },
+      {
+        "id": "D",
+        "body": "Use path-scoped rules targeting the relevant test files"
+      }
+    ],
+    "correctAnswers": [
+      "D"
+    ],
+    "explanation": "Path-scoped rules load when Claude works with matching files. They keep specialized guidance from occupying every session’s context unconditionally.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/memory"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The guidance is file-specific, not a procedure that needs separate user invocation.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/memory",
+          "assertion": "Path-scoped rules load when Claude works with matching files. They keep specialized guidance from occupying every session’s context unconditionally."
+        }
+      ],
+      "distractorRationales": {
+        "A": "That preserves the irrelevant context cost.",
+        "B": "Imports still load at launch, unlike path-scoped rules.",
+        "C": "That broadens rather than narrows the context scope."
+      },
+      "ambiguityChallenge": "The guidance is file-specific, not a procedure that needs separate user invocation. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: config-scoped-rules-token-loading; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-105",
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "plugin-cross-plugin-dependency-declaration",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A Claude Code plugin requires another plugin at a compatible version. The maintainer wants this relationship represented in plugin configuration. Which declaration is intended for that relationship?",
+    "options": [
+      {
+        "id": "A",
+        "body": "The plugin manifest’s dependencies entries, with supported version constraints"
+      },
+      {
+        "id": "B",
+        "body": "List the plugin only as an npm dependency in package.json"
+      },
+      {
+        "id": "C",
+        "body": "Document the dependency only in README installation prose"
+      },
+      {
+        "id": "D",
+        "body": "Put the required plugin’s name only in the consuming plugin’s keywords"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "The plugin manifest supports dependencies on other plugins, including supported version constraints. This differs from a plugin’s own language-package dependencies.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/plugins-reference"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The dependency is another Claude Code plugin, not an npm or Python package.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/plugins-reference",
+          "assertion": "The plugin manifest supports dependencies on other plugins, including supported version constraints. This differs from a plugin’s own language-package dependencies."
+        }
+      ],
+      "distractorRationales": {
+        "B": "That declares a language package rather than the Claude plugin relationship.",
+        "C": "Prose does not supply plugin dependency configuration.",
+        "D": "Keywords are metadata, not dependency declarations."
+      },
+      "ambiguityChallenge": "The dependency is another Claude Code plugin, not an npm or Python package. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: plugin-cross-plugin-dependency-declaration; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "AI-106",
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "plugin-sensitive-option-storage",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A plugin asks users for an API token through userConfig. The author wants it treated as a sensitive configuration value rather than ordinary non-sensitive settings. Which field controls that treatment?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Set required: true on the token field"
+      },
+      {
+        "id": "B",
+        "body": "Set sensitive: true on the userConfig field"
+      },
+      {
+        "id": "C",
+        "body": "Set type: string and omit the sensitive flag"
+      },
+      {
+        "id": "D",
+        "body": "Store the token as the userConfig default value"
+      }
+    ],
+    "correctAnswers": [
+      "B"
+    ],
+    "explanation": "A userConfig field marked sensitive masks entry and stores the value through the documented secure credential storage path rather than ordinary settings.json values.",
+    "difficultyEstimate": "foundational",
+    "sourceRefs": [
+      "https://code.claude.com/docs/en/plugins-reference"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "This asks for the actual configuration flag, without claiming all operating systems use the same credential store.",
+      "sourceAssertions": [
+        {
+          "url": "https://code.claude.com/docs/en/plugins-reference",
+          "assertion": "A userConfig field marked sensitive masks entry and stores the value through the documented secure credential storage path rather than ordinary settings.json values."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Required controls presence rather than sensitive storage.",
+        "C": "The string type alone does not configure sensitive handling.",
+        "D": "A default is not a sensitive-storage declaration and embeds the token in configuration."
+      },
+      "ambiguityChallenge": "This asks for the actual configuration flag, without claiming all operating systems use the same credential store. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: plugin-sensitive-option-storage; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "ET-001",
+    "domain": "eval-testing-debugging",
+    "objective": "D4.1",
+    "conceptKey": "stream-http-success-not-completion",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An integration records a streaming API call as successful as soon as HTTP 200 arrives. Later, the SSE stream reports an error and the user sees a partial answer. Which diagnosis is correct?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Treat the HTTP success status as the sole completion criterion"
+      },
+      {
+        "id": "B",
+        "body": "Mark completion after the first content block starts"
+      },
+      {
+        "id": "C",
+        "body": "The integration conflates accepted stream headers with successful completion and must handle stream errors"
+      },
+      {
+        "id": "D",
+        "body": "Record success whenever any text was generated before the connection ended"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "An SSE error can occur after HTTP 200 has been returned. Success accounting must include the stream outcome instead of treating headers or a partial delta as completed generation.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/api/errors"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The trace contains a real error event after headers, isolating the accounting defect.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/api/errors",
+          "assertion": "An SSE error can occur after HTTP 200 has been returned. Success accounting must include the stream outcome instead of treating headers or a partial delta as completed generation."
+        }
+      ],
+      "distractorRationales": {
+        "A": "A stream can error after the successful headers.",
+        "B": "A started block can still be followed by a stream failure.",
+        "D": "Partial generation does not establish successful completion."
+      },
+      "ambiguityChallenge": "The trace contains a real error event after headers, isolating the accounting defect. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: stream-http-success-not-completion; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "ET-002",
+    "domain": "eval-testing-debugging",
+    "objective": "D4.1",
+    "conceptKey": "error-request-id-correlation",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "Support is investigating one failing direct Claude API request among thousands. They need its unique API correlation identifier and the service’s specific error category/detail, beyond the HTTP status alone. Which TWO response fields supply these? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "The HTTP status code alone as a unique request locator"
+      },
+      {
+        "id": "B",
+        "body": "The response request-id identifier"
+      },
+      {
+        "id": "C",
+        "body": "The model identifier alone as proof of the failure category"
+      },
+      {
+        "id": "D",
+        "body": "The structured error type and message"
+      },
+      {
+        "id": "E",
+        "body": "The retry attempt count alone as the service-side request identifier"
+      }
+    ],
+    "correctAnswers": [
+      "B",
+      "D"
+    ],
+    "explanation": "The request-id identifies the API request for support correlation, while the structured error type and message describe the failure category and details.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/api/errors"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The question asks for response evidence tied to the actual failing request.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/api/errors",
+          "assertion": "The request-id identifies the API request for support correlation, while the structured error type and message describe the failure category and details."
+        }
+      ],
+      "distractorRationales": {
+        "A": "Status helps classification but cannot identify one request among many; the stem asks for specific correlation evidence.",
+        "C": "A model ID identifies a model, not this failed request or its error category.",
+        "E": "A local retry count cannot uniquely correlate the actual API request."
+      },
+      "ambiguityChallenge": "The question asks for response evidence tied to the actual failing request. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: error-request-id-correlation; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "ET-003",
+    "domain": "eval-testing-debugging",
+    "objective": "D4.1",
+    "conceptKey": "payload-bytes-versus-token-overflow",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A direct Messages request is rejected with 413 request_too_large before inference. The team proposes adjusting the prompt’s tone. What should it investigate instead?",
+    "options": [
+      {
+        "id": "A",
+        "body": "The serialized request’s byte size and the endpoint’s request-size limit"
+      },
+      {
+        "id": "B",
+        "body": "The remaining output-token budget, assuming 413 means generation exhausted it"
+      },
+      {
+        "id": "C",
+        "body": "The organization’s requests-per-minute quota, assuming 413 means throttling"
+      },
+      {
+        "id": "D",
+        "body": "The client’s response timeout, assuming the request failed while waiting for generation"
+      }
+    ],
+    "correctAnswers": [
+      "A"
+    ],
+    "explanation": "A 413 request_too_large indicates that request bytes exceed the endpoint limit. Diagnose the payload size rather than model output or instruction style.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/api/errors"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The observed 413 specifies a byte-size rejection, not an inferred token-context failure.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/api/errors",
+          "assertion": "A 413 request_too_large indicates that request bytes exceed the endpoint limit. Diagnose the payload size rather than model output or instruction style."
+        }
+      ],
+      "distractorRationales": {
+        "B": "The rejection is before inference and specifies request bytes.",
+        "C": "Rate throttling is a different error category from request byte size.",
+        "D": "The known pre-inference byte-size error is not a response timeout."
+      },
+      "ambiguityChallenge": "The observed 413 specifies a byte-size rejection, not an inferred token-context failure. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: payload-bytes-versus-token-overflow; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  },
+  {
+    "id": "ET-004",
+    "domain": "eval-testing-debugging",
+    "objective": "D4.1",
+    "conceptKey": "forward-compatible-enumeration",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An API error response adds a new error.type value. Your adapter uses an exhaustive lookup with no fallback and crashes before showing a recoverable failure to the user. Which change addresses the integration defect?",
+    "options": [
+      {
+        "id": "A",
+        "body": "Map every unfamiliar type to an authentication error and retry credentials"
+      },
+      {
+        "id": "B",
+        "body": "Assume the existing type enumeration is closed and keep the exhaustive lookup unchanged"
+      },
+      {
+        "id": "C",
+        "body": "Preserve the unknown type and message in a generic error path instead of crashing"
+      },
+      {
+        "id": "D",
+        "body": "Drop the error object and process the response as a successful completion"
+      }
+    ],
+    "correctAnswers": [
+      "C"
+    ],
+    "explanation": "The API’s error type values may expand over time. An integration should handle an unknown category through a safe generic error path while preserving its diagnostic information.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/api/errors"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The recorded adapter crash is caused by an unhandled new category, not malformed JSON.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/api/errors",
+          "assertion": "The API’s error type values may expand over time. An integration should handle an unknown category through a safe generic error path while preserving its diagnostic information."
+        }
+      ],
+      "distractorRationales": {
+        "A": "An unknown error is not evidence of authentication failure.",
+        "B": "The API documents that type values can expand.",
+        "D": "An unknown category does not make the response successful."
+      },
+      "ambiguityChallenge": "The recorded adapter crash is caused by an unhandled new category, not malformed JSON. Each alternative fails the explicit interface requirement.",
+      "duplicateCheck": "Replaced overlapping draft; distinct error-forward-compatible-unknown-category. Cross-bank review remains central."
+    }
+  },
+  {
+    "id": "ET-005",
+    "domain": "eval-testing-debugging",
+    "objective": "D4.1",
+    "conceptKey": "error-auth-permission-resource-isolation",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A valid API key can call one permitted resource, but a different requested resource returns 403 permission_error. Which TWO checks target the documented cause? Select TWO.",
+    "options": [
+      {
+        "id": "A",
+        "body": "Treat the working key as expired and rotate it without checking resource access"
+      },
+      {
+        "id": "B",
+        "body": "Tune rate-limit backoff before checking any authorization settings"
+      },
+      {
+        "id": "C",
+        "body": "Check the key’s permission to the requested resource"
+      },
+      {
+        "id": "D",
+        "body": "Inspect the relevant organization and workspace access configuration"
+      },
+      {
+        "id": "E",
+        "body": "Debug only the generated output schema before inspecting resource authorization"
+      }
+    ],
+    "correctAnswers": [
+      "C",
+      "D"
+    ],
+    "explanation": "A 403 permission_error means the key lacks permission for the specified resource. Investigate resource authorization and organization/workspace access, rather than prompt generation behavior.",
+    "difficultyEstimate": "intermediate",
+    "sourceRefs": [
+      "https://platform.claude.com/docs/en/api/errors"
+    ],
+    "qualityStatus": "CANDIDATE",
+    "review": {
+      "bindingDiscriminator": "The key works elsewhere; the error is resource permission, not a blanket authentication failure.",
+      "sourceAssertions": [
+        {
+          "url": "https://platform.claude.com/docs/en/api/errors",
+          "assertion": "A 403 permission_error means the key lacks permission for the specified resource. Investigate resource authorization and organization/workspace access, rather than prompt generation behavior."
+        }
+      ],
+      "distractorRationales": {
+        "A": "The key works for a permitted resource; the observed category specifies permissions.",
+        "B": "The observed 403 is permission_error rather than rate limiting.",
+        "E": "The documented category identifies permission access, not output schema generation."
+      },
+      "ambiguityChallenge": "The key works elsewhere; the error is resource permission, not a blanket authentication failure. The alternatives fail the explicit condition or documented behavior for the reasons recorded.",
+      "duplicateCheck": "Distinct distinction: error-auth-permission-resource-isolation; checked against this batch and original stems; cross-bank adjudication remains central."
+    }
+  }
+]

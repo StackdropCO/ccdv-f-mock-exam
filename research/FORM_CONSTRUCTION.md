@@ -4,7 +4,7 @@ Date: 2026-09-08. Exam Guide v1.0 (July 2026), retrieved as provenance-bearing m
 
 ## Capacity and generation target
 
-Target 318 new + 53 preserved = 371. This remains conditional on item-level quality acceptance. Domain quotas use largest remainder for 53; combined skill targets use largest remainder within each domain's seven-form capacity. Legacy primary-skill mappings are editorial classifications, not alterations to the original questions. The detailed allocation is in blueprint.json and EXAM_BLUEPRINT.md.
+Final accepted size: 318 new + 53 preserved = 371. All 318 new items completed editorial acceptance; legacy exceptions are disclosed in LEGACY_QUESTION_AUDIT.md. Domain quotas use largest remainder for 53; combined skill targets use largest remainder within each domain's seven-form capacity. Legacy primary-skill mappings are editorial classifications, not alterations to the original questions. The detailed allocation is in blueprint.json and EXAM_BLUEPRINT.md.
 
 | Domain | Per form | Legacy | New target | Combined |
 |---|---:|---:|---:|---:|
@@ -27,13 +27,19 @@ Mostly applied scenarios; authoring goal approximately 15–25% multiple respons
 
 ## Selection and lifecycle
 
-Pure selector accepts bank, history and RNG. Validate IDs, objective/domain mapping and capacity. Normalize incompatible/malformed history safely. Select each domain's exact quota among unused items, preferring concepts absent from the form and broad proportional skill coverage. Randomize equal choices and final question order. No exact per-form skill quota is claimed official. Once the pool is small, complete domain-valid forms take priority over concept diversity; report any legacy overlaps.
+Pure selector accepts bank, history and RNG. Validate IDs, objective/domain mapping and capacity. Normalize incompatible/malformed history safely. Select each domain's exact quota among unused items, preferring concepts absent from the form and broad proportional skill coverage. After those priorities, prefer the underrepresented authored response type and single-answer position as soft tie-breakers. Randomize equal choices and final question order. No exact per-form skill quota is claimed official. Once the pool is small, complete domain-valid forms take priority over concept diversity; report any legacy overlaps.
 
 If any domain cannot fill its quota, reset ALL used IDs atomically in the proposed in-memory selection; prefer items outside the immediately previous completed form. No partially repeated form within a cycle. Only submission commits that proposed cycle/history. Starting, navigating, reviewing, flagging, changing theme, aborting or reloading cannot consume IDs.
 
 Keep bank IDs separate from positions. The active form can project items to existing numeric positions 1–53 while retaining stable bankId. Existing reducer, answers, flags and scoring then retain their position-based contract. Active form is created once at mode choice and kept only in memory.
 
 Persist only version, cycle, completed used IDs and last completed form IDs, plus existing separate theme preference. Mode/timer/answers/flags/form/result remain ephemeral. Guard double submission. Storage failure must not prevent scoring; disclose inability to retain rotation if encountered. Browser-local sequential attempts are the rotation scope. Simultaneous independent tabs can have overlapping active forms; re-read history on submission and avoid silent corruption, document this limitation rather than claim a cross-tab transactional guarantee.
+
+## Final outcome and operational limits
+
+Seven complete disjoint forms are supported. Actual-bank simulations passed across 200 cycles; detailed distributions and concept collisions are in QUESTION_BANK_AUDIT.md. New items are 270 single-answer and 48 Select TWO; the original Select THREE remains. No runtime option shuffling occurs.
+
+If another tab changes completed history during an attempt, submission still scores but displays a notice and does not overwrite that newer history. Simultaneous active tabs are not transactionally coordinated; use one exam tab for guaranteed sequential rotation. A localStorage write failure keeps completed history in memory for the current page and displays a reload limitation. Clearing browser data deliberately resets rotation. Active attempts are never persisted.
 
 ## Verification contract
 

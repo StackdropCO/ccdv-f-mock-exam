@@ -1,0 +1,2662 @@
+{
+  "https://www.anthropic.com/engineering/building-effective-agents": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D1.1",
+      "D1.3"
+    ],
+    "questionIds": [
+      "AW-001",
+      "AW-002",
+      "AW-003",
+      "AW-004",
+      "AW-005",
+      "AW-006",
+      "AW-007",
+      "AW-008",
+      "AW-009",
+      "AW-010",
+      "AW-011",
+      "AW-032"
+    ],
+    "assertions": [
+      {
+        "questionId": "AW-001",
+        "establishes": "Routing selects a specialized path for the identified category, avoiding competing task instructions in one prompt. Running both paths is unnecessary when each input needs only one."
+      },
+      {
+        "questionId": "AW-002",
+        "establishes": "Independent required subtasks support parallel sectioning. Voting repeats one task; it does not cover three different required checks."
+      },
+      {
+        "questionId": "AW-003",
+        "establishes": "Voting gathers multiple attempts at the same task. Chaining introduces dependence, while sectioning distributes different subtasks."
+      },
+      {
+        "questionId": "AW-004",
+        "establishes": "Orchestrator-workers supports subtasks determined from the specific input. Adding or reordering fixed workers does not provide that decomposition."
+      },
+      {
+        "questionId": "AW-005",
+        "establishes": "An evaluator-optimizer loop uses actionable feedback to refine a candidate against stable criteria. The stated evidence supports iteration rather than unrelated reruns."
+      },
+      {
+        "questionId": "AW-006",
+        "establishes": "Agent and workflow patterns can be combined. Adaptive investigation can feed a deterministic gate that every deliverable must pass."
+      },
+      {
+        "questionId": "AW-007",
+        "establishes": "Additional orchestration must justify its cost and latency. Here it fails a binding limit while adding no measured benefit."
+      },
+      {
+        "questionId": "AW-008",
+        "establishes": "Routing requires accurate classification to select the appropriate specialized path; supplied metrics identify classification as the bottleneck."
+      },
+      {
+        "questionId": "AW-009",
+        "establishes": "A programmatic intermediate gate can stop an invalid outline before downstream generation. A prompt request alone does not enforce the transition."
+      },
+      {
+        "questionId": "AW-010",
+        "establishes": "An agent needs observations from tools or execution to assess progress. A proposed action is not evidence that the environment changed successfully."
+      },
+      {
+        "questionId": "AW-011",
+        "establishes": "A harness stopping condition bounds execution independently of model decisions. A blocker checkpoint allows human judgment instead of endless autonomous cycling."
+      },
+      {
+        "questionId": "AW-032",
+        "establishes": "Framework abstractions can hide the prompts and responses needed for debugging. Inspecting the underlying interactions reveals which assumption failed."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/agent-sdk/subagents": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D1.1",
+      "D1.3"
+    ],
+    "questionIds": [
+      "AW-012",
+      "AW-013",
+      "AW-040",
+      "AW-041",
+      "AW-042",
+      "AW-048",
+      "AW-049"
+    ],
+    "assertions": [
+      {
+        "questionId": "AW-012",
+        "establishes": "Subagents support specialized instructions for focused subtasks. Separate prompts avoid imposing unrelated procedures on every worker."
+      },
+      {
+        "questionId": "AW-013",
+        "establishes": "An AgentDefinition tools list restricts the subagent\u2019s available tools. Naming or describing a role alone does not remove capabilities."
+      },
+      {
+        "questionId": "AW-040",
+        "establishes": "A non-fork subagent does not receive the parent\u2019s conversation history. The delegation prompt must carry the specific facts needed for the subtask."
+      },
+      {
+        "questionId": "AW-041",
+        "establishes": "AgentDefinition.description tells the parent when to use the subagent. Its prompt governs the subagent\u2019s behavior after selection."
+      },
+      {
+        "questionId": "AW-042",
+        "establishes": "Programmatic agent definitions take precedence over filesystem definitions with the same name. Maintaining both with divergent content can therefore obscure the effective configuration."
+      },
+      {
+        "questionId": "AW-048",
+        "establishes": "Depth1 prevents subagents spawning descendants; concurrency4 limits running subagents to four when the documented ultracode exception is inactive."
+      },
+      {
+        "questionId": "AW-049",
+        "establishes": "Resuming the containing session makes its subagent transcript available; the agent ID identifies the specific worker to continue. A role name alone does not select a past execution."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/agent-sdk/overview": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D1.2"
+    ],
+    "questionIds": [
+      "AW-014",
+      "AW-017"
+    ],
+    "assertions": [
+      {
+        "questionId": "AW-014",
+        "establishes": "The Agent SDK provides the Claude Code loop and tools as a library. Direct Client SDK model calls leave loop orchestration to the application."
+      },
+      {
+        "questionId": "AW-017",
+        "establishes": "For languages other than Python and TypeScript, the documented bridge to the same loop is the CLI as a subprocess with print mode and JSON output."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/managed-agents/overview": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D1.2"
+    ],
+    "questionIds": [
+      "AW-015",
+      "AW-022"
+    ],
+    "assertions": [
+      {
+        "questionId": "AW-015",
+        "establishes": "The Messages API supplies direct model access for custom loops. A pre-built agent harness owns orchestration that this prototype needs to implement itself."
+      },
+      {
+        "questionId": "AW-022",
+        "establishes": "A session is the running agent instance within an environment. Agent and environment resources describe configuration rather than one specific task execution."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/agent-sdk/hosting": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D1.2"
+    ],
+    "questionIds": [
+      "AW-016",
+      "AW-025",
+      "AW-029",
+      "AW-030"
+    ],
+    "assertions": [
+      {
+        "questionId": "AW-016",
+        "establishes": "The SDK supervises a CLI subprocess that owns shell and filesystem state. Concurrency planning must account for those processes rather than treating the SDK as a stateless wrapper."
+      },
+      {
+        "questionId": "AW-025",
+        "establishes": "Working-directory artifacts need their own persistence strategy. A session identifier or transcript is not a durable copy of every generated file."
+      },
+      {
+        "questionId": "AW-029",
+        "establishes": "The hosted SDK needs outbound access to its model provider and any remote tools it uses. Local file access alone does not establish either connection."
+      },
+      {
+        "questionId": "AW-030",
+        "establishes": "Ephemeral sessions tie a container\u2019s lifetime to one task. They fit one-off work whose results are exported before teardown."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/agent-sdk/agent-loop": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D1.2",
+      "D1.3"
+    ],
+    "questionIds": [
+      "AW-018",
+      "AW-019",
+      "AW-026",
+      "AW-027",
+      "AW-028",
+      "AW-031",
+      "AW-047"
+    ],
+    "assertions": [
+      {
+        "questionId": "AW-018",
+        "establishes": "Assistant messages occur throughout execution. The result message records the loop outcome, and its subtype distinguishes success from stopping on an error or limit."
+      },
+      {
+        "questionId": "AW-019",
+        "establishes": "The SDK\u2019s turn limit bounds tool-use round trips. Short output or small logs do not bound how many times the loop executes."
+      },
+      {
+        "questionId": "AW-026",
+        "establishes": "In SDK default mode, uncovered tools go to canUseTool; without that callback they are denied. A headless embedding should not expect an interactive terminal prompt."
+      },
+      {
+        "questionId": "AW-027",
+        "establishes": "The SDK query budget includes subagent spend. Separate worker contexts do not create free or excluded model requests."
+      },
+      {
+        "questionId": "AW-028",
+        "establishes": "The Agent SDK executes requested tools and feeds their results back into its loop. Executing the same managed call again outside that loop duplicates the action."
+      },
+      {
+        "questionId": "AW-031",
+        "establishes": "ResultMessage marks the loop outcome, but a small number of system events can follow. Consuming the stream to completion preserves those events."
+      },
+      {
+        "questionId": "AW-047",
+        "establishes": "The compact boundary event identifies conversation compaction. It concerns context management, not file restoration, permissions, or model training."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/agent-sdk/streaming-output": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D1.2"
+    ],
+    "questionIds": [
+      "AW-020",
+      "AW-021"
+    ],
+    "assertions": [
+      {
+        "questionId": "AW-020",
+        "establishes": "Partial-message streaming adds raw events as generation proceeds. The app must extract text deltas rather than waiting for complete assistant messages."
+      },
+      {
+        "questionId": "AW-021",
+        "establishes": "Partial events are emitted in addition to complete assistant messages. Treating both as new text duplicates the same content."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/managed-agents/sessions": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D1.2"
+    ],
+    "questionIds": [
+      "AW-023",
+      "AW-024"
+    ],
+    "assertions": [
+      {
+        "questionId": "AW-023",
+        "establishes": "Creating a session and sending its work are separate steps unless initial events are supplied. The task must be delivered as a user event."
+      },
+      {
+        "questionId": "AW-024",
+        "establishes": "A versioned agent reference pins which agent configuration the session runs. A bare ID selects the latest version."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/agent-sdk/sessions": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D1.3"
+    ],
+    "questionIds": [
+      "AW-033",
+      "AW-034",
+      "AW-035",
+      "AW-036",
+      "AW-037"
+    ],
+    "assertions": [
+      {
+        "questionId": "AW-033",
+        "establishes": "Continue selects the most recent session in the directory; resume targets a specific session ID. Multi-session applications must select the intended authorized conversation explicitly."
+      },
+      {
+        "questionId": "AW-034",
+        "establishes": "Forking creates a separate conversation initialized from the original history. The original thread remains available under its own ID."
+      },
+      {
+        "questionId": "AW-035",
+        "establishes": "A session fork does not branch the filesystem. Separate working copies or another filesystem isolation strategy are needed to keep edits apart."
+      },
+      {
+        "questionId": "AW-036",
+        "establishes": "Cross-host continuity requires available state. You can retain transcripts for resumption or preserve the needed task state and seed a new conversation; an ID alone contains neither."
+      },
+      {
+        "questionId": "AW-037",
+        "establishes": "TypeScript persistSession: false keeps the session in memory for the call instead of writing its transcript. A fresh default session can still be persisted."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/agent-sdk/file-checkpointing": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D1.3"
+    ],
+    "questionIds": [
+      "AW-038",
+      "AW-039"
+    ],
+    "assertions": [
+      {
+        "questionId": "AW-038",
+        "establishes": "Checkpointing tracks designated file-editing tools, including Edit and Write. Bash changes and unrelated external side effects are outside that mechanism."
+      },
+      {
+        "questionId": "AW-039",
+        "establishes": "File rewinding restores tracked filesystem state while retaining conversation context. It is not a conversation fork or rollback of external actions."
+      }
+    ]
+  },
+  "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D1.3"
+    ],
+    "questionIds": [
+      "AW-043",
+      "AW-044",
+      "AW-045",
+      "AW-046"
+    ],
+    "assertions": [
+      {
+        "questionId": "AW-043",
+        "establishes": "A feature ledger makes remaining requirements visible across sessions. Visible progress on one part no longer substitutes for evidence that every required feature works."
+      },
+      {
+        "questionId": "AW-044",
+        "establishes": "Reading the handoff establishes intended recent work; exercising the current application checks the actual baseline. Neither a stale summary nor immediate new edits establishes both."
+      },
+      {
+        "questionId": "AW-045",
+        "establishes": "The documented long-running harness allows coding agents to change feature passes status while prohibiting removal or editing of acceptance tests; completion requires verification."
+      },
+      {
+        "questionId": "AW-046",
+        "establishes": "A coherent versioned increment plus explicit progress notes gives the next session a recoverable working state and task handoff. Unfinished undocumented work defeats both goals."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.1",
+      "D2.2"
+    ],
+    "questionIds": [
+      "AI-001",
+      "AI-002",
+      "AI-004",
+      "AI-006",
+      "AI-007",
+      "AI-008",
+      "AI-009",
+      "AI-010",
+      "AI-011",
+      "AI-015",
+      "AI-017",
+      "AI-018"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-001",
+        "establishes": "The requirement is about the distribution of complete-response latency. A 95th-percentile measurement tests that threshold; a mean or first-token measurement does not."
+      },
+      {
+        "questionId": "AI-002",
+        "establishes": "Recall on the urgent subset measures how many genuine urgent cases are caught. Overall accuracy and precision answer different questions and can conceal missed urgent tickets."
+      },
+      {
+        "questionId": "AI-004",
+        "establishes": "Success criteria should include operational constraints such as price and latency alongside task fidelity. Those are the two unmet requirements described in this pilot."
+      },
+      {
+        "questionId": "AI-006",
+        "establishes": "Task-specific evaluations should include edge cases such as nonexistent or irrelevant inputs. The application needs an explicit expected outcome for those cases before readiness can be measured."
+      },
+      {
+        "questionId": "AI-007",
+        "establishes": "Qualitative criteria become more repeatable when they use a defined scale and explicit rubric. Token counts and deployment size do not resolve what professional tone means."
+      },
+      {
+        "questionId": "AI-008",
+        "establishes": "Context utilization must be tested with cases that actually depend on earlier turns. Isolated questions cannot demonstrate that the assistant meets the follow-up requirement."
+      },
+      {
+        "questionId": "AI-009",
+        "establishes": "Inference budgeting needs expected input and output usage, request frequency, and the applicable model prices. The stem already provides volume and input measurements, leaving output usage and pricing."
+      },
+      {
+        "questionId": "AI-010",
+        "establishes": "Success criteria should be specific, measurable, relevant, and achievable. An undefined universal correctness promise cannot be validated; scope and evidence are needed before committing to a target."
+      },
+      {
+        "questionId": "AI-011",
+        "establishes": "Privacy criteria must specify the information and behavior being measured. Defined prohibited categories and a disclosure metric permit testing; disclaimers and answer length do not establish privacy preservation."
+      },
+      {
+        "questionId": "AI-015",
+        "establishes": "A held-out set tests task performance beyond the cases used for iteration. Reusing only the tuning examples cannot establish how the revised prompt behaves on unseen representative inputs."
+      },
+      {
+        "questionId": "AI-017",
+        "establishes": "Task-specific evaluations should cover real edge cases. Adding representative cases makes the discovered failure class part of future regression checks rather than a one-time demonstration."
+      },
+      {
+        "questionId": "AI-018",
+        "establishes": "Anthropic recommends testing the reliability of LLM-based grading before scaling. A defined rubric and reference judgments provide evidence that the automated scores measure the intended quality."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/batch-processing": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.1",
+      "D2.2",
+      "D2.3"
+    ],
+    "questionIds": [
+      "AI-003",
+      "AI-020",
+      "AI-021",
+      "AI-022",
+      "AI-023",
+      "AI-024",
+      "AI-025",
+      "AI-026",
+      "AI-039"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-003",
+        "establishes": "Message Batches target work that does not need immediate responses and can run until the batch expiration window. They are not a way to guarantee a ten-second interactive decision."
+      },
+      {
+        "questionId": "AI-020",
+        "establishes": "Batch result downloads have a limited retention period. Six-month application retention therefore requires storing the needed result artifacts outside that temporary download window."
+      },
+      {
+        "questionId": "AI-021",
+        "establishes": "Ended describes completion of batch processing, not universal success. Each request has its own outcome and must be handled accordingly."
+      },
+      {
+        "questionId": "AI-022",
+        "establishes": "Message Batches are limited by both request count and payload size, whichever is reached first. A submission must satisfy both limits; meeting just one does not make it valid."
+      },
+      {
+        "questionId": "AI-023",
+        "establishes": "Cancellation passes through canceling to ended and can leave partial successful results. Inspecting per-request outcomes preserves completed answers."
+      },
+      {
+        "questionId": "AI-024",
+        "establishes": "Requests in a Message Batch are processed independently. A batch is not a dependency graph that injects one result into another request."
+      },
+      {
+        "questionId": "AI-025",
+        "establishes": "Per-item Messages parameter validation occurs asynchronously. Testing request shapes with the Messages API and inspecting item results is necessary even after batch creation succeeds."
+      },
+      {
+        "questionId": "AI-026",
+        "establishes": "Batch requests do not support stream: true because results are delivered as a result file. Streaming that file during download is different from live token streaming within a batch item."
+      },
+      {
+        "questionId": "AI-039",
+        "establishes": "Creation returns a batch tracking object. The application must wait for processing to end and retrieve per-request results through the batch result interface."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/about-claude/use-case-guides/ticket-routing": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.1",
+      "D2.2"
+    ],
+    "questionIds": [
+      "AI-005",
+      "AI-016",
+      "AI-019"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-005",
+        "establishes": "A routing integration needs well-defined intent categories and an understanding of how the support team handles edge cases. Resolving service ownership provides the classification contract that prompt optimization must implement."
+      },
+      {
+        "questionId": "AI-016",
+        "establishes": "Evolving intent categories require updated definitions and evaluation examples. Capacity changes do not teach the router the new classification contract, and old-category coverage remains useful for regressions."
+      },
+      {
+        "questionId": "AI-019",
+        "establishes": "Task evaluations should reflect real usage, and the ticket-routing guide calls for measuring performance across languages. The original English-only result cannot establish quality for the changed traffic mix."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/about-claude/model-deprecations": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.2"
+    ],
+    "questionIds": [
+      "AI-012",
+      "AI-013",
+      "AI-014"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-012",
+        "establishes": "Deprecated models may still work, but retired models are unavailable and requests fail. Testing and migrating before retirement avoids making failure the migration trigger."
+      },
+      {
+        "questionId": "AI-013",
+        "establishes": "Anthropic distinguishes its operated-platform retirement dates from partner-operated schedules. A multi-provider maintenance plan must check the relevant provider dates rather than assume one universal deadline."
+      },
+      {
+        "questionId": "AI-014",
+        "establishes": "The model-deprecation guide describes exporting usage by API key and model to locate remaining usage. That inventory identifies migration scope across callers."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/streaming": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.3"
+    ],
+    "questionIds": [
+      "AI-027",
+      "AI-028",
+      "AI-029",
+      "AI-030",
+      "AI-031",
+      "AI-032"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-027",
+        "establishes": "Content-block indices identify positions in the final content array, and delta types identify the field being updated. Separate typed accumulation preserves text and tool-input blocks."
+      },
+      {
+        "questionId": "AI-028",
+        "establishes": "Tool-input deltas are partial JSON strings. Accumulate the strings for the block and parse the completed input rather than requiring every fragment to be standalone JSON."
+      },
+      {
+        "questionId": "AI-029",
+        "establishes": "Usage token counts in message_delta events are cumulative. Summing successive totals double-counts earlier tokens."
+      },
+      {
+        "questionId": "AI-030",
+        "establishes": "content_block_stop ends one block, while message_stop ends the message stream. A response can contain multiple blocks before the final event."
+      },
+      {
+        "questionId": "AI-031",
+        "establishes": "Anthropic may add event types within a version and recommends handling unknown types gracefully. An informational extension should not be mistaken for text or a tool call."
+      },
+      {
+        "questionId": "AI-032",
+        "establishes": "Ping events can appear throughout a stream and do not represent answer content. They should not erase or be appended to the generated text."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/working-with-messages": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.3"
+    ],
+    "questionIds": [
+      "AI-033",
+      "AI-034",
+      "AI-035"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-033",
+        "establishes": "Historical assistant messages can be synthetic. Including one supplies context; it does not create automatic server-side conversation memory."
+      },
+      {
+        "questionId": "AI-034",
+        "establishes": "The vision request shape uses a typed image content block with a source describing the encoded image. Plain text containing base64 is not that image-input representation."
+      },
+      {
+        "questionId": "AI-035",
+        "establishes": "The Messages vision interface accepts a URL source for an image block. This supplies the image directly without a local base64 conversion step."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.3"
+    ],
+    "questionIds": [
+      "AI-036"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-036",
+        "establishes": "For stop_reason stop_sequence, the response\u2019s stop_sequence field identifies the matched sequence. Other metadata fields do not encode that match."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/api/versioning": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.3"
+    ],
+    "questionIds": [
+      "AI-037",
+      "AI-038"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-037",
+        "establishes": "Direct requests must include anthropic-version; official SDKs normally supply it automatically. The API protocol version is separate from the model identifier."
+      },
+      {
+        "questionId": "AI-038",
+        "establishes": "The API versioning policy preserves existing parameters but permits additional output values and optional inputs. A consumer should not mistake an additive response field for a protocol-breaking change."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.4",
+      "D5.2"
+    ],
+    "questionIds": [
+      "AI-040",
+      "AI-041",
+      "AI-042",
+      "AI-043",
+      "MO-018",
+      "MO-019",
+      "MO-020",
+      "MO-021",
+      "MO-022",
+      "MO-029",
+      "MO-030",
+      "MO-031",
+      "MO-032",
+      "MO-033",
+      "MO-035"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-040",
+        "establishes": "Each SDK invocation can make one initial attempt plus two retries. Three outer invocations can therefore produce nine HTTP attempts, so retry layers must be accounted for together."
+      },
+      {
+        "questionId": "AI-041",
+        "establishes": "Setting max_retries=0 disables the SDK\u2019s automatic retries. A value of one permits an additional attempt, while timeout and output length do not establish retry ownership."
+      },
+      {
+        "questionId": "AI-042",
+        "establishes": "The Python SDK supports per-request overrides through with_options. That gives the background request its policy without changing the shared default used by other calls."
+      },
+      {
+        "questionId": "AI-043",
+        "establishes": "The Python SDK retries timed-out requests under its retry policy. A per-request timeout is not by itself a total wall-clock budget across attempts and backoff."
+      },
+      {
+        "questionId": "MO-018",
+        "establishes": "SDK list methods are paginated; iteration can fetch all pages, or callers can explicitly retrieve next pages."
+      },
+      {
+        "questionId": "MO-019",
+        "establishes": "with_raw_response exposes headers and its parse method returns the normal parsed response object."
+      },
+      {
+        "questionId": "MO-020",
+        "establishes": "with_streaming_response requires a context manager so the response is reliably closed."
+      },
+      {
+        "questionId": "MO-021",
+        "establishes": "Python SDK documentation shows model_fields_set for distinguishing missing fields from explicit null."
+      },
+      {
+        "questionId": "MO-022",
+        "establishes": "The Python response models provide to_json and to_dict serialization helpers."
+      },
+      {
+        "questionId": "MO-029",
+        "establishes": "The SDK sends the documented version header by default; overriding it may cause type mismatches and unexpected behavior."
+      },
+      {
+        "questionId": "MO-030",
+        "establishes": "extra_query, extra_body and extra_headers can override documented parameters of the same name and should use trusted input."
+      },
+      {
+        "questionId": "MO-031",
+        "establishes": "The async client accepts PathLike file uploads and reads their contents asynchronously."
+      },
+      {
+        "questionId": "MO-032",
+        "establishes": "Python numeric timeout values are expressed in seconds."
+      },
+      {
+        "questionId": "MO-033",
+        "establishes": "The Python async Messages example awaits a Message; persisted batch operations use the separate messages.batches interface."
+      },
+      {
+        "questionId": "MO-035",
+        "establishes": "The documentation recommends anthropic.__version__ to identify an older runtime version when upgraded features are missing."
+      }
+    ]
+  },
+  "https://www.rfc-editor.org/rfc/rfc8259": {
+    "level": "A-primary",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.4"
+    ],
+    "questionIds": [
+      "AI-044",
+      "AI-045",
+      "AI-046",
+      "AI-047",
+      "AI-048",
+      "AI-049"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-044",
+        "establishes": "A JSON serializer escapes quotation marks and control characters within string values while preserving their decoded content. Manual stripping changes the input, and double encoding changes the body type."
+      },
+      {
+        "questionId": "AI-045",
+        "establishes": "JSON object names should be unique for interoperable interpretation. Duplicate-name handling differs among parsers, so neither first-wins nor last-wins is a universal rule."
+      },
+      {
+        "questionId": "AI-046",
+        "establishes": "JSON objects and arrays have different ordering semantics: object-member order should not be relied upon, while arrays are ordered sequences. An adapter must preserve meaningful content-array order."
+      },
+      {
+        "questionId": "AI-047",
+        "establishes": "The JSON literal true is a boolean; quoted values are strings and 1 is a number. Type-sensitive consumers must receive the type the contract requires."
+      },
+      {
+        "questionId": "AI-048",
+        "establishes": "NaN and Infinity are not permitted by the standard JSON number grammar. The application needs an explicit valid representation or rejection policy for non-finite calculation results."
+      },
+      {
+        "questionId": "AI-049",
+        "establishes": "JSON numeric precision is limited by consumer implementations. A decimal string preserves an identifier\u2019s digits when the receiving numeric type cannot represent them exactly."
+      }
+    ]
+  },
+  "https://docs.python.org/3/library/asyncio-task.html": {
+    "level": "A-primary",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.4"
+    ],
+    "questionIds": [
+      "AI-050",
+      "AI-051",
+      "AI-052",
+      "AI-053",
+      "AI-054"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-050",
+        "establishes": "Awaiting a coroutine provides its result for the dependent operation. Concurrency does not remove a data dependency or turn a coroutine object into its resolved value."
+      },
+      {
+        "questionId": "AI-051",
+        "establishes": "asyncio.gather returns successful results in the order of its input awaitables. Completion timing does not reorder that result list."
+      },
+      {
+        "questionId": "AI-052",
+        "establishes": "With return_exceptions=True, gather aggregates exceptions alongside returned values. The application must inspect those entries and distinguish failures from successful answers."
+      },
+      {
+        "questionId": "AI-053",
+        "establishes": "TaskGroup cancels remaining tasks when a member fails with a non-cancellation exception and waits for tasks on exit. That matches the stated structured failure behavior."
+      },
+      {
+        "questionId": "AI-054",
+        "establishes": "Python recommends cleanup in try/finally and generally propagating CancelledError after cleanup. Swallowing cancellation can interfere with structured concurrency and the caller\u2019s stop request."
+      }
+    ]
+  },
+  "https://docs.python.org/3/library/asyncio-sync.html": {
+    "level": "A-primary",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.4"
+    ],
+    "questionIds": [
+      "AI-055"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-055",
+        "establishes": "A shared semaphore limits concurrent entries to the outbound-call region. Releasing each acquired permit in cleanup, commonly with async with, ensures failures do not permanently reduce capacity."
+      }
+    ]
+  },
+  "https://httpwg.org/specs/rfc9110.html": {
+    "level": "A-primary",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.4"
+    ],
+    "questionIds": [
+      "AI-056",
+      "AI-057",
+      "AI-058"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-056",
+        "establishes": "HTTP does not generally guarantee POST is idempotent. Losing the response does not establish that the server did not apply the request, so a duplicate side effect is possible."
+      },
+      {
+        "questionId": "AI-057",
+        "establishes": "HTTP 202 means processing has been accepted but is not complete. The application needs the service\u2019s completion mechanism before claiming the export succeeded."
+      },
+      {
+        "questionId": "AI-058",
+        "establishes": "HTTP 204 indicates successful fulfillment with no response content. A body parser must respect that status instead of requiring JSON where the contract provides none."
+      }
+    ]
+  },
+  "https://git-scm.com/docs/git-revert": {
+    "level": "A-primary",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.4"
+    ],
+    "questionIds": [
+      "AI-059"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-059",
+        "establishes": "git revert records a new commit reversing an earlier patch. It preserves the existing history, unlike rewriting the branch to remove or amend the published commit."
+      }
+    ]
+  },
+  "https://git-scm.com/docs/git-diff": {
+    "level": "A-primary",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.4"
+    ],
+    "questionIds": [
+      "AI-060",
+      "AI-061"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-060",
+        "establishes": "git diff --cached compares the index with HEAD by default. Plain git diff shows unstaged changes, while git diff HEAD includes working-tree changes beyond the staged patch."
+      },
+      {
+        "questionId": "AI-061",
+        "establishes": "The three-dot diff compares the merge base of the branches with the feature tip. That isolates the feature\u2019s changes since divergence instead of comparing two independently advanced tips."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/best-practices": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.4"
+    ],
+    "questionIds": [
+      "AI-062",
+      "AI-063",
+      "AI-064"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-062",
+        "establishes": "Claude Code guidance recommends giving the agent checks it can run and showing evidence. Executable cases for both required behaviors verify the contract more directly than prose or patch size."
+      },
+      {
+        "questionId": "AI-063",
+        "establishes": "Deterministic adapter behavior can be tested against explicit expected structures. Generative variability does not excuse changes to a pure serialization contract."
+      },
+      {
+        "questionId": "AI-064",
+        "establishes": "For UI changes, Claude Code guidance recommends visual verification against the intended result. Rendering the affected viewport provides evidence for clipping that non-rendering unit tests do not."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/pdf-support": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.5"
+    ],
+    "questionIds": [
+      "AI-065",
+      "AI-083",
+      "AI-093"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-065",
+        "establishes": "PDF processing supplies page images together with extracted text, preserving visual evidence that a text-only extraction would discard."
+      },
+      {
+        "questionId": "AI-083",
+        "establishes": "PDF support requirements specify standard PDF with no passwords or encryption."
+      },
+      {
+        "questionId": "AI-093",
+        "establishes": "Binary .docx files are not supported directly in document blocks. Convert to a supported representation such as PDF; relabeling the same binary content is not conversion."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/files": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.5"
+    ],
+    "questionIds": [
+      "AI-066",
+      "AI-067",
+      "AI-068",
+      "AI-069",
+      "AI-089"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-066",
+        "establishes": "The Files API returns a file_id that can be referenced in later Messages requests without uploading the bytes again. The document reference still belongs in each request that needs it."
+      },
+      {
+        "questionId": "AI-067",
+        "establishes": "Uploaded files cannot be modified or renamed. Updating content requires a new upload; the application should switch its reference and retire the old file."
+      },
+      {
+        "questionId": "AI-068",
+        "establishes": "Files uploaded by the application are not downloadable through the Files API. Preserve originals separately if the product must return them later."
+      },
+      {
+        "questionId": "AI-069",
+        "establishes": "Files are accessible across the API workspace rather than scoped to an application user or conversation. Treat IDs as server-side references and enforce the user-to-file mapping."
+      },
+      {
+        "questionId": "AI-089",
+        "establishes": "File expiration is a lifecycle control, not a guaranteed-deletion control. Content becomes unavailable through the API, while limited retention and metadata visibility can continue."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/citations": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.5",
+      "D6.3"
+    ],
+    "questionIds": [
+      "AI-070",
+      "AI-071",
+      "AI-086",
+      "PC-032"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-070",
+        "establishes": "Native citations currently reference text, and scan-only PDFs without extractable text are not citable. A verified text representation supplies citable content."
+      },
+      {
+        "questionId": "AI-071",
+        "establishes": "Citations interleave citation information with text output and are incompatible with structured output formatting in the same request. The documented result is a 400 error."
+      },
+      {
+        "questionId": "AI-086",
+        "establishes": "Citation metadata provides source locations and cited passages for checking an answer. The renderer must retain that association to support source inspection."
+      },
+      {
+        "questionId": "PC-032",
+        "establishes": "PDF citation page numbers are1-indexed with exclusive end page numbers."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/search-results": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.5"
+    ],
+    "questionIds": [
+      "AI-072",
+      "AI-073",
+      "AI-074",
+      "AI-090"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-072",
+        "establishes": "Search-result blocks let an application provide its own retrieved content with source and title metadata for native citations."
+      },
+      {
+        "questionId": "AI-073",
+        "establishes": "Search-result citations reference whole content blocks. Splitting the same text into focused blocks gives the model finer citation boundaries."
+      },
+      {
+        "questionId": "AI-074",
+        "establishes": "If a tool_result contains search_result blocks, all its top-level content blocks must be search_result. Supporting text can be placed inside one result\u2019s text content array."
+      },
+      {
+        "questionId": "AI-090",
+        "establishes": "Search-result citation settings must be consistent across a request. Enable citations on all results when the application wants them all available as cited evidence."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/structured-outputs": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.5",
+      "D6.3",
+      "D7.1"
+    ],
+    "questionIds": [
+      "AI-075",
+      "AI-076",
+      "AI-092",
+      "PC-028",
+      "PC-029",
+      "PC-030",
+      "PC-031",
+      "PC-033",
+      "PC-034",
+      "PC-035",
+      "SS-006"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-075",
+        "establishes": "Structured outputs do not support external schema references. Resolve external definitions into a supported schema before sending it."
+      },
+      {
+        "questionId": "AI-076",
+        "establishes": "The SDK can remove unsupported constraints from the transmitted schema while retaining their descriptions, then validate responses against the original schema. That validation preserves the application\u2019s numeric requirement."
+      },
+      {
+        "questionId": "AI-092",
+        "establishes": "Numerical constraints such as minimum and maximum are unsupported in the transmitted structured-output schema. A supported schema plus application validation preserves the business bounds."
+      },
+      {
+        "questionId": "PC-028",
+        "establishes": "JSON outputs and strict tool use address different surfaces and may be combined."
+      },
+      {
+        "questionId": "PC-029",
+        "establishes": "Structured outputs support required fields, basic string/null types, and union types via type arrays or anyOf."
+      },
+      {
+        "questionId": "PC-030",
+        "establishes": "Refusals return200 and may not match the schema because safety refusals take precedence."
+      },
+      {
+        "questionId": "PC-031",
+        "establishes": "String enum and const capitalization is not guaranteed; avoid values differing only in capitalization; applies to JSON outputs and strict tools."
+      },
+      {
+        "questionId": "PC-033",
+        "establishes": "Complexity limits apply to combined schemas; simplifying nesting/optional fields and splitting requests are documented mitigations."
+      },
+      {
+        "questionId": "PC-034",
+        "establishes": "Lookahead/lookbehind are unsupported; unsupported schema features can cause400."
+      },
+      {
+        "questionId": "PC-035",
+        "establishes": "JSON outputs return the schema-shaped response in the response text content block."
+      },
+      {
+        "questionId": "SS-006",
+        "establishes": "PHI must not appear in schema definitions; compiled schema caches do not receive the same PHI protections as prompt/response content."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.5"
+    ],
+    "questionIds": [
+      "AI-077"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-077",
+        "establishes": "The preset object\u2019s append field adds instructions while preserving the Claude Code preset. A standalone custom string replaces the preset prompt."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/agent-sdk/claude-code-features": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.5"
+    ],
+    "questionIds": [
+      "AI-078",
+      "AI-087",
+      "AI-088"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-078",
+        "establishes": "An empty settingSources list excludes user, project, and local settings. It does not disable managed policy or global configuration and is not filesystem isolation."
+      },
+      {
+        "questionId": "AI-087",
+        "establishes": "Including project settings loads project CLAUDE.md context. The SDK\u2019s cwd determines project-level discovery, allowing the CLI and SDK to share the maintained file."
+      },
+      {
+        "questionId": "AI-088",
+        "establishes": "CLAUDE.md sources are combined as context, not merged under a hard settings precedence rule. Conflicting instructions should be reconciled explicitly."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/agent-sdk/plugins": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.5"
+    ],
+    "questionIds": [
+      "AI-079",
+      "AI-081",
+      "AI-091",
+      "AI-094"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-079",
+        "establishes": "The Agent SDK\u2019s plugin option accepts local directories. Download or check out remotely distributed plugins first, then provide the plugin root path."
+      },
+      {
+        "questionId": "AI-081",
+        "establishes": "Plugin skills use the plugin-name:skill-name namespace. Explicitly invoking /billing-audit:review disambiguates the intended skill."
+      },
+      {
+        "questionId": "AI-091",
+        "establishes": "The SDK plugin path points to the plugin root, the parent of the component directories and optional manifest directory."
+      },
+      {
+        "questionId": "AI-094",
+        "establishes": "The SDK may skip a missing plugin path without ending the session. Verify the local path and the initialization message\u2019s plugins inventory before declaring the required capability ready."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/plugins": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.5"
+    ],
+    "questionIds": [
+      "AI-080"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-080",
+        "establishes": "Plugins bundle skills, hooks, agents, and MCP servers for reusable, versioned distribution across projects and teams."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/plugins-reference": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.5",
+      "D2.6"
+    ],
+    "questionIds": [
+      "AI-082",
+      "AI-102",
+      "AI-103",
+      "AI-105",
+      "AI-106"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-082",
+        "establishes": "Installed plugins run from their installed location. CLAUDE_PLUGIN_ROOT provides the plugin root so bundled resources can be referenced portably."
+      },
+      {
+        "questionId": "AI-102",
+        "establishes": "Automatic installation uses npm ci --ignore-scripts for this lockfile. Dependencies requiring lifecycle-script builds need a separate supported setup path."
+      },
+      {
+        "questionId": "AI-103",
+        "establishes": "The installed plugin root is version-specific, whereas CLAUDE_PLUGIN_DATA is intended for persistent data that outlives a plugin version. Keep code and durable state in their appropriate locations."
+      },
+      {
+        "questionId": "AI-105",
+        "establishes": "The plugin manifest supports dependencies on other plugins, including supported version constraints. This differs from a plugin\u2019s own language-package dependencies."
+      },
+      {
+        "questionId": "AI-106",
+        "establishes": "A userConfig field marked sensitive masks entry and stores the value through the documented secure credential storage path rather than ordinary settings.json values."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/vision": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.5"
+    ],
+    "questionIds": [
+      "AI-084",
+      "AI-085"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-084",
+        "establishes": "Lossy compression can introduce artifacts that make text hard to read. Inspect the actual submitted images rather than assuming they preserve the originals\u2019 legibility."
+      },
+      {
+        "questionId": "AI-085",
+        "establishes": "Image object counts can be approximate, especially for many small objects. A product requiring exactness needs independent verification rather than relying on output formatting or confidence wording."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/settings": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.6",
+      "D3.1"
+    ],
+    "questionIds": [
+      "AI-095",
+      "AI-096",
+      "AI-097",
+      "AI-099",
+      "CC-003"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-095",
+        "establishes": "Project-local settings scope an override to one developer\u2019s project. If the file is created manually, explicitly keep it out of version control."
+      },
+      {
+        "questionId": "AI-096",
+        "establishes": "List settings such as permissions.allow are combined across sources rather than resolved like a single scalar value."
+      },
+      {
+        "questionId": "AI-097",
+        "establishes": "The --settings option applies supported overrides for that session without changing saved settings files."
+      },
+      {
+        "questionId": "AI-099",
+        "establishes": "Claude Code settings files use strict JSON. Fix the syntax, then inspect settings-source status to confirm the repaired file loaded."
+      },
+      {
+        "questionId": "CC-003",
+        "establishes": "Shared project settings outrank user settings; list merge behavior is separate."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/memory": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D2.6",
+      "D3.1"
+    ],
+    "questionIds": [
+      "AI-098",
+      "AI-100",
+      "AI-101",
+      "AI-104",
+      "CC-001",
+      "CC-002",
+      "CC-006",
+      "CC-012"
+    ],
+    "assertions": [
+      {
+        "questionId": "AI-098",
+        "establishes": "Relative CLAUDE.md imports resolve relative to the file containing the import, not the process working directory."
+      },
+      {
+        "questionId": "AI-100",
+        "establishes": "CLAUDE.md import parsing skips code spans and fenced code blocks. A code span preserves a literal @path mention without importing its content."
+      },
+      {
+        "questionId": "AI-101",
+        "establishes": "Managed settings enforce supported restrictions, while managed CLAUDE.md supplies behavioral guidance. Markdown instructions are not a hard enforcement layer."
+      },
+      {
+        "questionId": "AI-104",
+        "establishes": "Path-scoped rules load when Claude works with matching files. They keep specialized guidance from occupying every session\u2019s context unconditionally."
+      },
+      {
+        "questionId": "CC-001",
+        "establishes": "Ancestor CLAUDE.md files load at launch; subdirectory files load on demand."
+      },
+      {
+        "questionId": "CC-002",
+        "establishes": "Auto memory toggle controls automatic notes; CLAUDE.md is separately authored instruction context."
+      },
+      {
+        "questionId": "CC-006",
+        "establishes": "/init analyzes the codebase and suggests improvements if CLAUDE.md exists."
+      },
+      {
+        "questionId": "CC-012",
+        "establishes": "/context shows loaded Memory files for confirming CLAUDE.md loading."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/api/errors": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D4.1"
+    ],
+    "questionIds": [
+      "ET-001",
+      "ET-002",
+      "ET-003",
+      "ET-004",
+      "ET-005"
+    ],
+    "assertions": [
+      {
+        "questionId": "ET-001",
+        "establishes": "An SSE error can occur after HTTP 200 has been returned. Success accounting must include the stream outcome instead of treating headers or a partial delta as completed generation."
+      },
+      {
+        "questionId": "ET-002",
+        "establishes": "The request-id identifies the API request for support correlation, while the structured error type and message describe the failure category and details."
+      },
+      {
+        "questionId": "ET-003",
+        "establishes": "A 413 request_too_large indicates that request bytes exceed the endpoint limit. Diagnose the payload size rather than model output or instruction style."
+      },
+      {
+        "questionId": "ET-004",
+        "establishes": "The API\u2019s error type values may expand over time. An integration should handle an unknown category through a safe generic error path while preserving its diagnostic information."
+      },
+      {
+        "questionId": "ET-005",
+        "establishes": "A 403 permission_error means the key lacks permission for the specified resource. Investigate resource authorization and organization/workspace access, rather than prompt generation behavior."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/token-counting": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.1",
+      "D5.3"
+    ],
+    "questionIds": [
+      "MO-001",
+      "MO-042"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-001",
+        "establishes": "The counting endpoint takes a model and structured inputs including system content and tools; it estimates input tokens."
+      },
+      {
+        "questionId": "MO-042",
+        "establishes": "Current token-counting and migration docs describe a newer tokenizer and recommend recounting against the intended model."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/context-windows": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.1"
+    ],
+    "questionIds": [
+      "MO-002",
+      "MO-003",
+      "MO-012",
+      "MO-015"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-002",
+        "establishes": "Input, cache-read, and cache-creation token counts all contribute to the context window."
+      },
+      {
+        "questionId": "MO-003",
+        "establishes": "max_tokens is a hard limit on total output, including thinking, rather than a required generation length."
+      },
+      {
+        "questionId": "MO-012",
+        "establishes": "The context window is working memory distinct from the corpus used to train the model."
+      },
+      {
+        "questionId": "MO-015",
+        "establishes": "Thinking tokens are a subset of max_tokens and are billed as output when generated."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/effort": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.1"
+    ],
+    "questionIds": [
+      "MO-003",
+      "MO-005",
+      "MO-006"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-003",
+        "establishes": "max_tokens is a hard limit on total output, including thinking, rather than a required generation length."
+      },
+      {
+        "questionId": "MO-005",
+        "establishes": "Effort is soft guidance; max_tokens is a hard total-output limit."
+      },
+      {
+        "questionId": "MO-006",
+        "establishes": "Effort affects response text, tool calls and arguments, and thinking when active; it works with thinking disabled."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.1"
+    ],
+    "questionIds": [
+      "MO-004",
+      "MO-007",
+      "MO-016"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-004",
+        "establishes": "Adaptive thinking evaluates each request and can produce a turn without a thinking block."
+      },
+      {
+        "questionId": "MO-007",
+        "establishes": "Adaptive thinking includes interleaving reasoning with tool use automatically."
+      },
+      {
+        "questionId": "MO-016",
+        "establishes": "Use effort before wording-sensitive steering, and measure quality, latency and token usage on representative workload cases."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/fast-mode": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.1",
+      "D5.3"
+    ],
+    "questionIds": [
+      "MO-008",
+      "MO-009",
+      "MO-039"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-008",
+        "establishes": "Fast mode uses the same model weights and capabilities with premium pricing."
+      },
+      {
+        "questionId": "MO-009",
+        "establishes": "Fast-mode speed gains focus on output tokens per second rather than time to first token."
+      },
+      {
+        "questionId": "MO-039",
+        "establishes": "Fast mode illustrates provider-specific availability: availability on the direct API does not establish availability on every other integration."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/about-claude/glossary": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.1"
+    ],
+    "questionIds": [
+      "MO-010"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-010",
+        "establishes": "Autoregressive pretraining predicts subsequent text given preceding context."
+      }
+    ]
+  },
+  "https://www.anthropic.com/research/tracing-thoughts-language-model": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.1"
+    ],
+    "questionIds": [
+      "MO-010"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-010",
+        "establishes": "Anthropic demonstrated planning for later words in poetry despite sequential generation; this refutes the claimed necessary inability."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.1",
+      "D6.2"
+    ],
+    "questionIds": [
+      "MO-011",
+      "PC-012",
+      "PC-013",
+      "PC-014",
+      "PC-015",
+      "PC-016",
+      "PC-018",
+      "PC-019",
+      "PC-020",
+      "PC-022",
+      "PC-023",
+      "PC-024",
+      "PC-025"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-011",
+        "establishes": "Few-shot examples steer output format and task behavior; documentation distinguishes context, examples and variable inputs."
+      },
+      {
+        "questionId": "PC-012",
+        "establishes": "Clear instructions must specify desired behavior and constraints rather than assume shared context."
+      },
+      {
+        "questionId": "PC-013",
+        "establishes": "Examples should be relevant and diverse to avoid unintended patterns."
+      },
+      {
+        "questionId": "PC-014",
+        "establishes": "Few-shot examples steer format and accuracy and should mirror the intended use case."
+      },
+      {
+        "questionId": "PC-015",
+        "establishes": "XML tags help disambiguate mixed instructions, context, examples, and variable inputs."
+      },
+      {
+        "questionId": "PC-016",
+        "establishes": "Long-context guidance places long documents near the top and queries at the end."
+      },
+      {
+        "questionId": "PC-018",
+        "establishes": "The role-prompting example uses a top-level system role and a user task message."
+      },
+      {
+        "questionId": "PC-019",
+        "establishes": "Output-format guidance recommends stating what to do rather than only what not to do."
+      },
+      {
+        "questionId": "PC-020",
+        "establishes": "Use sequential numbered steps when instruction order or completeness matters."
+      },
+      {
+        "questionId": "PC-022",
+        "establishes": "Providing motivation and context behind instructions supports more targeted behavior and generalization."
+      },
+      {
+        "questionId": "PC-023",
+        "establishes": "Starting with Claude4.6 final assistant prefill returns400; structured outputs are the migration for schema-constrained output."
+      },
+      {
+        "questionId": "PC-024",
+        "establishes": "Tool usage guidance distinguishes asking for suggested changes from explicit instructions to make edits."
+      },
+      {
+        "questionId": "PC-025",
+        "establishes": "Current prompting guidance recommends targeted tool-use instructions and removing over-prompting that causes tool overtriggering."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/prompt-caching": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.1",
+      "D5.4"
+    ],
+    "questionIds": [
+      "MO-013",
+      "MO-045",
+      "MO-046",
+      "MO-047",
+      "MO-048",
+      "MO-049",
+      "MO-050",
+      "MO-051",
+      "MO-052"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-013",
+        "establishes": "Prompt caching has no effect on output-token generation and caches input prefixes, not final answers."
+      },
+      {
+        "questionId": "MO-045",
+        "establishes": "The default five-minute cache lifetime refreshes on each use, measured from the request start."
+      },
+      {
+        "questionId": "MO-046",
+        "establishes": "The one-hour TTL is intended for reuse gaps beyond five minutes, including paused conversations, and has an additional write cost."
+      },
+      {
+        "questionId": "MO-047",
+        "establishes": "Shorter-than-minimum prompts are processed without caching and without an error; zero cache usage can reveal this."
+      },
+      {
+        "questionId": "MO-048",
+        "establishes": "Changing tool definitions invalidates the tools/system/messages cache hierarchy."
+      },
+      {
+        "questionId": "MO-049",
+        "establishes": "For concurrent requests, a cache entry is available only after the first response begins; waiting for that point supports subsequent hits."
+      },
+      {
+        "questionId": "MO-050",
+        "establishes": "input_tokens excludes cache-read and cache-creation tokens; total input is the sum of the three categories."
+      },
+      {
+        "questionId": "MO-051",
+        "establishes": "Prompt caching bills cache writes and cache hits at distinct prices; the stem supplies illustrative rates rather than asserting a universal current price."
+      },
+      {
+        "questionId": "MO-052",
+        "establishes": "Mixed TTLs require longer lifetimes to precede shorter lifetimes in the prompt."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/models/opus-5/migration-guide": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.1",
+      "D5.3"
+    ],
+    "questionIds": [
+      "MO-014",
+      "MO-041",
+      "MO-042"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-014",
+        "establishes": "Opus 4.7 and later, including Opus 5, default to omitted thinking display while blocks can still appear."
+      },
+      {
+        "questionId": "MO-041",
+        "establishes": "Opus 4.7 and later, including Opus 5, reject non-default temperature/top_p/top_k; the safe migration is to omit them."
+      },
+      {
+        "questionId": "MO-042",
+        "establishes": "Current token-counting and migration docs describe a newer tokenizer and recommend recounting against the intended model."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/typescript": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.2"
+    ],
+    "questionIds": [
+      "MO-017",
+      "MO-023",
+      "MO-024",
+      "MO-025",
+      "MO-026",
+      "MO-027",
+      "MO-028",
+      "MO-032",
+      "MO-036"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-017",
+        "establishes": "A custom fetch function may be passed to a client instead of replacing globalThis.fetch."
+      },
+      {
+        "questionId": "MO-023",
+        "establishes": "The TypeScript SDK does not validate requests against their static types at runtime and sends extra values as-is."
+      },
+      {
+        "questionId": "MO-024",
+        "establishes": "A stream returned by create with stream:true can be canceled by breaking the loop or calling stream.controller.abort()."
+      },
+      {
+        "questionId": "MO-025",
+        "establishes": "create with stream:true returns an async iterable without accumulating a final message, unlike the stream helper."
+      },
+      {
+        "questionId": "MO-026",
+        "establishes": "TypeScript SDK logs are intended for debugging and their format and content may change between releases."
+      },
+      {
+        "questionId": "MO-027",
+        "establishes": "The configured SDK logLevel still filters messages when a custom logger is supplied."
+      },
+      {
+        "questionId": "MO-028",
+        "establishes": "The SDK supports runtime-specific proxy configuration through custom fetchOptions."
+      },
+      {
+        "questionId": "MO-032",
+        "establishes": "TypeScript timeout values are expressed in milliseconds."
+      },
+      {
+        "questionId": "MO-036",
+        "establishes": "The SDK versioning policy permits static-type-only incompatible changes in minor releases."
+      }
+    ]
+  },
+  "https://html.spec.whatwg.org/multipage/server-sent-events.html": {
+    "level": "A-primary",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.2"
+    ],
+    "questionIds": [
+      "MO-034"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-034",
+        "establishes": "The EventSource interface receives server-sent events and has no general upstream send method."
+      }
+    ]
+  },
+  "https://www.rfc-editor.org/rfc/rfc6455": {
+    "level": "A-primary",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.2"
+    ],
+    "questionIds": [
+      "MO-034"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-034",
+        "establishes": "RFC6455 defines two-way communication over an established WebSocket connection."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/about-claude/models/optimizing-for-cost-and-intelligence": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.3",
+      "D5.4"
+    ],
+    "questionIds": [
+      "MO-037",
+      "MO-038",
+      "MO-043",
+      "MO-044",
+      "MO-053"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-037",
+        "establishes": "The official optimization guide recommends comparing cost per completed or solved task rather than per-token price."
+      },
+      {
+        "questionId": "MO-038",
+        "establishes": "Escalation policies must count failed initial attempts and require a reliable failure signal, with added latency on escalations."
+      },
+      {
+        "questionId": "MO-043",
+        "establishes": "Select models against the application requirements and evaluate difficult workload tails rather than relying only on typical cases."
+      },
+      {
+        "questionId": "MO-044",
+        "establishes": "The optimization guide recommends separate sessions for effort comparisons because mid-session effort changes invalidate caching and distort results."
+      },
+      {
+        "questionId": "MO-053",
+        "establishes": "The optimization guide notes that generated output is billed again as input when retained in later agent-loop requests."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/about-claude/models/choosing-a-model": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.3"
+    ],
+    "questionIds": [
+      "MO-039",
+      "MO-043"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-039",
+        "establishes": "Choosing a model requires evaluating capabilities needed by the application."
+      },
+      {
+        "questionId": "MO-043",
+        "establishes": "Select models against the application requirements and evaluate difficult workload tails rather than relying only on typical cases."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D5.3"
+    ],
+    "questionIds": [
+      "MO-040"
+    ],
+    "assertions": [
+      {
+        "questionId": "MO-040",
+        "establishes": "Model IDs from the 4.6 generation use dateless versioned naming and identify pinned model versions, unlike some earlier convenience aliases."
+      }
+    ]
+  },
+  "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D6.1"
+    ],
+    "questionIds": [
+      "PC-001",
+      "PC-002",
+      "PC-003",
+      "PC-008"
+    ],
+    "assertions": [
+      {
+        "questionId": "PC-001",
+        "establishes": "Just-in-time retrieval maintains lightweight identifiers and dynamically loads content through tools."
+      },
+      {
+        "questionId": "PC-002",
+        "establishes": "Structured notes persist outside context and are pulled back into the context window later."
+      },
+      {
+        "questionId": "PC-003",
+        "establishes": "Overaggressive compaction can lose critical information; tune on complex traces, maximizing recall before precision."
+      },
+      {
+        "questionId": "PC-008",
+        "establishes": "Hybrid context strategies retrieve some context up front for speed and explore further on demand."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/context-editing": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D6.1"
+    ],
+    "questionIds": [
+      "PC-004",
+      "PC-005",
+      "PC-009",
+      "PC-011"
+    ],
+    "assertions": [
+      {
+        "questionId": "PC-004",
+        "establishes": "Server-side context editing does not require synchronizing the client history with the edited prompt."
+      },
+      {
+        "questionId": "PC-005",
+        "establishes": "exclude_tools names tools whose uses and results should never be cleared."
+      },
+      {
+        "questionId": "PC-009",
+        "establishes": "Only tool results are cleared by default; clear_tool_inputs true also clears calls/parameters."
+      },
+      {
+        "questionId": "PC-011",
+        "establishes": "clear_at_least requires a minimum clearing amount; if unavailable no strategy application occurs; tool-result clearing invalidates affected cached prefixes."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/compaction": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D6.1"
+    ],
+    "questionIds": [
+      "PC-006",
+      "PC-007",
+      "PC-010"
+    ],
+    "assertions": [
+      {
+        "questionId": "PC-006",
+        "establishes": "pause_after_compaction returns stop_reason compaction and permits adding content before continuing; compaction blocks must be passed back."
+      },
+      {
+        "questionId": "PC-007",
+        "establishes": "Custom summarization instructions completely replace the default prompt."
+      },
+      {
+        "questionId": "PC-010",
+        "establishes": "The token-counting endpoint applies existing compaction blocks but does not trigger new compactions."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-hallucinations": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D6.2"
+    ],
+    "questionIds": [
+      "PC-017",
+      "PC-021",
+      "PC-027"
+    ],
+    "assertions": [
+      {
+        "questionId": "PC-017",
+        "establishes": "Direct quote extraction before analysis grounds long-document tasks; external-knowledge restrictions and critical validation are recommended."
+      },
+      {
+        "questionId": "PC-021",
+        "establishes": "Explicit permission to admit uncertainty and restrict claims to supplied sources reduces hallucinations."
+      },
+      {
+        "questionId": "PC-027",
+        "establishes": "Citation verification may require finding a supporting quote for each claim and retracting unsupported claims."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D6.2"
+    ],
+    "questionIds": [
+      "PC-026"
+    ],
+    "assertions": [
+      {
+        "questionId": "PC-026",
+        "establishes": "Before prompt engineering establish clear success criteria, empirical tests, and an initial prompt."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D7.1",
+      "D7.2"
+    ],
+    "questionIds": [
+      "SS-001",
+      "SS-002",
+      "SS-004",
+      "SS-011",
+      "SS-012",
+      "SS-017"
+    ],
+    "assertions": [
+      {
+        "questionId": "SS-001",
+        "establishes": "Current mitigation guidance places third-party content in tool_result, not system or plain user text, and identifies provenance."
+      },
+      {
+        "questionId": "SS-002",
+        "establishes": "Do not put own instructions in tool results; send them in a user turn following the result."
+      },
+      {
+        "questionId": "SS-004",
+        "establishes": "Indirect injection includes adversarial instructions in OCR, emails, documents and tool results when the user is trusted."
+      },
+      {
+        "questionId": "SS-011",
+        "establishes": "Tool output screening occurs before returning content; flagged injection content is replaced by error or stripped summary."
+      },
+      {
+        "questionId": "SS-012",
+        "establishes": "Red-team workflows with documents/emails/tool results containing attacks and confirm screening and confirmation steps catch them."
+      },
+      {
+        "questionId": "SS-017",
+        "establishes": "Regularly analyze outputs for injection and iteratively refine prompts, validation and filters; red-team workflows."
+      }
+    ]
+  },
+  "https://modelcontextprotocol.io/docs/2025-11-25/tutorials/security/security_best_practices": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D7.1"
+    ],
+    "questionIds": [
+      "SS-003",
+      "SS-007",
+      "SS-008",
+      "SS-009",
+      "SS-010"
+    ],
+    "assertions": [
+      {
+        "questionId": "SS-003",
+        "establishes": "Authorization URL validation requires rejecting dangerous schemes; production usesHTTPS; clients must avoid shell execution when opening URLs."
+      },
+      {
+        "questionId": "SS-007",
+        "establishes": "MCP security guidance recommends validating redirect targets and blocking private/reserved destinations including metadata addresses."
+      },
+      {
+        "questionId": "SS-008",
+        "establishes": "MCP servers MUST NOT use sessions for authentication and authorized servers MUST verify all inbound requests."
+      },
+      {
+        "questionId": "SS-009",
+        "establishes": "One-click local configuration MUST show exact untruncated command, identify code execution risk, require approval, and allow cancellation."
+      },
+      {
+        "questionId": "SS-010",
+        "establishes": "Bind session IDs to user-specific information; combine user_id and session_id with user identity derived from token."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/reduce-prompt-leak": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D7.1",
+      "D7.2"
+    ],
+    "questionIds": [
+      "SS-005",
+      "SS-016"
+    ],
+    "assertions": [
+      {
+        "questionId": "SS-005",
+        "establishes": "Avoid unnecessary proprietary details; no prompt-leak mitigation is foolproof."
+      },
+      {
+        "questionId": "SS-016",
+        "establishes": "Leak prevention can degrade task performance; test prompts thoroughly and try monitoring/output screening first."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/sandboxing": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D7.2"
+    ],
+    "questionIds": [
+      "SS-013",
+      "SS-014",
+      "SS-015"
+    ],
+    "assertions": [
+      {
+        "questionId": "SS-013",
+        "establishes": "Effective sandboxing requires filesystem and network isolation; missing either leaves compromise routes."
+      },
+      {
+        "questionId": "SS-014",
+        "establishes": "Sandbox restrictions are OS-enforced on Bash and child processes regardless of model choice or command-name appearance."
+      },
+      {
+        "questionId": "SS-015",
+        "establishes": "Sandbox applies only to Bash commands and child processes; permission rules apply across tools."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/hooks": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D7.3"
+    ],
+    "questionIds": [
+      "SS-018",
+      "SS-019"
+    ],
+    "assertions": [
+      {
+        "questionId": "SS-018",
+        "establishes": "PreToolUse does not fire for @ file references; use Read deny rules to block specific paths."
+      },
+      {
+        "questionId": "SS-019",
+        "establishes": "Multiple PreToolUse decisions have deny precedence over defer,ask,allow."
+      }
+    ]
+  },
+  "https://github.com/anthropics/anthropic-sdk-typescript": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D7.4"
+    ],
+    "questionIds": [
+      "SS-020"
+    ],
+    "assertions": [
+      {
+        "questionId": "SS-020",
+        "establishes": "Browser support is disabled to avoid exposing secret credentials; dangerouslyAllowBrowser explicitly enables it."
+      }
+    ]
+  },
+  "https://support.claude.com/en/articles/9767949-api-key-best-practices-keeping-your-keys-safe-and-secure": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D7.4"
+    ],
+    "questionIds": [
+      "SS-021",
+      "SS-023",
+      "SS-024"
+    ],
+    "assertions": [
+      {
+        "questionId": "SS-021",
+        "establishes": "Do not share API keys in public discussions, emails, or support tickets, even with Anthropic."
+      },
+      {
+        "questionId": "SS-023",
+        "establishes": "Ignore local dotenv files; prefer encrypted cloud secret storage and environment injection."
+      },
+      {
+        "questionId": "SS-024",
+        "establishes": "Regularly review logs and API key usage patterns within the Console."
+      }
+    ]
+  },
+  "https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D7.4"
+    ],
+    "questionIds": [
+      "SS-022"
+    ],
+    "assertions": [
+      {
+        "questionId": "SS-022",
+        "establishes": "MCP servers must validate intended audience, reject tokens not intended for them, and must not pass received tokens through to upstream APIs."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.1"
+    ],
+    "questionIds": [
+      "TM-001",
+      "TM-002",
+      "TM-003",
+      "TM-008",
+      "TM-011",
+      "TM-012"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-001",
+        "establishes": "Tool descriptions should explain parameter meanings and behavior."
+      },
+      {
+        "questionId": "TM-002",
+        "establishes": "Invalid input_examples return 400; each example must satisfy input_schema."
+      },
+      {
+        "questionId": "TM-003",
+        "establishes": "tool_choice none prevents tool use; auto allows model choice."
+      },
+      {
+        "questionId": "TM-008",
+        "establishes": "On supported configurations, tool_choice tool forces a named tool while any permits any provided tool."
+      },
+      {
+        "questionId": "TM-011",
+        "establishes": "input_schema uses JSON Schema properties and required for parameter contracts."
+      },
+      {
+        "questionId": "TM-012",
+        "establishes": "Natural language commentary varies; structured tool_use blocks contain name and input."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.1"
+    ],
+    "questionIds": [
+      "TM-004",
+      "TM-005"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-004",
+        "establishes": "Tool results must immediately follow calls and precede text in the user content array."
+      },
+      {
+        "questionId": "TM-005",
+        "establishes": "tool_use id uniquely identifies the call and tool_use_id correlates its result."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.1"
+    ],
+    "questionIds": [
+      "TM-006",
+      "TM-007",
+      "TM-013"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-006",
+        "establishes": "Applications choose concurrent or sequential execution; shared-state/ordering requirements favor sequential handling."
+      },
+      {
+        "questionId": "TM-007",
+        "establishes": "Skipped custom tool calls still receive their own error result with a brief explanation."
+      },
+      {
+        "questionId": "TM-013",
+        "establishes": "Independent read-only operations can run concurrently; return one result per call together."
+      }
+    ]
+  },
+  "https://www.anthropic.com/engineering/writing-tools-for-agents": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.1"
+    ],
+    "questionIds": [
+      "TM-009",
+      "TM-010"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-009",
+        "establishes": "Tools should perform targeted searches instead of dumping complete collections into model context."
+      },
+      {
+        "questionId": "TM-010",
+        "establishes": "Tool responses should expose useful semantic information and identifiers needed for later actions."
+      }
+    ]
+  },
+  "https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.2"
+    ],
+    "questionIds": [
+      "TM-014"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-014",
+        "establishes": "Client must send initialized notification after successful initialization."
+      }
+    ]
+  },
+  "https://modelcontextprotocol.io/specification/2025-11-25/basic/transports": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.2"
+    ],
+    "questionIds": [
+      "TM-015"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-015",
+        "establishes": "stdio stdout must contain only valid MCP messages; stderr may carry diagnostics."
+      }
+    ]
+  },
+  "https://modelcontextprotocol.io/specification/2025-11-25/server/resources": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.2"
+    ],
+    "questionIds": [
+      "TM-016"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-016",
+        "establishes": "resources/subscribe registers URI interest; resources/updated notifies content changes."
+      }
+    ]
+  },
+  "https://modelcontextprotocol.io/specification/2025-11-25/server/prompts": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.2"
+    ],
+    "questionIds": [
+      "TM-017"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-017",
+        "establishes": "prompts/get retrieves a named prompt with arguments."
+      }
+    ]
+  },
+  "https://modelcontextprotocol.io/specification/2025-11-25/server/tools": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.2"
+    ],
+    "questionIds": [
+      "TM-018",
+      "TM-019"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-018",
+        "establishes": "Business and validation failures use tool-result isError; malformed/unknown operations are protocol errors."
+      },
+      {
+        "questionId": "TM-019",
+        "establishes": "Servers must return structured results conforming to outputSchema; clients should validate them."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/features-overview": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.3"
+    ],
+    "questionIds": [
+      "TM-020"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-020",
+        "establishes": "Skills provide reusable instructions; MCP provides external tools and access; they compose."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/agent-sdk/custom-tools": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.3"
+    ],
+    "questionIds": [
+      "TM-021",
+      "TM-026"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-021",
+        "establishes": "Custom tools can run in an SDK in-process MCP server."
+      },
+      {
+        "questionId": "TM-026",
+        "establishes": "Register custom tools by passing their server to mcpServers; allowedTools preapproves registered tools."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.3"
+    ],
+    "questionIds": [
+      "TM-022"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-022",
+        "establishes": "API code execution sandbox disables internet/outbound network access."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/skills": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D3.1",
+      "D8.3"
+    ],
+    "questionIds": [
+      "CC-010",
+      "TM-023",
+      "TM-027",
+      "TM-028",
+      "TM-029",
+      "TM-030",
+      "TM-034"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-023",
+        "establishes": "Supporting skill files enable detailed reference material to load only when needed."
+      },
+      {
+        "questionId": "TM-027",
+        "establishes": "Local !command dynamic context executes before skill content is sent; output replaces placeholder."
+      },
+      {
+        "questionId": "TM-028",
+        "establishes": "Skill frontmatter opening --- must be the first line; otherwise entire file is content."
+      },
+      {
+        "questionId": "TM-029",
+        "establishes": "disable-model-invocation prevents model invocation while retaining explicit user invocation."
+      },
+      {
+        "questionId": "TM-030",
+        "establishes": "$ARGUMENTS supplies invocation arguments within skill content."
+      },
+      {
+        "questionId": "TM-034",
+        "establishes": "Skill allowed-tools grants permission and does not restrict availability of unlisted tools."
+      },
+      {
+        "questionId": "CC-010",
+        "establishes": "Existing .claude/commands files continue to work; skills add supporting-file structure."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.3"
+    ],
+    "questionIds": [
+      "TM-024"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-024",
+        "establishes": "Web fetch does not support JavaScript-rendered sites; interactive browser access is a different capability."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.3"
+    ],
+    "questionIds": [
+      "TM-025"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-025",
+        "establishes": "Client Bash and server code execution use distinct environments with no shared state."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.3"
+    ],
+    "questionIds": [
+      "TM-031",
+      "TM-032"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-031",
+        "establishes": "Premade utility scripts improve consistency; instructions should distinguish execution from reference reading."
+      },
+      {
+        "questionId": "TM-032",
+        "establishes": "High-freedom instructions suit multiple valid approaches and context-dependent decisions."
+      }
+    ]
+  },
+  "https://platform.claude.com/docs/en/agents-and-tools/mcp-connector": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D8.3"
+    ],
+    "questionIds": [
+      "TM-033"
+    ],
+    "assertions": [
+      {
+        "questionId": "TM-033",
+        "establishes": "Server-side connector supports only MCP tool calls; separate client-side helpers support other primitives."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/headless": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D3.1"
+    ],
+    "questionIds": [
+      "CC-004",
+      "CC-005"
+    ],
+    "assertions": [
+      {
+        "questionId": "CC-004",
+        "establishes": "-p or --print runs a prompt non-interactively."
+      },
+      {
+        "questionId": "CC-005",
+        "establishes": "Token streaming example combines stream-json, verbose, and include-partial-messages."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/common-workflows": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D3.1"
+    ],
+    "questionIds": [
+      "CC-007"
+    ],
+    "assertions": [
+      {
+        "questionId": "CC-007",
+        "establishes": "@directory references provide file listings; @file references include file content."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/interactive-mode": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D3.1"
+    ],
+    "questionIds": [
+      "CC-008"
+    ],
+    "assertions": [
+      {
+        "questionId": "CC-008",
+        "establishes": "Background commands return a task ID immediately and write output for later retrieval."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/mcp": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D3.1"
+    ],
+    "questionIds": [
+      "CC-009"
+    ],
+    "assertions": [
+      {
+        "questionId": "CC-009",
+        "establishes": "Added confirms configuration write; /mcp and MCP status commands expose connection health."
+      }
+    ]
+  },
+  "https://code.claude.com/docs/en/cli-reference": {
+    "level": "A",
+    "accessed": "2026-09-08",
+    "objectives": [
+      "D3.1"
+    ],
+    "questionIds": [
+      "CC-011"
+    ],
+    "assertions": [
+      {
+        "questionId": "CC-011",
+        "establishes": "safe-mode disables customizations while authentication, models, built-in tools and permissions work normally."
+      }
+    ]
+  }
+}
