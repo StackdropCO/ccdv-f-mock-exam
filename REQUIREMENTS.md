@@ -296,3 +296,8 @@ Preserve mode selection, 120-minute timed countdown without automatic submission
 Test selector size, quotas, uniqueness, valid IDs, unused selection, complete disjoint cycles, exhaustion/reset, previous-form avoidance, aborted/submitted history, malformed/stale storage, deterministic RNG, and mode equivalence. Validate all content metadata and exact legacy preservation. Simulate hundreds/thousands of forms over repeated cycles. Functionally check timed/untimed navigation, flags, confirmation, submission, answer review, retake, reload, completed-history persistence, themes, and mobile navigation.
 
 Run npm test, npm run typecheck, npm run lint, and npm run build without weakening meaningful tests. Report exact sources, confirmed and unknown blueprint facts, counts, algorithm, persisted fields, files changed, tests and smoke results, legacy concerns, and remaining uncertainty. Work from main on a dedicated branch; do not merge or deploy automatically.
+
+
+### Approved Change 2 — Research methodology clarification (2026-09-08)
+
+The user explicitly accepts a provenance-bearing mirror of the official Exam Guide plus credible independent corroboration for blueprint facts when Skilljar is inaccessible. Direct authenticated Skilljar access is not a generation prerequisite. Technical answer correctness still normally requires current first-party documentation, unique answer sets, and item-level ambiguity and duplicate review. The earlier blocked research checkpoint is superseded by this clarification; prior history remains preserved.

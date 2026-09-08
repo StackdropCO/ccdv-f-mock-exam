@@ -1,43 +1,40 @@
-# Form construction — conditional design, not frozen
+# Form construction — frozen research checkpoint
 
-Status: research blocked; no production selector implemented. The user requires 53-item mocks and 120-minute timed mode. Whether these match the current live exam remains unverified.
+Date: 2026-09-08. Exam Guide v1.0 (July 2026), retrieved as provenance-bearing mirror and independently corroborated, supports 53 items, 120 minutes, eight weighted domains and 25 weighted skills. Evidence methodology is in SOURCE_MATRIX.md. Research gate PASS; no material blueprint contradiction found.
 
-## Conditional counts
+## Capacity and generation target
 
-If the supplied weights are verified, largest remainder produces the following. The proposed maximum initial target is seven disjoint forms (371 total), subject to item-by-item quality review.
+Target 318 new + 53 preserved = 371. This remains conditional on item-level quality acceptance. Domain quotas use largest remainder for 53; combined skill targets use largest remainder within each domain's seven-form capacity. Legacy primary-skill mappings are editorial classifications, not alterations to the original questions. The detailed allocation is in blueprint.json and EXAM_BLUEPRINT.md.
 
-| Domain | Form quota | Seven-form total | New items IF legacy count equals form quota |
-|---|---:|---:|---:|
-| Applications & Integration | 17 | 119 | 102 |
-| Model Selection & Optimization | 9 | 63 | 54 |
-| Agents & Workflows | 8 | 56 | 48 |
-| Prompt & Context Engineering | 6 | 42 | 36 |
-| Tools & MCPs | 6 | 42 | 36 |
-| Security & Safety | 4 | 28 | 24 |
-| Claude Code | 2 | 14 | 12 |
-| Eval, Testing & Debugging | 1 | 7 | 6 |
-| Total | 53 | 371 | 318 |
+| Domain | Per form | Legacy | New target | Combined |
+|---|---:|---:|---:|---:|
+| Agents and Workflows | 8 | 7 | 49 | 56 |
+| Applications and Integration | 17 | 13 | 106 | 119 |
+| Claude Code | 2 | 2 | 12 | 14 |
+| Eval, Testing, and Debugging | 1 | 2 | 5 | 7 |
+| Model Selection and Optimization | 9 | 10 | 53 | 63 |
+| Prompt and Context Engineering | 6 | 7 | 35 | 42 |
+| Security and Safety | 4 | 4 | 24 | 28 |
+| Tools and MCPs | 6 | 8 | 34 | 42 |
 
-Crucial constraint: 371 / 53 = 7 is necessary but not sufficient. For quotas q[d] and eligible domain counts b[d], capacity is min_d floor(b[d] / q[d]). Actual new counts are 7*q[d] minus the accepted legacy count for that domain, not automatically the last column. Legacy items lack objective metadata, and the official mapping is unavailable. Seven forms are therefore not yet a defensible promise.
+Capacity is min across domains of floor(eligible count / quota), not just total / 53. If quality reduces capacity, document revised complete-form targets rather than fill with weak questions.
 
-If any legacy question fails the factual quality gate, preserving its text does not make it approved. Resolve its participation with the user before claiming the entire bank is quality-approved.
+## Authoring and review contract
 
-## Planned algorithm and lifecycle
+Draft by objective in bounded batches. Every item has one binding discriminator; plausible alternatives must be excluded by a stated condition or documented behavior. Require source-backed answer AND an explanation of why each distractor fails. Challenge alternate interpretations, model/version dependence, and semantic duplicates. Current first-party documents establish technical correctness. Use explicit versions when necessary; reject facts that cannot be pinned down. An agent's draft is a candidate, not approval: central review must adjudicate it.
 
-Retain the reducer and use a pure selector with injected RNG. On mode choice, normalize completed history, validate bank metadata, and calculate all unused domain capacities. If any is below quota, provisionally reset the entire cycle in memory. Prefer items absent from lastCompletedFormIds after a reset; prefer distinct concepts and broad objectives. Shuffle the selected form's question order, never its options.
+Mostly applied scenarios; authoring goal approximately 15–25% multiple response, varied across objectives, with explicit Select TWO or Select THREE and exact keys. This range is an editorial choice, NOT an official ratio or a selection quota. Guide publishes no exact response/difficulty/answer-position mix. Do not force a percentage at the expense of correctness. Audit authored option positions; never shuffle options at runtime. Official samples demonstrate a binding requirement that rules out generally sensible alternatives.
 
-Hold bank IDs and form positions separately. All navigation, review, flags and scoring must refer consistently to the same selected form. No reselection on render, navigation, review, or theme change.
+## Selection and lifecycle
 
-Only final submission commits the form IDs and any provisional cycle reset. Abort/reload commits nothing. Guard repeated submission against duplicate commits. Malformed or incompatible stored history resets safely; malformed bank content must fail loudly.
+Pure selector accepts bank, history and RNG. Validate IDs, objective/domain mapping and capacity. Normalize incompatible/malformed history safely. Select each domain's exact quota among unused items, preferring concepts absent from the form and broad proportional skill coverage. Randomize equal choices and final question order. No exact per-form skill quota is claimed official. Once the pool is small, complete domain-valid forms take priority over concept diversity; report any legacy overlaps.
 
-Persist bankVersion, cycle, usedQuestionIds and lastCompletedFormIds only, separate from theme preference. No attempt state or result persistence. Storage-unavailable behavior and simultaneous-tab submissions need explicit implementation decisions and tests so the app does not falsely claim durable global disjointness.
+If any domain cannot fill its quota, reset ALL used IDs atomically in the proposed in-memory selection; prefer items outside the immediately previous completed form. No partially repeated form within a cycle. Only submission commits that proposed cycle/history. Starting, navigating, reviewing, flagging, changing theme, aborting or reloading cannot consume IDs.
 
-## Item construction rules
+Keep bank IDs separate from positions. The active form can project items to existing numeric positions 1–53 while retaining stable bankId. Existing reducer, answers, flags and scoring then retain their position-based contract. Active form is created once at mode choice and kept only in memory.
 
-Official objective mapping and source support are mandatory. Each item requires a binding discriminator, exactly one defensible answer set, plausible but demonstrably wrong distractors, concise explanation, internal distractor rationales, and source references. Review source currency, alternate answers, hidden assumptions, semantic duplicates, and answer-position patterns before APPROVED status.
+Persist only version, cycle, completed used IDs and last completed form IDs, plus existing separate theme preference. Mode/timer/answers/flags/form/result remain ephemeral. Guard double submission. Storage failure must not prevent scoring; disclose inability to retain rotation if encountered. Browser-local sequential attempts are the rotation scope. Simultaneous independent tabs can have overlapping active forms; re-read history on submission and avoid silent corruption, document this limitation rather than claim a cross-tab transactional guarantee.
 
-Single/multiple-response mix is not frozen. No official percentage or sample style was verified. Preserve exact-set mock scoring; require explicit Select TWO/THREE labels for accepted multiple-response items. Define a varied authoring mix after examining public official samples, labeled as an authoring choice unless the guide specifies it.
+## Verification contract
 
-## Checkpoint decision
-
-FAIL / BLOCKED: official objectives, weights and sample rationales are unavailable. No bulk generation, objective quota commitment, or application implementation is authorized by a passed research gate yet. This is an evidence gap, not a request to reapprove the already-approved change.
+Preserve legacy source and canonical markdown byte-for-byte with hash tests. Validate all accepted item metadata and per-option review coverage. Test deterministic form selection, exact quotas, seven disjoint completed forms, exhaustion/reset, previous-form avoidance, abort versus submit, invalid/stale history and both modes. Simulate thousands of forms. Keep existing regression gates and test the real browser flows where tooling permits.

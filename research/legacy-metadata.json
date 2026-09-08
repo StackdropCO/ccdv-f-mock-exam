@@ -1,0 +1,267 @@
+{
+  "5": {
+    "domain": "agents-workflows",
+    "objective": "D1.1",
+    "conceptKey": "fixed-workflow"
+  },
+  "8": {
+    "domain": "agents-workflows",
+    "objective": "D1.1",
+    "conceptKey": "subagent-context-isolation"
+  },
+  "30": {
+    "domain": "agents-workflows",
+    "objective": "D1.1",
+    "conceptKey": "supervisor-orchestration"
+  },
+  "43": {
+    "domain": "agents-workflows",
+    "objective": "D1.1",
+    "conceptKey": "adaptive-agent"
+  },
+  "17": {
+    "domain": "agents-workflows",
+    "objective": "D1.2",
+    "conceptKey": "managed-agent-hosting"
+  },
+  "23": {
+    "domain": "agents-workflows",
+    "objective": "D1.2",
+    "conceptKey": "sdk-session-continuation"
+  },
+  "37": {
+    "domain": "agents-workflows",
+    "objective": "D1.3",
+    "conceptKey": "durable-agent-memory"
+  },
+  "25": {
+    "domain": "applications-integration",
+    "objective": "D2.1",
+    "conceptKey": "infrastructure-requirements"
+  },
+  "51": {
+    "domain": "applications-integration",
+    "objective": "D2.2",
+    "conceptKey": "model-rollout-evaluation"
+  },
+  "1": {
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "batch-asynchronous-cost"
+  },
+  "6": {
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "messages-stateless"
+  },
+  "12": {
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "streaming-perceived-latency"
+  },
+  "29": {
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "batch-result-correlation"
+  },
+  "40": {
+    "domain": "applications-integration",
+    "objective": "D2.3",
+    "conceptKey": "system-top-level"
+  },
+  "14": {
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "async-concurrency"
+  },
+  "45": {
+    "domain": "applications-integration",
+    "objective": "D2.4",
+    "conceptKey": "incremental-refactoring"
+  },
+  "19": {
+    "domain": "applications-integration",
+    "objective": "D2.5",
+    "conceptKey": "interface-prompt-parity"
+  },
+  "9": {
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "model-version-pinning"
+  },
+  "35": {
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "prompt-versioning"
+  },
+  "53": {
+    "domain": "applications-integration",
+    "objective": "D2.6",
+    "conceptKey": "plugin-reproducibility"
+  },
+  "13": {
+    "domain": "claude-code",
+    "objective": "D3.1",
+    "conceptKey": "memory-versus-skill"
+  },
+  "42": {
+    "domain": "claude-code",
+    "objective": "D3.1",
+    "conceptKey": "plan-mode-inspection"
+  },
+  "3": {
+    "domain": "eval-testing-debugging",
+    "objective": "D4.1",
+    "conceptKey": "semantic-evaluation"
+  },
+  "26": {
+    "domain": "eval-testing-debugging",
+    "objective": "D4.1",
+    "conceptKey": "retryable-versus-invalid"
+  },
+  "10": {
+    "domain": "model-selection-optimization",
+    "objective": "D5.1",
+    "conceptKey": "context-budget"
+  },
+  "24": {
+    "domain": "model-selection-optimization",
+    "objective": "D5.1",
+    "conceptKey": "one-shot-example"
+  },
+  "38": {
+    "domain": "model-selection-optimization",
+    "objective": "D5.1",
+    "conceptKey": "image-token-budget"
+  },
+  "22": {
+    "domain": "model-selection-optimization",
+    "objective": "D5.2",
+    "conceptKey": "client-sdk-abstraction"
+  },
+  "27": {
+    "domain": "model-selection-optimization",
+    "objective": "D5.2",
+    "conceptKey": "sse-websocket-bridge"
+  },
+  "46": {
+    "domain": "model-selection-optimization",
+    "objective": "D5.2",
+    "conceptKey": "sdk-api-version-gap"
+  },
+  "20": {
+    "domain": "model-selection-optimization",
+    "objective": "D5.3",
+    "conceptKey": "smallest-qualified-model"
+  },
+  "33": {
+    "domain": "model-selection-optimization",
+    "objective": "D5.3",
+    "conceptKey": "measured-model-constraints"
+  },
+  "16": {
+    "domain": "model-selection-optimization",
+    "objective": "D5.4",
+    "conceptKey": "cache-stable-prefix"
+  },
+  "39": {
+    "domain": "model-selection-optimization",
+    "objective": "D5.4",
+    "conceptKey": "cost-observability"
+  },
+  "15": {
+    "domain": "prompt-context-engineering",
+    "objective": "D6.1",
+    "conceptKey": "old-tool-result-clearing"
+  },
+  "32": {
+    "domain": "prompt-context-engineering",
+    "objective": "D6.1",
+    "conceptKey": "context-curation"
+  },
+  "50": {
+    "domain": "prompt-context-engineering",
+    "objective": "D6.1",
+    "conceptKey": "subagent-context-isolation"
+  },
+  "41": {
+    "domain": "prompt-context-engineering",
+    "objective": "D6.2",
+    "conceptKey": "untrusted-content-boundary"
+  },
+  "52": {
+    "domain": "prompt-context-engineering",
+    "objective": "D6.2",
+    "conceptKey": "few-shot-examples"
+  },
+  "7": {
+    "domain": "prompt-context-engineering",
+    "objective": "D6.3",
+    "conceptKey": "structured-json-format"
+  },
+  "31": {
+    "domain": "prompt-context-engineering",
+    "objective": "D6.3",
+    "conceptKey": "schema-versus-business-validity"
+  },
+  "4": {
+    "domain": "security-safety",
+    "objective": "D7.1",
+    "conceptKey": "untrusted-content-boundary"
+  },
+  "47": {
+    "domain": "security-safety",
+    "objective": "D7.2",
+    "conceptKey": "approval-before-send"
+  },
+  "18": {
+    "domain": "security-safety",
+    "objective": "D7.3",
+    "conceptKey": "pre-versus-post-hook"
+  },
+  "34": {
+    "domain": "security-safety",
+    "objective": "D7.4",
+    "conceptKey": "leaked-key-revocation"
+  },
+  "2": {
+    "domain": "tools-mcp",
+    "objective": "D8.1",
+    "conceptKey": "client-tool-execution"
+  },
+  "21": {
+    "domain": "tools-mcp",
+    "objective": "D8.1",
+    "conceptKey": "tool-description-disambiguation"
+  },
+  "48": {
+    "domain": "tools-mcp",
+    "objective": "D8.1",
+    "conceptKey": "tool-error-result"
+  },
+  "49": {
+    "domain": "tools-mcp",
+    "objective": "D8.1",
+    "conceptKey": "custom-loop-approval"
+  },
+  "28": {
+    "domain": "tools-mcp",
+    "objective": "D8.2",
+    "conceptKey": "mcp-primitives"
+  },
+  "36": {
+    "domain": "tools-mcp",
+    "objective": "D8.2",
+    "conceptKey": "mcp-transports"
+  },
+  "11": {
+    "domain": "tools-mcp",
+    "objective": "D8.3",
+    "conceptKey": "shared-mcp-integration"
+  },
+  "44": {
+    "domain": "tools-mcp",
+    "objective": "D8.3",
+    "conceptKey": "server-tool-reuse"
+  }
+}
