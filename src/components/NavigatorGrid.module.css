@@ -1,0 +1,90 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(44px, 1fr));
+  gap: var(--space-2);
+}
+
+.cell {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: var(--space-1);
+  border: 1.5px dashed var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.cell:hover {
+  border-color: var(--color-accent-border);
+}
+
+.answered {
+  border-style: solid;
+  border-color: var(--color-border-strong);
+  background: var(--color-bg-subtle);
+}
+
+.current {
+  border-style: solid;
+  border-color: var(--color-accent);
+  border-width: 2px;
+  box-shadow: 0 0 0 2px var(--color-accent-subtle);
+  font-weight: 700;
+}
+
+.dot {
+  position: absolute;
+  bottom: 3px;
+  right: 4px;
+  font-size: 8px;
+  line-height: 1;
+  color: var(--color-accent);
+}
+
+.flag {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  font-size: 11px;
+  line-height: 1;
+  color: var(--color-flag);
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--color-fg-muted);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.legendSwatch {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-sm);
+  border: 1.5px dashed var(--color-border-strong);
+  font-size: 9px;
+}
+
+.legendSwatch.answered {
+  border-style: solid;
+  background: var(--color-bg-subtle);
+}

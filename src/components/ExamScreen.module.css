@@ -1,0 +1,110 @@
+.page {
+  max-width: 76rem;
+  margin: 0 auto;
+}
+
+.examLayout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  align-items: flex-start;
+}
+
+@media (min-width: 960px) {
+  .examLayout {
+    flex-direction: row;
+  }
+}
+
+.content {
+  flex: 1;
+  min-width: 0;
+  max-width: var(--content-width);
+}
+
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-4);
+}
+
+.progressText {
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+}
+
+.progressText strong {
+  color: var(--color-fg);
+}
+
+.badge {
+  display: inline-block;
+  padding: 2px var(--space-2);
+  border: 1px solid var(--color-accent-border);
+  background: var(--color-accent-subtle);
+  color: var(--color-accent);
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: var(--space-3);
+}
+
+.questionTitle {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.questionBody {
+  margin-bottom: var(--space-5);
+}
+
+.options {
+  margin-bottom: var(--space-5);
+}
+
+.flagRow {
+  margin-bottom: var(--space-6);
+}
+
+.flagButton {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-bg);
+  color: var(--color-fg-muted);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.flagButton.flagged {
+  border-color: var(--color-flag-border);
+  background: var(--color-flag-subtle);
+  color: var(--color-flag);
+}
+
+.footerNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--color-border);
+}
+
+.timerRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}

@@ -1,0 +1,173 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+:root {
+  color-scheme: light;
+
+  --color-bg: #ffffff;
+  --color-bg-subtle: #f8fafc;
+  --color-fg: #1e293b;
+  --color-fg-muted: #64748b;
+  --color-border: #e2e8f0;
+  --color-border-strong: #cbd5e1;
+  --color-accent: #2563eb;
+  --color-accent-fg: #ffffff;
+  --color-accent-subtle: #eff6ff;
+  --color-accent-border: #93c5fd;
+  --color-success: #15803d;
+  --color-success-subtle: #f0fdf4;
+  --color-success-border: #86efac;
+  --color-danger: #dc2626;
+  --color-danger-subtle: #fef2f2;
+  --color-danger-border: #fca5a5;
+  --color-flag: #b45309;
+  --color-flag-subtle: #fffbeb;
+  --color-flag-border: #fcd34d;
+  --color-code-bg: #f1f5f9;
+
+  --font-sans: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.25rem;
+  --text-2xl: 1.5rem;
+  --text-3xl: 1.875rem;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.06);
+  --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.08);
+
+  --content-width: 44rem;
+  --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent);
+}
+
+/*
+  Theme resolution order:
+  1. Bare :root above = light tokens (the default, first-class light design).
+  2. System dark preference applies automatically, unless the user has explicitly
+     chosen light (data-theme="light" is set by useTheme once they do).
+  3. An explicit user choice (data-theme="dark"/"light", set by useTheme and
+     mirrored into localStorage) always wins, regardless of system preference.
+*/
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+
+    --color-bg: #0f1520;
+    --color-bg-subtle: #161d2b;
+    --color-fg: #e2e8f0;
+    --color-fg-muted: #94a3b8;
+    --color-border: #2a3546;
+    --color-border-strong: #3c4a60;
+    --color-accent: #60a5fa;
+    --color-accent-fg: #0b1220;
+    --color-accent-subtle: #172234;
+    --color-accent-border: #3b5a86;
+    --color-success: #4ade80;
+    --color-success-subtle: #142a1c;
+    --color-success-border: #2f6b45;
+    --color-danger: #f87171;
+    --color-danger-subtle: #2b1616;
+    --color-danger-border: #7a3434;
+    --color-flag: #fbbf24;
+    --color-flag-subtle: #2a2210;
+    --color-flag-border: #7a5f1f;
+    --color-code-bg: #161d2b;
+
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+
+  --color-bg: #0f1520;
+  --color-bg-subtle: #161d2b;
+  --color-fg: #e2e8f0;
+  --color-fg-muted: #94a3b8;
+  --color-border: #2a3546;
+  --color-border-strong: #3c4a60;
+  --color-accent: #60a5fa;
+  --color-accent-fg: #0b1220;
+  --color-accent-subtle: #172234;
+  --color-accent-border: #3b5a86;
+  --color-success: #4ade80;
+  --color-success-subtle: #142a1c;
+  --color-success-border: #2f6b45;
+  --color-danger: #f87171;
+  --color-danger-subtle: #2b1616;
+  --color-danger-border: #7a3434;
+  --color-flag: #fbbf24;
+  --color-flag-subtle: #2a2210;
+  --color-flag-border: #7a5f1f;
+  --color-code-bg: #161d2b;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--color-bg);
+  color: var(--color-fg);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  font-family: inherit;
+}
+
+code,
+pre {
+  font-family: var(--font-mono);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
