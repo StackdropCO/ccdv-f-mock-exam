@@ -252,3 +252,47 @@ The results screen may show "Mode: Timed Exam" / "Mode: Untimed Practice" alongs
 - Switching theme never affects exam content, answers, flags, timer, or any other exam state.
 - The toggle is a real, keyboard-operable button with an accessible name describing the action (e.g. "Switch to light mode" / "Switch to dark mode"), not an unlabeled icon, and it retains visible focus styling in both themes.
 - Implemented via semantic design tokens (background/surface/text/border/accent/selected/focus-ring/success/danger/warning) rather than duplicated per-theme component styles.
+
+---
+
+## Approved Change 2 — Large Question Bank and Non-Repeating Mock Rotation
+
+Approved by the user on 2026-09-08. This amendment preserves all previous history and supersedes only the fixed-bank, fixed-question-order, and theme-only persistence restrictions described below. Approval of the change is not a claim that research or implementation is complete.
+
+### C2.1 Research gate and quality contract
+
+Before bulk generation or application implementation, independently verify the current CCDV-F exam guide, objectives, domain weights, formats, timing, and public sample rationales against authoritative Anthropic sources. Prefer official certification, Platform, Claude Code, Agent SDK, MCP, and Pearson VUE materials. Never use leaked questions or dumps. Label unpublished details and inferences explicitly.
+
+Create research/EXAM_BLUEPRINT.md, research/SOURCE_MATRIX.md, and research/FORM_CONSTRUCTION.md before generation. Freeze them only when internally consistent and sufficiently evidenced. A material source conflict or inability to verify the blueprint blocks generation; do not substitute the existing bank or third-party practice material for official evidence.
+
+Each new accepted item must map to an official domain/objective, have authoritative source references, a stable globally unique ID, concept metadata, type, selectCount, valid options and exact answer set, and a concise explanation. Record internal rationales for every distractor. Review source support, unstated assumptions, version dependence, plausible alternative answers, and semantic duplication. Rewrite or reject ambiguous, weak, or repetitive items. Do not claim review occurred unless it actually did.
+
+### C2.2 Size and legacy protection
+
+Target approximately 318 new questions only if the verified blueprint and sustained quality permit it. Prefer whole disjoint 53-question forms. Quality takes priority over quantity. Determine generation counts after mapping the existing 53 to verified objectives; do not assume they already match domain quotas.
+
+Preserve all existing question text, options, answer keys, explanations, and canonical Markdown. Add metadata without rewriting content. Record concerns and proposed corrections in research/LEGACY_QUESTION_AUDIT.md; corrections require separate explicit approval. Record draft/rejection/approval counts, domain/objective and response-type distributions, answer-position distribution, source coverage, and actual reviews in research/QUESTION_BANK_AUDIT.md.
+
+### C2.3 Static architecture and form selection
+
+Keep the static React/TypeScript SPA and current reducer. No backend, database, accounts, external runtime question service, Redux persistence, or bank administration UI. Organize the static bank in maintainable domain-sized modules if useful.
+
+A pure, deterministic-testable selector constructs exactly 53 questions matching verified domain quotas, with sensible objective breadth and distinct concept keys where feasible. Mix domain order; never randomize option order. Stable bank IDs are separate from visible positions 1–53. Validate IDs, metadata, answer sets, sources, duplicates, and per-domain capacity; selection must fail clearly if bank defects prevent a valid form.
+
+### C2.4 Rotation and persistence
+
+Both Timed and Untimed use the same selector. Select once on explicit mode choice and retain the form only in memory throughout navigation, flagging, review, and theme changes.
+
+Only successful final submission consumes the selected IDs. Completed forms are disjoint within a cycle. When any domain lacks enough unused items for the next full valid form, reset the entire cycle before selection; never partially repeat a form. Avoid the immediately preceding completed form after reset wherever feasible.
+
+Persist only theme preference and a small completed-rotation record containing bankVersion, cycle, usedQuestionIds, and lastCompletedFormIds (suggested key: ccdv-f-question-history-v2). Active selected form, answers, flags, position, timer, mode, results, and submission session are never persisted. Aborted attempts do not advance history, including when selection provisionally required a cycle reset. Invalid or incompatible history resets safely.
+
+### C2.5 UX preservation
+
+Preserve mode selection, 120-minute timed countdown without automatic submission, untimed behavior, themes, navigation, flags, review/confirmation, exact-set scoring, results and filters, leave warning, Exit Exam, mobile layout, and accessibility. Retake returns to mode selection before selecting a fresh form. Minimal larger-bank messaging and a “Take another mock” CTA are allowed; no redesign or new bank-management features.
+
+### C2.6 Verification and delivery
+
+Test selector size, quotas, uniqueness, valid IDs, unused selection, complete disjoint cycles, exhaustion/reset, previous-form avoidance, aborted/submitted history, malformed/stale storage, deterministic RNG, and mode equivalence. Validate all content metadata and exact legacy preservation. Simulate hundreds/thousands of forms over repeated cycles. Functionally check timed/untimed navigation, flags, confirmation, submission, answer review, retake, reload, completed-history persistence, themes, and mobile navigation.
+
+Run npm test, npm run typecheck, npm run lint, and npm run build without weakening meaningful tests. Report exact sources, confirmed and unknown blueprint facts, counts, algorithm, persisted fields, files changed, tests and smoke results, legacy concerns, and remaining uncertainty. Work from main on a dedicated branch; do not merge or deploy automatically.
