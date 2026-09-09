@@ -22,7 +22,12 @@ const AUTHORITATIVE_HOSTS = [
 ];
 
 describe('published question bank', () => {
-  it('retains both original canonical files byte for byte and all 53 original question records', () => {
+  // Baseline approved 2026-09-09 (Approved Change 4): six originals (Q1, Q7, Q9, Q31, Q40, Q42)
+  // carry explicitly user-approved wording corrections; the other 47 are the original content.
+  // This fixture pins that whole-file baseline byte for byte so any *other* edit to either file
+  // is caught immediately, and separately confirms every legacy record's bank projection
+  // (LEGACY-0xx) still matches the maintained question record exactly.
+  it('matches the approved original-question baseline and keeps every legacy bank projection in sync', () => {
     for (const [p, expected] of Object.entries(read('tests/legacy-hashes.json'))) expect(hash(readFileSync(p, 'utf8'))).toBe(expected);
     expect(QUESTIONS).toHaveLength(53);
     for (const q of QUESTIONS) {

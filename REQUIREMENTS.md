@@ -349,3 +349,66 @@ in Git history and in this change's pull request, not duplicated in the working 
 Everything else approved in Change 2 — the static architecture, the pure selector, the
 memory-only active-attempt rule, the completed-history persistence contract, and the UX
 preservation rules — is unchanged by this cleanup.
+
+---
+
+## Approved Change 4 — Six Legacy Question Corrections (2026-09-09)
+
+Approved by the user as a focused, explicit exception to the Section 5 / Section 0 original-content
+preservation rule, scoped to exactly six originally preserved questions and no others. The user's
+approval message supplied verbatim replacement `body`/`option`/`explanation` text for each of the
+six items and explicitly authorized applying it to both `src/data/questions.ts` and
+`CCDV-F_Final_Mock_Exam.md`. This is not a general reopening of the preservation rule: every other
+original question remains frozen exactly as before, under the same rule stated in Section 5.
+
+### C4.1 Scope of the exception
+
+The following six questions, identified by their original numeric ID (equivalently
+`LEGACY-00N` in the bank), had their `body`, one or more `options[].body`, and `explanation`
+fields replaced with user-approved wording. Their `id`, `type`, `selectCount`, `correctAnswers`,
+domain/objective/concept mapping, and option lettering/order are unchanged:
+
+- **Q1 / LEGACY-001** — removed the implied unconditional "overnight" completion guarantee from
+  the Message Batches scenario; explanation now states batches do not guarantee overnight
+  completion and the application must handle failed/expired requests.
+- **Q7 / LEGACY-007** — option C and the explanation now describe checking for refusal/incomplete
+  generation and validating against the application's own schema/value requirements, rather than
+  an unqualified "completion/stop conditions" check.
+- **Q9 / LEGACY-009** — options A and B now distinguish a documented *moving* alias from a
+  canonical *fixed* snapshot ID (dated or dateless), rather than implying every non-pinned
+  reference floats.
+- **Q31 / LEGACY-031** — the stem no longer calls a JSON response instance a "schema"; it now
+  separately describes the schema's requirements, the returned instance, and an explicitly
+  external, separately-checked authorization requirement. Option D and the explanation now state
+  the object passes the schema but the refund must still be blocked pending that separate
+  authorization.
+- **Q40 / LEGACY-040** — the stem now asks specifically about supplying the *initial* system
+  instruction; option A and the explanation now state a system-role message cannot be the first
+  entry in `messages` and that some supported models permit later system-role messages, rather
+  than implying the Messages API never accepts a system role in `messages` at all.
+- **Q42 / LEGACY-042** — the stem now asks which mode is intended for investigation/planning
+  before implementation, rather than asserting plan mode is an absolute guarantee against
+  mutation; the explanation now states plan mode's actual enforcement depends on the session's
+  permissions/configuration.
+
+All 47 other original questions, `CCDV-F_Final_Mock_Exam.md`'s content outside these six items,
+and all 318 new questions from Change 2/3 are unchanged. Total bank size (371), the seven-form
+disjoint rotation capacity, and every domain/skill count from Change 2/3 are unchanged, since
+none of these six edits altered `id`, `domain`, `objective`, `type`, or `selectCount`.
+
+### C4.2 Compatibility
+
+`BANK_VERSION` is unchanged. Completed rotation history recorded under the existing
+`ccdv-f-question-history-v2` localStorage key before this change remains valid and usable after
+it: history validity depends only on stable bank IDs, domain/objective mapping, and per-domain
+quotas, none of which changed. The existing generic stale/incompatible-history reset behavior
+(for a genuinely incompatible or malformed record) is unchanged and untested by this specific
+patch beyond confirming it still passes.
+
+### C4.3 What this change does not do
+
+This change does not reopen, re-run, or supersede the Change 3 independent review of the 318 new
+questions, and does not restore any part of the retired drafting/review/generation pipeline. The
+non-blocking domain-wide content-balance observations and the remaining soft near-duplicate calls
+recorded during Change 3 are still open observations, not resolved by this patch. Fixing these six
+items does not imply every other editorial concern in the bank has been resolved.

@@ -59,9 +59,12 @@ against every legacy item for semantic duplication. Findings and corrections:
   framing. No item was rejected outright — every one of the 318 has exactly one defensible
   correct answer after this review.
 
-See [LEGACY_QUESTION_AUDIT.md](LEGACY_QUESTION_AUDIT.md) for the four preserved legacy precision
-caveats (Q1, Q7, Q9, Q40) and two preserved legacy content concerns (Q31, Q42) — all left
-unchanged per the original-content preservation rule, disclosed rather than silently fixed.
+**Update (2026-09-09, Approved Change 4):** the four legacy precision caveats (Q1, Q7, Q9, Q40)
+and two legacy content concerns (Q31, Q42) disclosed above were resolved with explicit
+user-approved wording corrections to their `body`/affected `options`/`explanation`. `id`, `type`,
+`selectCount`, `correctAnswers`, and domain/objective mapping are unchanged for all six, and the
+other 47 legacy items remain unchanged. See
+[LEGACY_QUESTION_AUDIT.md](LEGACY_QUESTION_AUDIT.md) for the resolved before/after record.
 
 ## Maintaining the bank
 

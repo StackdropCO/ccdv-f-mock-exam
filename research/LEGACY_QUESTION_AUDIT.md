@@ -1,8 +1,13 @@
 # Legacy question audit
 
-Audit date: 2026-09-08. All 53 original items were read against the verified blueprint and current primary documentation. Original stems, options, answer sets, explanations and canonical Markdown remain unchanged. This replaces the earlier preliminary research-access checkpoint; inaccessible Skilljar is not a generation blocker.
+Audit date: 2026-09-08. All 53 original items were read against the verified blueprint and current primary documentation. This replaces the earlier preliminary research-access checkpoint; inaccessible Skilljar is not a generation blocker.
 
-This is a bounded source-and-answer audit, not an assertion that preserved legacy items passed the new-item authoring contract. Status totals: **47 supported, 4 precision caveats, 2 content concerns**. No legacy item is labeled APPROVED. The original answer key is recorded for traceability, not derived from third-party practice material.
+**Update, 2026-09-09 (Approved Change 4):** the six items below (Q1, Q7, Q9, Q31, Q40, Q42) were
+independently re-confirmed against current documentation, then corrected with user-approved
+replacement wording for `body`/affected `options`/`explanation`. See "Corrections" below for the
+resolved before/after record. The other 47 items are still unchanged from the original content.
+
+This is a bounded source-and-answer audit, not an assertion that preserved legacy items passed the new-item authoring contract. Status totals as of the original 2026-09-08 audit: **47 supported, 4 precision caveats, 2 content concerns**; all 6 precision caveats/content concerns were resolved on 2026-09-09 per Approved Change 4. No legacy item is labeled APPROVED. The original answer key is recorded for traceability, not derived from third-party practice material.
 
 ## Per-item evidence
 
@@ -10,15 +15,15 @@ Domain/objective/concept-key mapping for each original item is in `src/data/lega
 
 | ID | Objective | Key | Audit status | Current evidence and finding |
 |---|---|---|---|---|
-| Q1 | D2.3 | C | precision caveat | Batch pricing and independent asynchronous processing support C; overnight is a precision caveat, not an invalid key. [batch](https://platform.claude.com/docs/en/build-with-claude/batch-processing) |
+| Q1 | D2.3 | C | resolved 2026-09-09 | Batch pricing and independent asynchronous processing support C; overnight is a precision caveat, not an invalid key. [batch](https://platform.claude.com/docs/en/build-with-claude/batch-processing) |
 | Q2 | D8.1 | B | supported | Application executes a client tool and returns the matching tool_use_id; Claude does not execute this client function. [tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls) |
 | Q3 | D4.1 | D | supported | Semantic and structural grading fits the stated acceptance criteria; wording equality is not required. [eval](https://platform.claude.com/docs/en/test-and-evaluate/develop-tests) |
 | Q4 | D7.1 | A, D | supported | Untrusted retrieved text is a prompt-injection vector; privilege restrictions and approval boundaries reduce its consequences. [security](https://code.claude.com/docs/en/agent-sdk/secure-deployment); [tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls) |
 | Q5 | D1.1 | B | supported | Predetermined steps fit a workflow; adaptive model-directed orchestration adds no requirement benefit. [agents](https://www.anthropic.com/engineering/building-effective-agents) |
 | Q6 | D2.3 | C | supported | Messages requests are stateless; reusing an SDK client does not resend conversation history. [messages](https://platform.claude.com/docs/en/build-with-claude/working-with-messages) |
-| Q7 | D6.3 | A, C | precision caveat | Schema-constrained output and completion-state checks are the best offered pair; current enum-casing exception needs precision. [structured](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) |
+| Q7 | D6.3 | A, C | resolved 2026-09-09 | Schema-constrained output and completion-state checks are the best offered pair; current enum-casing exception needs precision. [structured](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) |
 | Q8 | D1.1 | C | supported | Isolated specialist contexts can return compact findings to a coordinator; substantially overlaps Q50. [contexteng](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) |
-| Q9 | D2.6 | B, D | precision caveat | Pinning a fixed model and evaluating upgrades address a moving alias. Dateless modern model IDs are already pinned; not every short ID floats. [versions](https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions); [eval](https://platform.claude.com/docs/en/test-and-evaluate/develop-tests) |
+| Q9 | D2.6 | B, D | resolved 2026-09-09 | Pinning a fixed model and evaluating upgrades address a moving alias. Dateless modern model IDs are already pinned; not every short ID floats. [versions](https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions); [eval](https://platform.claude.com/docs/en/test-and-evaluate/develop-tests) |
 | Q10 | D5.1 | A | supported | Request content and generated output share a finite context budget; it is not just user-text capacity. [context](https://platform.claude.com/docs/en/build-with-claude/context-windows) |
 | Q11 | D8.3 | D | supported | MCP standardizes reusable tool/data integration. Selection of a shared server is a scenario inference from the stated maintenance constraint. [mcp](https://modelcontextprotocol.io/specification/2025-11-25) |
 | Q12 | D2.3 | A | supported | Streaming exposes incremental response content and improves perceived latency without promising faster total generation. [stream](https://platform.claude.com/docs/en/build-with-claude/streaming) |
@@ -40,7 +45,7 @@ Domain/objective/concept-key mapping for each original item is in `src/data/lega
 | Q28 | D8.2 | A, B, C | supported | Tools expose operations, resources expose contextual data, and prompts expose reusable message templates. [mtools](https://modelcontextprotocol.io/specification/2025-11-25/server/tools); [mresources](https://modelcontextprotocol.io/specification/2025-11-25/server/resources); [mprompts](https://modelcontextprotocol.io/specification/2025-11-25/server/prompts) |
 | Q29 | D2.3 | A, C | supported | Result order is not guaranteed; custom_id correlates records and per-request outcomes require individual handling. [batch](https://platform.claude.com/docs/en/build-with-claude/batch-processing) |
 | Q30 | D1.1 | A | supported | An orchestrator decomposes work, delegates and synthesizes; that role matches the described supervisor. [agents](https://www.anthropic.com/engineering/building-effective-agents) |
-| Q31 | D6.3 | D | content concern | The keyed distinction between output shape and external business approval is sound, but the displayed object is not a JSON Schema. [structured](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) |
+| Q31 | D6.3 | D | resolved 2026-09-09 | The keyed distinction between output shape and external business approval is sound, but the displayed object is not a JSON Schema. [structured](https://platform.claude.com/docs/en/build-with-claude/structured-outputs) |
 | Q32 | D6.1 | C | supported | Compaction and context curation preserve relevant facts while removing redundant or stale material. [contexteng](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) |
 | Q33 | D5.3 | B | supported | Using the hypothetical measurements in the stem, only Sonnet meets both thresholds. These figures are not published model benchmarks. [eval](https://platform.claude.com/docs/en/test-and-evaluate/develop-tests) |
 | Q34 | D7.4 | B, D | supported | A potentially exposed key must be revoked; replacement credentials should be protected outside committed source. [keys](https://support.claude.com/en/articles/8384961-what-should-i-do-if-i-suspect-my-api-key-has-been-compromised) |
@@ -49,9 +54,9 @@ Domain/objective/concept-key mapping for each original item is in `src/data/lega
 | Q37 | D1.3 | C | supported | Persistent notes outside the transient context retain selected facts for later retrieval after compaction. [contexteng](https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents) |
 | Q38 | D5.1 | B | supported | Images consume visual tokens and context; replacing text with screenshots does not make their content free. [vision](https://platform.claude.com/docs/en/build-with-claude/vision); [context](https://platform.claude.com/docs/en/build-with-claude/context-windows) |
 | Q39 | D5.4 | C | supported | Usage categories and workload measurements distinguish cost changes; per-call attribution is an observability inference from those measurable quantities. [cache](https://platform.claude.com/docs/en/build-with-claude/prompt-caching); [eval](https://platform.claude.com/docs/en/test-and-evaluate/develop-tests) |
-| Q40 | D2.3 | A | precision caveat | Initial system instructions use the top-level field. Current selected models also permit later system-role messages, so the explanation is too broad. [messages](https://platform.claude.com/docs/en/build-with-claude/working-with-messages) |
+| Q40 | D2.3 | A | resolved 2026-09-09 | Initial system instructions use the top-level field. Current selected models also permit later system-role messages, so the explanation is too broad. [messages](https://platform.claude.com/docs/en/build-with-claude/working-with-messages) |
 | Q41 | D6.2 | A, D | supported | External content stays untrusted data; higher-priority application instructions and limited authority help contain injection. [tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls); [security](https://code.claude.com/docs/en/agent-sdk/secure-deployment) |
-| Q42 | D3.1 | B | content concern | Plan is the intended inspection/planning mode, but current configuration can remove plan-mode permission blocks; the absolute nonmutation promise is unsafe. [plan](https://code.claude.com/docs/en/permission-modes) |
+| Q42 | D3.1 | B | resolved 2026-09-09 | Plan is the intended inspection/planning mode, but current configuration can remove plan-mode permission blocks; the absolute nonmutation promise is unsafe. [plan](https://code.claude.com/docs/en/permission-modes) |
 | Q43 | D1.1 | D | supported | Adaptive investigation with unknown next steps fits agent-directed decisions instead of a predetermined workflow. [agents](https://www.anthropic.com/engineering/building-effective-agents) |
 | Q44 | D8.3 | C | supported | Server tools execute on the platform; the stem explicitly establishes that the built-in search already satisfies requirements. [web](https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-search-tool); [tool](https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls) |
 | Q45 | D2.4 | B | supported | Reviewable incremental changes with executable checks match the explicit behavior-preservation and risk constraints; no unique platform feature is implied. [code](https://code.claude.com/docs/en/best-practices) |
@@ -64,53 +69,58 @@ Domain/objective/concept-key mapping for each original item is in `src/data/lega
 | Q52 | D6.2 | A, D | supported | Several in-prompt demonstrations are few-shot conditioning and do not modify model weights. [prompt](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices) |
 | Q53 | D2.6 | C | supported | Versioned marketplace sources and reproducible configuration support consistent team installs; exact dependency policy remains a deployment design choice. [plugins](https://code.claude.com/docs/en/plugin-marketplaces) |
 
-## Corrections requiring separate approval
+## Corrections — resolved 2026-09-09 (Approved Change 4)
 
-### Q31 — content concern
+All six corrections proposed below were explicitly approved by the user and applied verbatim to
+both `src/data/questions.ts` and `CCDV-F_Final_Mock_Exam.md`. Each entry below is the historical
+finding as originally recorded, followed by what was actually applied. `id`, `type`,
+`selectCount`, `correctAnswers`, and domain/objective/concept mapping are unchanged for all six.
 
-The stem labels a JSON instance as a schema. Also, some business constraints can be expressed in a schema, so the distinction must be constraints not encoded or requiring external authorization.
+### Q31 — content concern — RESOLVED
 
-**Proposed correction (not applied):** Replace schema with JSON object conforming to a separately defined schema, and state that the customer-specific approval limit is enforced outside that schema. Preserve key D if those binding conditions remain.
+The stem labeled a JSON instance as a schema. Also, some business constraints can be expressed in a schema, so the distinction must be constraints not encoded or requiring external authorization.
+
+**Applied correction:** The stem now separately describes the schema's requirements (an `approved` boolean and a `refund_amount` number in euros), the returned JSON *instance*, and an explicitly external, separately-checked authorization requirement not encoded in that schema. Option D and the explanation now state the object passes the schema but the application must still block the refund pending that separate authorization. Key D unchanged.
 
 Sources: [structured-outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs).
 
-### Q42 — content concern
+### Q42 — content concern — RESOLVED
 
 Current Plan mode documentation says permission blocks are not enforced when bypass permissions is available, and execution permissions vary by configuration. Choosing Plan alone is not an absolute guarantee against mutation.
 
-**Proposed correction (not applied):** Ask which mode is intended for investigation before proposing edits, and separately specify effective deny rules/sandbox constraints if the requirement is a hard prohibition on writes. Do not present the mode as a security boundary.
+**Applied correction:** The stem now asks which mode is specifically intended for investigation/planning before implementation, rather than asserting an absolute prohibition on edits. The explanation now states plan mode is not an unconditional read-only security boundary and that its enforcement depends on the session's permissions/configuration. Key B unchanged.
 
 Sources: [permission-modes](https://code.claude.com/docs/en/permission-modes).
 
-### Q1 — precision caveat
+### Q1 — precision caveat — RESOLVED
 
 A hard overnight deadline is not a documented Batch guarantee; requests may expire after the processing window. The mirrored official guide itself uses overnight batch scenarios, so this is an exam-style precision caveat rather than evidence that C is wrong.
 
-**Proposed correction (not applied):** If revising later, explicitly allow the documented asynchronous processing window or state that overnight is a preference rather than a completion SLA.
+**Applied correction:** The stem no longer asserts an "overnight" deadline; it states there is no hard completion deadline and the application can handle failed/expired requests and resubmit. The explanation now states Batches do not guarantee overnight completion. Key C unchanged.
 
 Sources: [batch-processing](https://platform.claude.com/docs/en/build-with-claude/batch-processing).
 
-### Q7 — precision caveat
+### Q7 — precision caveat — RESOLVED
 
 Current structured-output documentation lists enum/const casing as an exception even for normally completed responses. Stop-state checks alone are not an unconditional application-validation guarantee.
 
-**Proposed correction (not applied):** Qualify the explanation: constrained structure plus completion checks, with local validation for application-critical values and documented exceptions.
+**Applied correction:** Option C and the explanation now describe checking for refusal/incomplete generation and then validating the returned data against the application's own schema/value requirements, rather than an unqualified "completion/stop conditions" check. Key A, C unchanged.
 
 Sources: [structured-outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs).
 
-### Q9 — precision caveat
+### Q9 — precision caveat — RESOLVED
 
 The stem explicitly specifies a moving alias and the key is defensible. Modern dateless model IDs are pinned snapshots; a date suffix is not universally necessary.
 
-**Proposed correction (not applied):** If revising, distinguish older convenience aliases from canonical fixed IDs, whether dated or dateless.
+**Applied correction:** Options A and B now distinguish a documented *moving* alias from a canonical *fixed* model snapshot ID, dated or dateless, rather than implying every non-dated reference floats. Key B, D unchanged.
 
 Sources: [model-ids-and-versions](https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions), [develop-tests](https://platform.claude.com/docs/en/test-and-evaluate/develop-tests).
 
-### Q40 — precision caveat
+### Q40 — precision caveat — RESOLVED
 
 The first-message example is correctly fixed using top-level system. The explanation generalizes beyond that case: selected current models accept mid-conversation system messages after a user message.
 
-**Proposed correction (not applied):** Limit the explanation to initial system instructions and the invalid leading system-role message shown; do not claim all in-array system messages are universally unsupported.
+**Applied correction:** The stem now asks specifically about the *initial* system instruction. The explanation now states a system-role message cannot be the first entry in `messages` and that some supported models permit later system-role messages, rather than implying the Messages API never accepts a system role in `messages` at all. Key A unchanged.
 
 Sources: [working-with-messages](https://platform.claude.com/docs/en/build-with-claude/working-with-messages).
 
@@ -120,4 +130,4 @@ Sources: [working-with-messages](https://platform.claude.com/docs/en/build-with-
 - Q9/Q51 both touch evaluated model rollout but have distinct immediate constraints; Q15/Q32/Q37 distinguish discarded outputs, context curation and durable persistence.
 - Q33 explicitly supplies scenario measurements; they are not claims about current model performance or pricing. Q17 refers to currently documented Managed Agents behavior, which is beta and warrants maintenance review.
 - Several legacy distractors are easier to reject than the new authoring contract prefers. Supported status means the keyed technical distinction has current evidence, not that every distractor is exam-calibrated.
-- No correction was applied. Neither legacy inclusion nor this audit resolves the two substantive wording concerns. They remain visible for the user’s explicit content decision.
+- All six wording concerns above (Q1, Q7, Q9, Q31, Q40, Q42) were resolved on 2026-09-09 per Approved Change 4, with explicit user approval and verbatim replacement text. This audit's remaining "supported" findings, and the duplication/scope observations above (Q8/Q50, Q4/Q41, Q9/Q51, Q15/Q32/Q37, Q17's beta status), are unaffected and still stand as recorded.
