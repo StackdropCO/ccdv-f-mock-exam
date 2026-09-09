@@ -301,3 +301,51 @@ Run npm test, npm run typecheck, npm run lint, and npm run build without weakeni
 ### Approved Change 2 — Research methodology clarification (2026-09-08)
 
 The user explicitly accepts a provenance-bearing mirror of the official Exam Guide plus credible independent corroboration for blueprint facts when Skilljar is inaccessible. Direct authenticated Skilljar access is not a generation prerequisite. Technical answer correctness still normally requires current first-party documentation, unique answer sets, and item-level ambiguity and duplicate review. The earlier blocked research checkpoint is superseded by this clarification; prior history remains preserved.
+
+---
+
+## Approved Change 3 — Independent review, correction, and repository cleanup (2026-09-09)
+
+Approved by the user as a focused change: independently review, correct, and merge the 318-item
+question-bank expansion introduced by Change 2, then clean up the repository so only what is
+needed to run, test, and maintain the app remains.
+
+### C3.1 Independent verification
+
+The Change 2 blueprint and research methodology were independently re-verified against the real
+exam guide, fetched directly from Anthropic's own hosting (not only the previously-cited mirror):
+every domain weight, skill weight, format detail, and sample-question rationale matched exactly.
+All 318 new items were independently re-reviewed, split by domain, each checked against freshly
+fetched live documentation (not the original authoring citations alone) for a unique defensible
+answer, sound distractors, currency, and semantic duplication against the legacy 53. The six
+previously disclosed legacy concerns (precision caveats on Q1, Q7, Q9, Q40; content concerns on
+Q31, Q42) were independently re-confirmed against current documentation and left unchanged, per
+the original-content preservation rule.
+
+### C3.2 Corrections applied
+
+Two new items rested on an MCP protocol mechanism removed in a spec revision published before the
+original research checkpoint but not caught by it; both were rewritten against current guidance.
+Four new items were near-duplicates of an existing legacy question (the same discriminator in
+different scenario dress) and were retargeted to a distinct, freshly-sourced fact within their
+objective. No item required rejection. Full before/after detail is in the pull request that
+carried this change and in Git history; see
+[QUESTION_BANK_SUMMARY.md](research/QUESTION_BANK_SUMMARY.md) for the current summary.
+
+### C3.3 Repository cleanup
+
+The Change 2 drafting/review pipeline (`research/drafts/`, `research/reviews/`,
+`research/question-sources.json`, `research/source-registry.json`,
+`scripts/build-question-bank.mjs`, the `bank:generate` script) is retired. The 318 new questions
+in `src/data/questions/new/` are now hand-maintained, directly-edited production files — there is
+no separate draft/approval/generation step, and no script, test, or doc references a deleted
+research file. `src/data/blueprint.ts` absorbed the skill-level `target`/`newTarget` allocation
+data previously kept only in `research/blueprint.json`. `research/EXAM_BLUEPRINT.md` and
+`research/LEGACY_QUESTION_AUDIT.md` are kept as live references; a new
+`research/QUESTION_BANK_SUMMARY.md` replaces the retired audit/report files with a permanent,
+non-stale summary. The detailed drafting, peer-review, and independent-review trail is preserved
+in Git history and in this change's pull request, not duplicated in the working tree.
+
+Everything else approved in Change 2 — the static architecture, the pure selector, the
+memory-only active-attempt rule, the completed-history persistence contract, and the UX
+preservation rules — is unchanged by this cleanup.

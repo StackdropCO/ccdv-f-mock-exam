@@ -6,7 +6,7 @@ This is a bounded source-and-answer audit, not an assertion that preserved legac
 
 ## Per-item evidence
 
-Full domain, objective, concept key, original answer set, direct URLs, access date and proposed corrections are in `legacy-sources.json`. All sources below are Level A primary documentation; Python documentation is primary language documentation, distinguished from Anthropic-owned documentation. Architecture/process conclusions identified as inference follow the binding constraints in each stem.
+Domain/objective/concept-key mapping for each original item is in `src/data/legacyMetadata.ts`. All sources below are Level A primary documentation; Python documentation is primary language documentation, distinguished from Anthropic-owned documentation. Architecture/process conclusions identified as inference follow the binding constraints in each stem.
 
 | ID | Objective | Key | Audit status | Current evidence and finding |
 |---|---|---|---|---|

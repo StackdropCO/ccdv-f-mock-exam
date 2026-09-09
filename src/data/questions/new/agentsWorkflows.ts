@@ -500,34 +500,34 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-015",
     "domain": "agents-workflows",
     "objective": "D1.2",
-    "conceptKey": "direct-model-control-versus-managed-harness",
+    "conceptKey": "hooks-vs-prompt-instruction-guarantee",
     "type": "single",
     "selectCount": 1,
-    "body": "A research prototype must replace the orchestration algorithm itself, deciding exactly what conversation to send for every model invocation and executing its own tool schedule. It does not want a pre-built autonomous harness. Which starting point fits?",
+    "body": "A coding-assistant integration must guarantee that a destructive shell command is blocked before it runs, regardless of what the model decides, rather than merely being discouraged in the system prompt. Which Claude Agent SDK / Claude Code mechanism directly provides that guarantee?",
     "options": [
       {
         "id": "A",
-        "body": "The Messages API with an application-owned loop."
+        "body": "A stronger system-prompt instruction asking the model not to run destructive commands"
       },
       {
         "id": "B",
-        "body": "A Managed Agents session whose harness controls all turns."
+        "body": "A PreToolUse hook that inspects the proposed command and can block it before execution"
       },
       {
         "id": "C",
-        "body": "A Claude Code terminal session with the default loop."
+        "body": "Increasing the model's reasoning effort so it double-checks itself"
       },
       {
         "id": "D",
-        "body": "An MCP server alone, without a model client."
+        "body": "A PostToolUse hook that logs the command after it runs"
       }
     ],
     "correctAnswers": [
-      "A"
+      "B"
     ],
-    "explanation": "The Messages API supplies direct model access for custom loops. A pre-built agent harness owns orchestration that this prototype needs to implement itself.",
+    "explanation": "Hooks give deterministic, code-level control over tool execution. A PreToolUse hook can inspect and block a proposed action before it runs; approaches that depend on the model's own judgment, such as prompt wording or reasoning effort, provide no such guarantee.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/managed-agents/overview"
+      "https://code.claude.com/docs/en/hooks"
     ],
     "qualityStatus": "APPROVED"
   },

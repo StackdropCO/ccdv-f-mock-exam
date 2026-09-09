@@ -9,8 +9,7 @@
     "lint": "oxlint",
     "preview": "vite preview",
     "test": "vitest run",
-    "typecheck": "tsc -b --noEmit",
-    "bank:generate": "node scripts/build-question-bank.mjs"
+    "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {
     "react": "^19.2.8",

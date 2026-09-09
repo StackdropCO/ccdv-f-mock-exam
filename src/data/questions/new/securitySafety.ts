@@ -255,34 +255,34 @@ export const securitySafety: BankQuestion[] = [
     "id": "SS-008",
     "domain": "security-safety",
     "objective": "D7.1",
-    "conceptKey": "mcp-session-id-not-authentication",
+    "conceptKey": "mcp-state-handle-not-authentication",
     "type": "single",
     "selectCount": 1,
-    "body": "An HTTP MCP server authenticates the first request, then accepts later requests solely because they include an existing session ID. What security requirement is missing?",
+    "body": "An HTTP MCP server mints a state handle for an authenticated user, then accepts later requests solely because they present that handle, without re-verifying the caller. Per current MCP guidance, what is missing?",
     "options": [
       {
         "id": "A",
-        "body": "A rule allowing any request with a long random session ID without token verification"
+        "body": "A rule allowing any request with a long random handle without token verification"
       },
       {
         "id": "B",
-        "body": "A policy to rotate session IDs without verifying later requests"
+        "body": "A policy to rotate the handle without verifying later requests"
       },
       {
         "id": "C",
-        "body": "A check that the requested session is present in the session store"
+        "body": "A check that the handle is present in a server-side store"
       },
       {
         "id": "D",
-        "body": "Authorization checks on inbound requests rather than using the session ID as authentication"
+        "body": "Authorization checks on inbound requests rather than using the handle as authentication"
       }
     ],
     "correctAnswers": [
       "D"
     ],
-    "explanation": "MCP sessions must not serve as authentication. Servers implementing authorization must verify inbound requests, even when a valid session ID is present.",
+    "explanation": "MCP is stateless and has no protocol-level sessions; an application-level state handle must not serve as authentication. Servers implementing authorization must independently verify inbound requests, even when a valid handle is present.",
     "sourceRefs": [
-      "https://modelcontextprotocol.io/docs/2025-11-25/tutorials/security/security_best_practices"
+      "https://modelcontextprotocol.io/specification/2026-07-28/basic/security_best_practices#state-handle-hijacking"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -330,10 +330,10 @@ export const securitySafety: BankQuestion[] = [
     "id": "SS-010",
     "domain": "security-safety",
     "objective": "D7.1",
-    "conceptKey": "mcp-authenticated-user-session-queue-binding",
+    "conceptKey": "mcp-authenticated-user-handle-queue-binding",
     "type": "single",
     "selectCount": 1,
-    "body": "A multi-user MCP service shares an event queue. Authorization is checked, but queue entries are keyed only by session ID. The service wants to prevent an event for one authorized user being attached to another user's session. What additional binding follows MCP guidance?",
+    "body": "A multi-user MCP service shares an event queue. Authorization is checked, but queue entries are keyed only by a server-issued state handle. The service wants to prevent an event for one authorized user from being attached to another user's handle. What additional binding follows current MCP guidance?",
     "options": [
       {
         "id": "A",
@@ -341,11 +341,11 @@ export const securitySafety: BankQuestion[] = [
       },
       {
         "id": "B",
-        "body": "Associate queue/session data with both session ID and user identity derived from the authenticated token"
+        "body": "Bind stored state to both the handle and a user identity derived from the verified authentication token"
       },
       {
         "id": "C",
-        "body": "Use only a hash of session ID as the queue key"
+        "body": "Use only a hash of the handle as the queue key"
       },
       {
         "id": "D",
@@ -355,9 +355,9 @@ export const securitySafety: BankQuestion[] = [
     "correctAnswers": [
       "B"
     ],
-    "explanation": "Bind session data to authenticated user-specific information as well as the session ID. The identity must come from verified authorization, not attacker-controlled event text.",
+    "explanation": "Current MCP guidance recommends binding handles server-side to the authenticated user's verified identity (for example keying stored state as user_id:handle from the verified token), not just the handle itself, so a guessed or reused handle cannot be used to access another user's state.",
     "sourceRefs": [
-      "https://modelcontextprotocol.io/docs/2025-11-25/tutorials/security/security_best_practices"
+      "https://modelcontextprotocol.io/specification/2026-07-28/basic/security_best_practices#state-handle-hijacking"
     ],
     "qualityStatus": "APPROVED"
   },

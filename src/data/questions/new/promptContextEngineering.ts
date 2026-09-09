@@ -40,32 +40,32 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-002",
     "domain": "prompt-context-engineering",
     "objective": "D6.1",
-    "conceptKey": "memory-rehydrate-after-context-reset",
+    "conceptKey": "durable-notes-content-selection",
     "type": "single",
     "selectCount": 1,
-    "body": "A long investigation writes verified findings and unresolved questions to an external notes file before each context reset. The next model call starts with an empty working history. What step makes the notes useful to that call?",
+    "body": "An agent writes external notes before a context reset to preserve its progress. Which content belongs in those durable notes, rather than being left out because it can be regenerated later by rerunning a tool?",
     "options": [
       {
         "id": "A",
-        "body": "Send the latest user question and rely on the notes remaining in the filesystem"
+        "body": "The full raw output of every tool call made so far"
       },
       {
         "id": "B",
-        "body": "Read the relevant notes back into the new context"
+        "body": "Verified conclusions and unresolved questions the agent has reached so far"
       },
       {
         "id": "C",
-        "body": "Supply only a session label to a raw stateless API call, without loading a transcript or notes"
+        "body": "Nothing; durable notes should stay empty until the task fully completes"
       },
       {
         "id": "D",
-        "body": "Archive the notes for audit but omit them from the new request and disable file retrieval"
+        "body": "A copy of the system prompt, in case it changes later"
       }
     ],
     "correctAnswers": [
       "B"
     ],
-    "explanation": "External notes preserve information outside the window, but relevant notes must be loaded again to inform a later call.",
+    "explanation": "Durable notes should capture conclusions and open questions that took real work to derive, not raw tool output that can be regenerated on demand. Persisting everything defeats the purpose of pruning; persisting nothing loses the agent's progress.",
     "sourceRefs": [
       "https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents"
     ],

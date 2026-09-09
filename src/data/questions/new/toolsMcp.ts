@@ -215,32 +215,32 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-007",
     "domain": "tools-mcp",
     "objective": "D8.1",
-    "conceptKey": "skipped-tool-call-result-obligation",
+    "conceptKey": "parallel-tool-result-correlation",
     "type": "single",
     "selectCount": 1,
-    "body": "A custom client-tool batch contains two writes. After the first fails, application policy skips the second. Which response correctly accounts for the skipped call?",
+    "body": "Claude proposes three tool calls in one turn as a parallel batch, each with its own `tool_use` id. The application executes all three and returns their results. Which requirement must the returned `tool_result` blocks satisfy?",
     "options": [
       {
         "id": "A",
-        "body": "Omit it from history because it did not run"
+        "body": "Each `tool_result` must reference the `tool_use_id` of the specific call it answers, matching one-to-one"
       },
       {
         "id": "B",
-        "body": "Mark it successful with empty content"
+        "body": "A single combined `tool_result` may answer all three calls if concatenated in order"
       },
       {
         "id": "C",
-        "body": "Reuse the first call’s ID for both failures"
+        "body": "Results may be spread across multiple later turns, as long as the total count eventually matches"
       },
       {
         "id": "D",
-        "body": "Return its own `tool_result` with `is_error: true` and explain that it was not executed"
+        "body": "The application may reuse one call's `tool_use_id` for multiple results if the calls are related"
       }
     ],
     "correctAnswers": [
-      "D"
+      "A"
     ],
-    "explanation": "Every proposed client call still needs a corresponding result. A skipped action should be reported explicitly under its own call ID.",
+    "explanation": "Every tool_use block in a parallel batch needs its own matching tool_result, correlated by tool_use_id. Combining results, deferring them to later turns, or reusing an ID breaks Claude's ability to match a result back to the call that produced it.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/agents-and-tools/tool-use/parallel-tool-use"
     ],

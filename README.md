@@ -17,13 +17,11 @@ npm run build
 
 ## Content and evidence
 
-- [Exam blueprint](research/EXAM_BLUEPRINT.md) and [source matrix](research/SOURCE_MATRIX.md)
-- [Form construction](research/FORM_CONSTRUCTION.md) and [bank audit](research/QUESTION_BANK_AUDIT.md)
-- [Final implementation report](research/FINAL_REPORT.md)
-- Per-item answer evidence and distractor rationales: `research/question-sources.json`
-- Source index: `research/source-registry.json`
+- [Exam blueprint](research/EXAM_BLUEPRINT.md) — provenance for the domain/skill weights and format
+- [Question bank summary](research/QUESTION_BANK_SUMMARY.md) — current counts, domain allocation, and independent-review notes
+- [Legacy question audit](research/LEGACY_QUESTION_AUDIT.md) — disclosed precision caveats and content concerns on the 53 preserved originals
 
-Original `src/data/questions.ts` and `CCDV-F_Final_Mock_Exam.md` remain unchanged. New authoring records are grouped in `research/drafts`; centrally approved production modules live in `src/data/questions/new`. After editorial approval, `npm run bank:generate` reproduces the modules and traceability file. It rejects unapproved or modified records using content hashes; editing an item requires renewed editorial review, not simply running the script.
+Original `src/data/questions.ts` and `CCDV-F_Final_Mock_Exam.md` remain unchanged. New questions live in `src/data/questions/new/`, grouped one file per domain, and are hand-maintained directly — there is no separate draft/approval/generation step. Each question carries its own `sourceRefs` (authoritative first-party URLs); `npm test` validates IDs, answer keys, `selectCount`, domain/skill counts against `src/data/blueprint.ts`, and original-content preservation. The detailed drafting and review trail behind the current bank is preserved in Git history rather than in the working tree.
 
 ## Rotation and persistence
 

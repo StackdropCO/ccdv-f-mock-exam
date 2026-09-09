@@ -835,32 +835,32 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-024",
     "domain": "applications-integration",
     "objective": "D2.3",
-    "conceptKey": "execution-data-dependency",
+    "conceptKey": "batch-results-availability-timing",
     "type": "single",
     "selectCount": 1,
-    "body": "A report requires first extracting a customer ID and then querying Claude with that extracted ID. A developer puts both Messages requests into one batch and expects the second to receive the first response automatically. What is the flaw?",
+    "body": "A team submits a Message Batch and immediately begins polling every few seconds, expecting partial results to stream back as each request finishes. After polling repeatedly with no results, they conclude the API is broken. What is the actual documented behavior?",
     "options": [
       {
         "id": "A",
-        "body": "Submit the dependent item immediately after the first array entry to enforce a dependency"
+        "body": "Results become retrievable once every request in the batch has completed, or after 24 hours, whichever comes first"
       },
       {
         "id": "B",
-        "body": "Use matching custom_id values so the API shares output between the two items"
+        "body": "Each request's result streams back individually the moment that one request finishes"
       },
       {
         "id": "C",
-        "body": "Put both requests in the same batch to share the first request’s runtime state"
+        "body": "The whole batch silently fails if any single request in it errors"
       },
       {
         "id": "D",
-        "body": "Obtain the first result, then construct and submit the request that depends on it"
+        "body": "Results are available immediately after submission, before any processing occurs"
       }
     ],
     "correctAnswers": [
-      "D"
+      "A"
     ],
-    "explanation": "Requests in a Message Batch are processed independently. A batch is not a dependency graph that injects one result into another request.",
+    "explanation": "The Message Batches API makes results available once every request in the batch has completed, or after the batch's 24-hour processing window elapses, whichever happens first — not as each individual request finishes.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
     ],
