@@ -517,3 +517,30 @@ and 375×812, light and dark mode: both start buttons launch their correct mode 
 clicking non-interactive card content does nothing, focusing a start button shows a visible
 high-contrast outline, no page-level horizontal overflow at either width, and the button/icon
 colors keep dark text on the amber fill in both themes.
+
+### C5.5 Mockup-inspired icon and spacing pass (2026-09-09)
+
+Approved by the user as a further, purely visual refinement of the C5.4 start screen, using a
+supplied mockup image as direction. No layout, section order, copy, or interaction change: the
+mode cards are still noninteractive containers with one native start button each; the bank/rotation
+summary still reads its numbers from `QUESTION_BANK.length`/`FORM_SIZE`.
+
+- Mode icons now sit in a small rounded, amber-tinted chip (40px) rather than bare inline glyphs,
+  and the duration label ("120 minutes" / "No time limit") became a small pill badge next to the
+  chip — both restrained in scale (not the mockup's larger icon tiles), reversing the C5.4 note that
+  simplified this to plain text, per the user's explicit direction after seeing the mockup.
+  A new `CheckCircleIcon` was added to the local icon set and placed beside the two practice notes.
+- Start buttons are now full-width within their card, with the arrow pushed to the trailing edge,
+  and pinned to the bottom of the card via `margin-top: auto` so both buttons align on the same
+  baseline regardless of description length — matching "align the buttons... to the end of the
+  cards." Button height remains 44px; only the width and internal alignment changed.
+- A small amber accent bar above the heading was added, matching the mockup's decorative tick.
+- Per the standing instruction that the bank-summary section must not introduce a new action, the
+  mockup's circular refresh-style icon on that row was deliberately not carried over — the section
+  keeps only the informational stack icon.
+
+Still scoped to `StartScreen.tsx`/`StartScreen.module.css`/`icons.tsx`; no shared button, token, or
+exam-screen file was touched. `npm test`, `npm run typecheck`, `npm run lint`, and `npm run build`
+all pass with no test changes needed. Re-verified in-browser at 1440×900, mobile (375×812), and
+dark mode: buttons remain 44px tall and bottom-aligned across both cards, still exactly one button
+per card, no page-level horizontal overflow.

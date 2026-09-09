@@ -44,6 +44,15 @@ export function StackIcon(props: IconProps) {
   );
 }
 
+export function CheckCircleIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="8.25" />
+      <path d="M8.5 12.25l2.4 2.4 4.6-5.3" />
+    </svg>
+  );
+}
+
 export function ArrowRightIcon(props: IconProps) {
   return (
     <svg {...base} width={16} height={16} {...props}>
