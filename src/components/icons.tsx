@@ -78,3 +78,21 @@ export function ArrowRightIcon(props: IconProps) {
     </svg>
   );
 }
+
+export function XCircleIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="8.25" />
+      <path d="M9.5 9.5l5 5" />
+      <path d="M14.5 9.5l-5 5" />
+    </svg>
+  );
+}
+
+export function ChevronDownIcon(props: IconProps) {
+  return (
+    <svg {...base} width={16} height={16} {...props}>
+      <path d="M5.5 9l6.5 6.5L18.5 9" />
+    </svg>
+  );
+}

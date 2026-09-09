@@ -39,12 +39,11 @@ describe('application interaction smoke (DOM environment)',()=>{
     click('Exit Exam');click('Continue Exam');
     expect(screen.getByRole('heading',{name:'Question 12 of 53'})).not.toBeNull();
     submit();
-    expect(screen.getByRole('heading',{name:'Mock exam score'})).not.toBeNull();
+    expect(screen.getByRole('heading',{name:'Your result'})).not.toBeNull();
+    expect(screen.getByRole('heading',{name:'Review your answers'})).not.toBeNull();
     const first=JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)!);
-    click('Review Answers');
-    expect(screen.getAllByText('Correct answer')).toHaveLength(53);
-    fireEvent.click(within(screen.getByRole('group',{name:'Filter reviewed questions'})).getByRole('button',{name:'Flagged'}));
-    expect(screen.getAllByRole('article')).toHaveLength(1);
+    fireEvent.click(within(screen.getByRole('group',{name:'Filter reviewed questions'})).getByRole('button',{name:/^Flagged/}));
+    expect(screen.getAllByText(/^Question \d+$/)).toHaveLength(1);
     another();click('Start practice');
     expect(screen.queryByText(/remaining/)).toBeNull();
     submit();

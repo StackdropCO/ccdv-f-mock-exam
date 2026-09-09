@@ -630,3 +630,90 @@ app: started an Untimed attempt, answered and flagged real questions, confirmed 
 and "Review flagged" landed on the correct real positions, confirmed Previous/answers/flags
 survived the jump, and confirmed submission still recorded completed-rotation history correctly
 afterward. No answer leakage, no horizontal overflow, all interactive targets 44px.
+
+---
+
+## Approved Change 5, C5.8 — Post-submission results redesign (2026-09-09)
+
+Approved by the user as a focused redesign of the results screen (`ResultsScreen.tsx`) and its
+inline answer review (`AnswerReviewList.tsx`), turning a bare score receipt into a study/diagnosis
+view: overall result, performance by domain, and full answer review are now one continuous page.
+No question content, scoring, the 371-item bank, domain quotas, `BANK_VERSION`, localStorage keys,
+completed rotation history, memory-only active-attempt behavior, or timed/untimed behavior is
+affected — this is a presentation and read-only-aggregation change over the existing submitted
+`ExamResult`.
+
+### What changed
+
+- **Overall result.** "Your result" (was "Mock exam score") with mode/completion time as quiet
+  metadata, a large raw percentage, "X of Y correct", a segmented correct/incorrect/unanswered bar,
+  and a text legend — replacing the four detached statistic cards. No pass/fail, "exam ready," or
+  scaled-score claim is made anywhere; the existing unofficial-result disclaimer is kept, moved
+  next to "Take another mock" at the bottom of the page (one disclaimer, not duplicated).
+- **Primary action.** A prominent amber "Review N incorrect answers" (or "Review unanswered
+  questions", or "Review all answers" once nothing is wrong) sits right under the score. It only
+  sets the review section's active filter and scrolls/focuses it — it never touches the attempt,
+  score, answers, flags, or rotation history.
+- **Performance by domain (new section).** For each of the current form's domains: correct/total,
+  raw percentage, and a bar, sorted lowest percentage first with blueprint-order tie-breaking. A
+  small `DOMAIN_LABEL`/`DOMAIN_ORDER` export was added directly to `blueprint.ts` (derived from the
+  blueprint's own `name` field — no new data file, no research-only import) so domain ids render as
+  their production names ("Applications and Integration", never `applications-integration`). A new
+  pure `computeDomainResults` helper (`src/lib/domainResults.ts`) aggregates strictly from the
+  current submitted `FormQuestion[]` and `result.perQuestion` — no second grading definition, no
+  lookup against the full bank, no official exam weighting.
+- **Answer review is part of the page**, not a hidden toggle. Compact filters (Incorrect,
+  Unanswered, Correct, Flagged, All — each showing its live count, zero-count ones disabled rather
+  than hidden) replace the old always-"All" default; the section defaults to Incorrect, else
+  Unanswered, else All (`defaultReviewFilter` in the new `src/lib/reviewFilter.ts`).
+- **Compact accordion rows** (native `<details>/<summary>`, so keyboard/focus/expand semantics are
+  free) replace the old fully-expanded cards: Question N (form position, never `bankId`), status,
+  human-readable domain, a stripped-Markdown stem preview (`src/lib/textPreview.ts` — never leaks
+  raw fenced-code or table syntax into the preview), and a flag badge. The first incorrect/
+  unanswered row starts expanded; closing it does not reopen automatically.
+- **Expanded content** shows the full stem, then a real answer comparison — complete option text
+  mapped from that same question's `options` (never just a letter, never another question's
+  content), "No answer selected" when unanswered, and a merged "Your answer · Correct" line instead
+  of duplicating identical content for a fully correct question. Multi-response answers list every
+  selected and every required option (exact-set grading is never softened to "partially correct");
+  an incorrect multi-response's selected list is annotated per-option (selected-and-correct vs.
+  selected-but-not-correct) with icons, not color alone. The stored explanation renders unchanged
+  below, under "Why this is correct."
+
+### What this change preserves
+
+Everything listed in C5.2/C5.7, plus every prior visual pass. `ResultsScreen`/`AnswerReviewList`'s
+prop types were widened from `Question[]` to `FormQuestion[]` (they already received `FormQuestion`
+data at runtime; this only exposes the `domain` field already on it) — `computeResult` and other
+generic scoring helpers still take plain `Question[]`, unchanged. No answer, correct-answer, or
+explanation content is reachable before a confirmed submission (the results screen only mounts once
+`state.submitted` is true, unchanged).
+
+### Tests
+
+New `tests/domainResults.test.ts` (deterministic 12-question, 8-domain fixture with two intentional
+percentage ties, verifying per-domain math, full reconciliation with the overall result, and
+blueprint-order tie-breaking), `tests/textPreview.test.ts` (fenced code / tables / emphasis /
+truncation), `tests/answerReviewList.test.tsx` (default-filter priority, live filter counts and
+disabled zero-count filters, full option-body answer comparisons for incorrect/unanswered/correct/
+partial-multi-response questions, domain labels, form-position labeling, safe rendering of a code
+block, and a defensive malformed-option-id case that renders without crashing or leaking content),
+and `tests/resultsScreen.test.tsx` (score/percentage/reconciliation, mode and completion time, no
+pass/fail claim, domain section rendering, the primary action's label/filter-selection/focus
+behavior for all three priority cases, and the retake confirm/cancel flow). `tests/
+appRotationSmoke.test.tsx` was updated for the review section now being always-present (no more
+"Review Answers" toggle) and the new "Your result" heading. `npm test` (122/122), `npm run
+typecheck`, `npm run lint`, and `npm run build` all pass.
+
+### Verification
+
+Checked in-browser at 1440×900 (light and dark), 390-width mobile, and an approximated 200%-zoom
+reflow width, across a low-score result (many incorrect), a mixed result (incorrect and unanswered
+both present), and a perfect-score result, using real bank content (a code-block question, a
+Select TWO question with a blockquote, a Select THREE question, and a table question) via a
+temporary local-only fixture removed before committing (confirmed via `git diff`). Also ran one
+full real, non-fixture attempt through the live app (real rotation-selected form, real grading,
+real domain reconciliation, real completed-history write) to confirm the redesigned screen behaves
+identically to the fixture-verified behavior. No page-level horizontal overflow, no answer leakage,
+44px interactive targets throughout, and dark-mode contrast held up for the segmented bar, domain
+bars, and the muted red/green answer-comparison tones.
