@@ -1,138 +1,347 @@
-.wrap {
-  max-width: 36rem;
+.page {
+  position: relative;
+  max-width: 70rem;
   margin: 0 auto;
 }
 
-.eyebrow {
-  margin: 0 0 var(--space-2);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  color: var(--color-accent);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
+/* -------------------------------------------------------------------- */
+/* Hero: intro + mode columns                                           */
+/* -------------------------------------------------------------------- */
 
-.title {
-  margin: 0 0 var(--space-5);
-  font-size: var(--text-2xl);
-  font-weight: 700;
-  line-height: 1.25;
-}
-
-.metaRow {
-  display: flex;
-  gap: var(--space-3);
-  margin-bottom: var(--space-5);
-  flex-wrap: wrap;
-}
-
-.metaItem {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  padding: var(--space-2) var(--space-4);
-  font-size: var(--text-sm);
-  color: var(--color-fg-muted);
-}
-
-.metaItem strong {
-  color: var(--color-fg);
-}
-
-.list {
-  margin: 0 0 var(--space-6);
-  padding-left: 1.2em;
-  color: var(--color-fg-muted);
-  font-size: var(--text-sm);
-  line-height: 1.7;
-}
-
-.list li {
-  margin-bottom: var(--space-1);
-}
-
-.actions {
-  display: flex;
-  gap: var(--space-3);
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.modeHeading {
-  margin: 0 0 var(--space-3);
-  font-size: var(--text-sm);
-  font-weight: 600;
-  color: var(--color-fg-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-.modeGrid {
+.hero {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: 1fr;
-  gap: var(--space-3);
-  margin-bottom: var(--space-4);
+  gap: var(--space-7);
+  padding-top: var(--space-4);
+  padding-bottom: var(--space-7);
 }
 
-@media (min-width: 560px) {
-  .modeGrid {
-    grid-template-columns: 1fr 1fr;
+@media (min-width: 880px) {
+  .hero {
+    grid-template-columns: 1.35fr 1fr;
+    column-gap: clamp(40px, 5vw, 64px);
+    align-items: start;
   }
 }
 
-.modeCard {
-  display: block;
-  width: 100%;
-  text-align: left;
-  padding: var(--space-4);
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-lg);
-  background: var(--color-bg);
-  color: var(--color-fg);
-  cursor: pointer;
-  transition: border-color 150ms ease, background-color 150ms ease;
+.intro {
+  min-width: 0;
 }
 
-.modeCard:hover {
-  border-color: var(--color-accent);
+.accentBar {
+  display: block;
+  width: 32px;
+  height: 3px;
+  margin-bottom: var(--space-4);
+  border-radius: 999px;
+  background: var(--color-accent);
+}
+
+.eyebrow {
+  margin: 0 0 var(--space-4);
+  font-size: var(--text-xs);
+  font-weight: 600;
+  color: var(--color-fg-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+}
+
+.heading {
+  margin: 0 0 var(--space-5);
+  line-height: 1.12;
+}
+
+.headingSans {
+  display: block;
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-size: clamp(1.875rem, 1.35rem + 2.2vw, 3.25rem);
+  color: var(--color-fg);
+  letter-spacing: -0.01em;
+}
+
+.headingSerif {
+  display: block;
+  font-family: ui-serif, Georgia, "Times New Roman", serif;
+  font-weight: 400;
+  font-size: clamp(2rem, 1.4rem + 2.6vw, 3.5rem);
+  color: var(--color-fg);
+  letter-spacing: -0.005em;
+}
+
+.supporting {
+  margin: 0;
+  max-width: 34rem;
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-fg-muted);
+}
+
+.modes {
+  min-width: 0;
+  padding-top: var(--space-1);
+}
+
+@media (min-width: 880px) {
+  .modes {
+    border-left: 1px solid var(--color-border);
+    padding-left: clamp(32px, 4vw, 48px);
+  }
+}
+
+.modesHeading {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--color-fg);
+}
+
+.modesSupporting {
+  margin: 0 0 var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+}
+
+.modeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-5);
+  padding: var(--space-4) 0;
+}
+
+.modeDivider {
+  height: 1px;
+  background: var(--color-border);
+}
+
+.modeIcon {
+  flex: none;
+  display: inline-flex;
+  color: var(--color-accent-text);
+}
+
+/*
+  Sized here rather than on the icon components so the shared 20px default keeps serving
+  every other use. At this size the default stroke reads heavy, so it is thinned to match.
+*/
+.modeIcon svg {
+  width: 32px;
+  height: 32px;
+  stroke-width: 1.5;
+}
+
+.modeInfo {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* Title over duration over description, three stacked lines. */
+.modeTitleRow {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  margin-bottom: 2px;
+}
+
+.modeTitle {
+  font-size: var(--text-base);
+  font-weight: 700;
+  color: var(--color-fg);
+}
+
+.modeMeta {
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--color-accent-text);
+}
+
+.modeDesc {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--color-fg-muted);
+}
+
+.modeStart {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: 44px;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-accent-border);
+  background: transparent;
+  color: var(--color-accent-text);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease;
+}
+
+.modeStart:hover {
   background: var(--color-accent-subtle);
 }
 
-.modeCardTitle {
-  display: block;
-  font-size: var(--text-lg);
-  font-weight: 700;
-  margin-bottom: var(--space-1);
+.modeStart svg {
+  transition: transform 150ms ease;
 }
 
-.modeCardMeta {
-  display: block;
+.modeStart:hover svg {
+  transform: translateX(2px);
+}
+
+.modeStartPrimary {
+  border-color: transparent;
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+
+.modeStartPrimary:hover {
+  background: var(--color-accent);
+  opacity: 0.92;
+}
+
+/* -------------------------------------------------------------------- */
+/* Exam-specification rail                                              */
+/* -------------------------------------------------------------------- */
+
+.specRail {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, auto);
+  column-gap: clamp(32px, 5vw, 64px);
+  row-gap: var(--space-3);
+  align-items: start;
+  padding: var(--space-6) 0;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.specItem {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-left: clamp(32px, 5vw, 64px);
+}
+
+.specItem:first-child {
+  padding-left: 0;
+}
+
+.specItem:not(:first-child) {
+  border-left: 1px solid var(--color-border);
+}
+
+.specNumber {
+  font-size: clamp(1.75rem, 1.4rem + 1.2vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1;
+  color: var(--color-accent-text);
+}
+
+.specLabel {
   font-size: var(--text-xs);
   font-weight: 600;
-  color: var(--color-accent);
+  color: var(--color-fg-muted);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  margin-bottom: var(--space-2);
+  letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 
-.modeCardDesc {
-  display: block;
+.specNote {
+  grid-column: 1 / -1;
+  margin: var(--space-2) 0 0;
+  max-width: 34rem;
   font-size: var(--text-sm);
   color: var(--color-fg-muted);
   line-height: 1.5;
 }
 
-.noSaveNote {
-  margin: 0 0 var(--space-6);
+/*
+  Wide enough for the note to ride alongside the three figures as a fourth column, divided
+  from them the same way they are divided from each other. Below this it drops to its own
+  row, where a 12rem column would force it into a ragged three or four word measure.
+*/
+@media (min-width: 880px) {
+  .specRail {
+    grid-template-columns: auto auto auto minmax(12rem, 1fr);
+  }
+
+  .specNote {
+    grid-column: auto;
+    margin: 0;
+    max-width: none;
+    padding-left: clamp(32px, 5vw, 64px);
+    border-left: 1px solid var(--color-border);
+  }
+}
+
+/* -------------------------------------------------------------------- */
+/* Utility notes                                                        */
+/* -------------------------------------------------------------------- */
+
+.utilityNotes {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-6);
+  padding: var(--space-4) 0;
+}
+
+.utilityNote {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
   font-size: var(--text-xs);
   color: var(--color-fg-muted);
 }
 
-.disclaimerBox {
-  margin-top: var(--space-6);
-  padding: var(--space-3) var(--space-4);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  background: var(--color-bg-subtle);
-  color: var(--color-fg-muted);
-  font-size: var(--text-xs);
+.utilityIcon {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  color: var(--color-accent-text);
+}
+
+/* -------------------------------------------------------------------- */
+/* Narrow layouts                                                       */
+/* -------------------------------------------------------------------- */
+
+@media (max-width: 879px) {
+  .modes {
+    margin-top: var(--space-2);
+  }
+}
+
+@media (max-width: 639px) {
+  .specRail {
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: var(--space-3);
+  }
+
+  .specItem {
+    padding-left: var(--space-3);
+  }
+
+  .specLabel {
+    white-space: normal;
+  }
+
+  /*
+    Reclaim the width the larger icon takes, so the mode descriptions still fit on one line
+    beside the Start button at phone widths.
+  */
+  .modeRow {
+    gap: var(--space-4);
+  }
+
+  .modeIcon svg {
+    width: 28px;
+    height: 28px;
+  }
 }

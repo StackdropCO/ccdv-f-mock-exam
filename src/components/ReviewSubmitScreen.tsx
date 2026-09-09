@@ -2,8 +2,8 @@ import { useState } from "react";
 import type { ExamState } from "../state/examState";
 import type { Question } from "../data/types";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { ArrowRightIcon, CheckCircleIcon, CircleIcon, FlagIcon } from "./icons";
 import btn from "../styles/buttons.module.css";
-import navStyles from "./NavigatorGrid.module.css";
 import styles from "./ReviewSubmitScreen.module.css";
 
 interface ReviewSubmitScreenProps {
@@ -16,96 +16,123 @@ interface ReviewSubmitScreenProps {
   };
 }
 
+const plural = (count: number, noun: string) => `${count} ${noun}${count === 1 ? "" : "s"}`;
+
 export function ReviewSubmitScreen({ state, questions, actions }: ReviewSubmitScreenProps) {
   const [confirming, setConfirming] = useState(false);
 
   const unanswered = questions.filter((q) => (state.answers[q.id]?.length ?? 0) === 0);
   const flagged = questions.filter((q) => !!state.flags[q.id]);
   const answeredCount = questions.length - unanswered.length;
+  const allAnswered = unanswered.length === 0;
+  const noneFlagged = flagged.length === 0;
+  const progressPercent = questions.length > 0 ? Math.round((answeredCount / questions.length) * 100) : 0;
 
-  const message =
-    unanswered.length > 0
-      ? `You have answered ${answeredCount} of ${questions.length} questions.\n${unanswered.length} question${unanswered.length === 1 ? " is" : "s are"} unanswered.\n\nSubmitting is final for this attempt.`
-      : "You have answered all questions. Submitting is final for this attempt.";
+  const unansweredHeading = allAnswered
+    ? noneFlagged
+      ? "All questions answered. Ready when you are."
+      : "All questions answered"
+    : plural(unanswered.length, "unanswered question");
+
+  const flaggedHeading = noneFlagged ? "No questions flagged" : plural(flagged.length, "flagged question");
+
+  const dialogMessage = allAnswered
+    ? "Submitting ends this attempt and shows your score and explanations."
+    : `${plural(unanswered.length, "question")} will remain unanswered.\n\nSubmitting ends this attempt and shows your score and explanations.`;
 
   return (
     <div className={styles.page}>
-      <h1 className={styles.title}>Exam Review</h1>
+      <h1 className={styles.title}>Review before submitting</h1>
+      <p className={styles.supporting}>Check anything you want to revisit, then submit to see your results.</p>
 
-      <div className={styles.summaryRow}>
-        <div className={styles.summaryItem}>
-          <span className={styles.summaryValue}>{answeredCount}</span>
-          <span className={styles.summaryLabel}>Answered</span>
-        </div>
-        <div className={styles.summaryItem}>
-          <span className={styles.summaryValue}>{unanswered.length}</span>
-          <span className={styles.summaryLabel}>Unanswered</span>
-        </div>
-        <div className={styles.summaryItem}>
-          <span className={styles.summaryValue}>{flagged.length}</span>
-          <span className={styles.summaryLabel}>Flagged</span>
+      <div className={styles.progressSection}>
+        <p className={styles.progressText}>
+          {answeredCount} of {questions.length} answered
+        </p>
+        <div
+          className={styles.progressTrack}
+          role="progressbar"
+          aria-valuemin={0}
+          aria-valuemax={questions.length}
+          aria-valuenow={answeredCount}
+          aria-valuetext={`${answeredCount} of ${questions.length} answered`}
+        >
+          <div className={styles.progressFill} style={{ width: `${progressPercent}%` }} />
         </div>
       </div>
 
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Unanswered</h2>
-        {unanswered.length === 0 ? (
-          <p className={styles.emptyNote}>All questions are answered.</p>
-        ) : (
-          <div className={styles.chipGrid}>
-            {unanswered.map((q) => (
-              <button
-                key={q.id}
-                type="button"
-                className={navStyles.cell}
-                onClick={() => actions.goToQuestion(q.id)}
-                aria-label={`Go to question ${q.id}, unanswered`}
-              >
-                {q.id}
-              </button>
-            ))}
+      <div className={styles.statusGrid}>
+        <div className={styles.statusCard}>
+          <div className={styles.statusHeader}>
+            {allAnswered ? (
+              <CheckCircleIcon className={styles.statusIconDone} />
+            ) : (
+              <CircleIcon className={styles.statusIconPending} />
+            )}
+            <h2 className={`${styles.statusHeading} ${allAnswered ? styles.statusHeadingDone : ""}`}>
+              {unansweredHeading}
+            </h2>
           </div>
-        )}
-      </div>
-
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Flagged</h2>
-        {flagged.length === 0 ? (
-          <p className={styles.emptyNote}>No questions are flagged.</p>
-        ) : (
-          <div className={styles.chipGrid}>
-            {flagged.map((q) => (
+          {!allAnswered && (
+            <>
+              <p className={styles.statusBody}>Go to your first unanswered question.</p>
               <button
-                key={q.id}
                 type="button"
-                className={navStyles.cell}
-                onClick={() => actions.goToQuestion(q.id)}
-                aria-label={`Go to question ${q.id}, flagged for review`}
+                className={btn.secondary}
+                onClick={() => actions.goToQuestion(unanswered[0].id)}
+                aria-label={`Review unanswered questions, starting at Question ${unanswered[0].id}`}
               >
-                {q.id}
-                <span className={navStyles.flag} aria-hidden="true">
-                  ⚑
-                </span>
+                Review unanswered
+                <ArrowRightIcon />
               </button>
-            ))}
+            </>
+          )}
+        </div>
+
+        <div className={styles.statusCard}>
+          <div className={styles.statusHeader}>
+            <FlagIcon className={noneFlagged ? styles.statusIconDone : styles.statusIconFlag} />
+            <h2 className={`${styles.statusHeading} ${noneFlagged ? styles.statusHeadingDone : ""}`}>
+              {flaggedHeading}
+            </h2>
           </div>
-        )}
+          {!noneFlagged && (
+            <>
+              <p className={styles.statusBody}>Go to your first flagged question.</p>
+              <button
+                type="button"
+                className={btn.secondary}
+                onClick={() => actions.goToQuestion(flagged[0].id)}
+                aria-label={`Review flagged questions, starting at Question ${flagged[0].id}`}
+              >
+                Review flagged
+                <ArrowRightIcon />
+              </button>
+            </>
+          )}
+        </div>
       </div>
 
-      <div className={styles.actions}>
-        <button type="button" className={btn.secondary} onClick={actions.returnToExam}>
-          Return to Exam
-        </button>
-        <button type="button" className={btn.primary} onClick={() => setConfirming(true)}>
-          Submit Exam
-        </button>
+      <div className={styles.submitSection}>
+        <p className={styles.submitCopy}>Submitting ends this attempt and shows your score and explanations.</p>
+        {!allAnswered && (
+          <p className={styles.submitWarning}>{plural(unanswered.length, "question")} still unanswered.</p>
+        )}
+        <div className={styles.submitActions}>
+          <button type="button" className={btn.secondary} onClick={actions.returnToExam}>
+            Back to exam
+          </button>
+          <button type="button" className={btn.primary} onClick={() => setConfirming(true)}>
+            Submit exam
+          </button>
+        </div>
       </div>
 
       {confirming && (
         <ConfirmDialog
           title="Submit exam?"
-          message={message}
-          confirmLabel="Submit Exam"
+          message={dialogMessage}
+          confirmLabel="Submit exam"
           onConfirm={actions.submitExam}
           onCancel={() => setConfirming(false)}
         />

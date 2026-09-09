@@ -3,6 +3,7 @@ import { useExamState } from "./hooks/useExamState";
 import { useTheme } from "./hooks/useTheme";
 import { Layout } from "./components/Layout";
 import { StartScreen } from "./components/StartScreen";
+import { StartScreenDecor } from "./components/StartScreenDecor";
 import { ExamScreen } from "./components/ExamScreen";
 import { ReviewSubmitScreen } from "./components/ReviewSubmitScreen";
 import { ResultsScreen } from "./components/ResultsScreen";
@@ -25,6 +26,7 @@ function App() {
       onExitExam={isUnfinished ? () => setConfirmingExit(true) : undefined}
       theme={theme}
       onToggleTheme={toggleTheme}
+      backdrop={screen === "start" ? <StartScreenDecor /> : undefined}
     >
       {rotationNotice && <p role="status">{rotationNotice}</p>}
       {screen === "start" && <StartScreen onStart={actions.startExam} />}

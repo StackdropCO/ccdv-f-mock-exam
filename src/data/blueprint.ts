@@ -100,3 +100,13 @@ export const BLUEPRINT = [
 export type Domain = (typeof BLUEPRINT)[number]["id"];
 export const FORM_SIZE = 53;
 export const BANK_VERSION = "ccdv-f-bank-v2-2026-09";
+
+// Production-friendly domain names for presentation (results/review), derived from the
+// blueprint itself so there is exactly one source of truth for each domain's display name.
+export const DOMAIN_LABEL: Record<Domain, string> = Object.fromEntries(
+  BLUEPRINT.map((d) => [d.id, d.name])
+) as Record<Domain, string>;
+
+// Blueprint declaration order, used as a deterministic tie-breaker when sorting domains
+// by performance (e.g. equal percentages).
+export const DOMAIN_ORDER: Domain[] = BLUEPRINT.map((d) => d.id);

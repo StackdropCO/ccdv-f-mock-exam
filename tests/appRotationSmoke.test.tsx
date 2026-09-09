@@ -9,8 +9,8 @@ const click=(name:string|RegExp)=>fireEvent.click(screen.getByRole('button',{nam
 function submit(){
   click(/^Question 53,/);
   click('Review & Submit');
-  click('Submit Exam');
-  fireEvent.click(within(screen.getByRole('alertdialog')).getByRole('button',{name:'Submit Exam'}));
+  click('Submit exam');
+  fireEvent.click(within(screen.getByRole('alertdialog')).getByRole('button',{name:'Submit exam'}));
 }
 function another(){
   click('Take another mock');
@@ -20,10 +20,10 @@ function another(){
 describe('application interaction smoke (DOM environment)',()=>{
   it('runs timed navigation, mobile drawer, flags, exit cancel, submit, answer filters and fresh untimed mock',()=>{
     render(<App/>);
-    expect(screen.getByText(/Each mock selects 53/)).not.toBeNull();
-    click(/^Timed Exam\./);
-    expect(screen.getByText(/remaining/)).not.toBeNull();
-    expect(screen.getByRole('heading',{name:'Question 1'})).not.toBeNull();
+    expect(screen.getByText(/53-question mock shaped around the exam/)).not.toBeNull();
+    click('Start timed exam');
+    expect(screen.getByText('remaining')).not.toBeNull();
+    expect(screen.getByRole('heading',{name:'Question 1 of 53'})).not.toBeNull();
     expect(screen.queryByText('Correct answer')).toBeNull();
     const options=screen.getByRole('group',{name:'Answer options for question 1'});
     fireEvent.click(within(options).queryAllByRole('radio').at(0) ?? within(options).getAllByRole('checkbox')[0]);
@@ -35,18 +35,17 @@ describe('application interaction smoke (DOM environment)',()=>{
     expect(within(drawer).getAllByRole('button')).toHaveLength(54);
     fireEvent.click(within(drawer).getByRole('button',{name:/^Question 12,/}));
     expect(screen.queryByRole('dialog')).toBeNull();
-    expect(screen.getByRole('heading',{name:'Question 12'})).not.toBeNull();
+    expect(screen.getByRole('heading',{name:'Question 12 of 53'})).not.toBeNull();
     click('Exit Exam');click('Continue Exam');
-    expect(screen.getByRole('heading',{name:'Question 12'})).not.toBeNull();
+    expect(screen.getByRole('heading',{name:'Question 12 of 53'})).not.toBeNull();
     submit();
-    expect(screen.getByRole('heading',{name:'Mock exam score'})).not.toBeNull();
+    expect(screen.getByRole('heading',{name:'Your result'})).not.toBeNull();
+    expect(screen.getByRole('heading',{name:'Review your answers'})).not.toBeNull();
     const first=JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)!);
-    click('Review Answers');
-    expect(screen.getAllByText('Correct answer')).toHaveLength(53);
-    fireEvent.click(within(screen.getByRole('group',{name:'Filter reviewed questions'})).getByRole('button',{name:'Flagged'}));
-    expect(screen.getAllByRole('article')).toHaveLength(1);
-    another();click(/^Untimed Practice\./);
-    expect(screen.queryByText(/remaining/)).toBeNull();
+    fireEvent.click(within(screen.getByRole('group',{name:'Filter reviewed questions'})).getByRole('button',{name:/^Flagged/}));
+    expect(screen.getAllByText(/^Question \d+$/)).toHaveLength(1);
+    another();click('Start untimed practice');
+    expect(screen.queryByText('remaining')).toBeNull();
     submit();
     const second=JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)!);
     expect(second.usedQuestionIds).toHaveLength(106);
@@ -57,7 +56,7 @@ describe('application interaction smoke (DOM environment)',()=>{
     const used=new Set<string>();
     let previous:string[]=[];
     for(let i=0;i<8;i++){
-      click(i%2===0?/^Timed Exam\./:/^Untimed Practice\./);
+      click(i%2===0?'Start timed exam':'Start untimed practice');
       submit();
       const h=JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)!);
       expect(h.cycle).toBe(i<7?1:2);

@@ -1,42 +1,55 @@
 .page {
-  max-width: 76rem;
+  max-width: var(--shell-width);
   margin: 0 auto;
+  padding-inline: var(--shell-gutter);
 }
 
 .examLayout {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
   gap: var(--space-6);
   align-items: flex-start;
 }
 
-@media (min-width: 960px) {
+@media (min-width: 1100px) {
   .examLayout {
-    flex-direction: row;
+    grid-template-columns: minmax(0, 1fr) 340px;
   }
 }
 
 .content {
-  flex: 1;
   min-width: 0;
-  max-width: var(--content-width);
 }
 
-.topBar {
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-5);
+}
+
+.headerMain {
+  min-width: 0;
+}
+
+.headerActions {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: var(--space-3);
   flex-wrap: wrap;
-  margin-bottom: var(--space-4);
 }
 
-.progressText {
-  font-size: var(--text-sm);
+.questionHeading {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-xl);
+  font-weight: 700;
+  line-height: 1.35;
   color: var(--color-fg-muted);
 }
 
-.progressText strong {
+.questionHeading strong {
   color: var(--color-fg);
 }
 
@@ -45,20 +58,12 @@
   padding: 2px var(--space-2);
   border: 1px solid var(--color-accent-border);
   background: var(--color-accent-subtle);
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   border-radius: var(--radius-sm);
   font-size: var(--text-xs);
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  margin-bottom: var(--space-3);
-}
-
-.questionTitle {
-  margin: 0 0 var(--space-4);
-  font-size: var(--text-xl);
-  font-weight: 700;
-  line-height: 1.35;
 }
 
 .questionBody {
@@ -66,10 +71,6 @@
 }
 
 .options {
-  margin-bottom: var(--space-5);
-}
-
-.flagRow {
   margin-bottom: var(--space-6);
 }
 
@@ -81,11 +82,12 @@
   padding: var(--space-2) var(--space-4);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
-  background: var(--color-bg);
+  background: var(--color-surface);
   color: var(--color-fg-muted);
   font-size: var(--text-sm);
   font-weight: 500;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .flagButton.flagged {
@@ -101,10 +103,4 @@
   gap: var(--space-3);
   padding-top: var(--space-5);
   border-top: 1px solid var(--color-border);
-}
-
-.timerRow {
-  display: flex;
-  align-items: center;
-  gap: var(--space-4);
 }

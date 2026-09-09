@@ -10,15 +10,27 @@ interface LayoutProps {
   onExitExam?: () => void;
   theme: Theme;
   onToggleTheme: () => void;
+  /** Decorative background painted behind every band of the layout. */
+  backdrop?: ReactNode;
   children: ReactNode;
 }
 
-export function Layout({ modeLabel, timerStartTimestamp, onExitExam, theme, onToggleTheme, children }: LayoutProps) {
+export function Layout({
+  modeLabel,
+  timerStartTimestamp,
+  onExitExam,
+  theme,
+  onToggleTheme,
+  backdrop,
+  children,
+}: LayoutProps) {
   return (
-    <>
-      <header className={styles.header}>
+    <div className={styles.shell}>
+      {backdrop}
+      <header className={backdrop ? `${styles.header} ${styles.headerSeamless}` : styles.header}>
         <p className={styles.title}>
-          <span className={styles.titleAccent}>CCDV-F</span> Final Mock Exam
+          <span className={styles.titleAccent}>CCDV-F</span> Practice
+          <span className={styles.attribution}>by Stackdrop</span>
         </p>
         <div className={styles.headerRight}>
           {modeLabel && <span className={styles.modeIndicator}>{modeLabel}</span>}
@@ -34,9 +46,9 @@ export function Layout({ modeLabel, timerStartTimestamp, onExitExam, theme, onTo
       <main className={styles.main}>{children}</main>
       <footer className={styles.footer}>
         <p className={styles.disclaimer}>
-          Unofficial practice exam. Not affiliated with or endorsed by Anthropic or Pearson VUE.
+          Independent practice material. Not affiliated with or endorsed by Anthropic or Pearson VUE.
         </p>
       </footer>
-    </>
+    </div>
   );
 }

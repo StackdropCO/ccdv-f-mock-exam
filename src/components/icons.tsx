@@ -1,0 +1,108 @@
+import type { SVGProps } from "react";
+
+type IconProps = SVGProps<SVGSVGElement>;
+
+const base: IconProps = {
+  viewBox: "0 0 24 24",
+  fill: "none",
+  stroke: "currentColor",
+  strokeWidth: 1.75,
+  strokeLinecap: "round",
+  strokeLinejoin: "round",
+  width: 20,
+  height: 20,
+  "aria-hidden": true,
+  focusable: false,
+};
+
+export function ClockIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="8.25" />
+      <path d="M12 7.5v4.75l3 2" />
+    </svg>
+  );
+}
+
+export function BookOpenIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 6.5c-1.4-1.15-3.3-1.75-5.5-1.75-.83 0-1.5.67-1.5 1.5v10.5c0 .55.45 1 1 1 .18 0 .35-.05.5-.14.98-.6 2.3-.98 3.5-.98 1.02 0 2.24.28 2.9.65.06.03.13.05.2.05" />
+      <path d="M12 6.5c1.4-1.15 3.3-1.75 5.5-1.75.83 0 1.5.67 1.5 1.5v10.5c0 .55-.45 1-1 1-.18 0-.35-.05-.5-.14-.98-.6-2.3-.98-3.5-.98-1.02 0-2.24.28-2.9.65-.06.03-.13.05-.2.05" />
+      <path d="M12 6.5v10.83" />
+    </svg>
+  );
+}
+
+export function StackIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M12 4.5l7.5 3.75L12 12 4.5 8.25 12 4.5z" />
+      <path d="M4.5 12l7.5 3.75L19.5 12" />
+      <path d="M4.5 15.75L12 19.5l7.5-3.75" />
+    </svg>
+  );
+}
+
+export function CheckCircleIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="8.25" />
+      <path d="M8.5 12.25l2.4 2.4 4.6-5.3" />
+    </svg>
+  );
+}
+
+export function CircleIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="8.25" />
+    </svg>
+  );
+}
+
+export function FlagIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M5.5 21V4" />
+      <path d="M5.5 4.75c1.05-.6 2.25-.9 3.5-.9 1.5 0 2.75.6 4 1.2 1 .5 2 .9 3 .9.8 0 1.5-.2 2-.5v7.6c-.5.3-1.2.5-2 .5-1 0-2-.4-3-.9-1.25-.6-2.5-1.2-4-1.2-1.25 0-2.45.3-3.5.9z" />
+    </svg>
+  );
+}
+
+export function ArrowRightIcon(props: IconProps) {
+  return (
+    <svg {...base} width={16} height={16} {...props}>
+      <path d="M4.5 12h15" />
+      <path d="M13.5 6.5L19.5 12l-6 5.5" />
+    </svg>
+  );
+}
+
+export function XCircleIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="8.25" />
+      <path d="M9.5 9.5l5 5" />
+      <path d="M14.5 9.5l-5 5" />
+    </svg>
+  );
+}
+
+export function ChevronDownIcon(props: IconProps) {
+  return (
+    <svg {...base} width={16} height={16} {...props}>
+      <path d="M5.5 9l6.5 6.5L18.5 9" />
+    </svg>
+  );
+}
+
+export function AlertCircleIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="8.25" />
+      <path d="M12 8v5" />
+      <path d="M12 16.25v.1" />
+    </svg>
+  );
+}

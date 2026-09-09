@@ -412,3 +412,549 @@ questions, and does not restore any part of the retired drafting/review/generati
 non-blocking domain-wide content-balance observations and the remaining soft near-duplicate calls
 recorded during Change 3 are still open observations, not resolved by this patch. Fixing these six
 items does not imply every other editorial concern in the bank has been resolved.
+
+---
+
+## Approved Change 5 — Visual Refinement (2026-09-09)
+
+Approved by the user as a focused, presentation-only change: revised introductory/interface copy,
+a Stackdrop-branded accent palette, and a responsive layout/navigator refinement, built on branch
+`visual-refinement`. No question content, scoring, rotation, or persistence behavior is affected.
+
+### C5.1 What this change authorizes
+
+- Revised start-screen and header copy: header product name "CCDV-F Practice" with a small "by
+  Stackdrop" attribution; a new main heading, supporting sentence, and mode-card descriptions using
+  the exact wording the user supplied; a single footer disclaimer ("Independent practice material.
+  Not affiliated with or endorsed by Anthropic or Pearson VUE.") in place of the previous duplicate
+  disclaimer boxes.
+- Removal of redundant start-screen instructional copy (the four-item feature list, the standalone
+  "No login required" line, the "Choose your mode" heading, and the second disclaimer box) without
+  replacing it with another long explanation; the existing 53-question count is not duplicated as a
+  separate count card.
+- A Stackdrop amber accent (`#FBB03A`) introduced as a design token, split into a button-fill color
+  (`--color-accent`, paired with dark `--color-accent-fg` text — never white text on the amber
+  fill) and a separate, higher-contrast `--color-accent-text` / `--color-focus` token for small
+  text, icons, hover/active borders, and focus indicators on light backgrounds, verified against
+  WCAG contrast math rather than eyeballed. The pre-existing flag/success/danger colors remain
+  semantically distinct from the new accent; the flagged-question color was shifted to a
+  rust/burnt-orange so flagged and selected/current states stay visually distinguishable even
+  though both are now warm hues. Updated consistently across light, system-preference dark, and
+  explicit dark mode, preserving the existing theme-resolution precedence and persistence.
+- A warm off-white page background with white (`--color-surface`) content surfaces for cards,
+  panels, dialogs, and answer rows, replacing the previous plain-white/slate palette.
+- A responsive two-column exam-screen layout (single column below ~1100px, `minmax(0,1fr)` +
+  340px sidebar above it) replacing the previous flex layout capped at a fixed 44rem question
+  column; a consolidated single "Question N of 53" heading (removing the separate duplicate
+  question-number heading and the separate answered/unanswered progress line, which is now shown
+  once in the desktop navigator and once in the mobile navigator trigger); the flag control moved
+  into the question header, aligned right on desktop and wrapping naturally on mobile.
+- A navigator grid changed from an auto-fill layout to an explicit six-column grid at the sidebar
+  width (53 questions across nine rows instead of fourteen), with calmer unanswered/answered/
+  current/flagged visual states that remain distinguishable in combination, and a bounded-height
+  scroll on the sticky desktop panel for unusually short viewports only.
+- Presentation-only token, spacing, and button-hierarchy consistency updates carried into the
+  Review & Submit screen, confirmation dialogs, results screen, answer-review filters, and the
+  theme toggle, with no behavior change to any of those flows.
+- A global `-webkit-tap-highlight-color: transparent` reset so the browser's default blue tap
+  flash on touch devices doesn't clash with the new accent color.
+
+### C5.2 What this change preserves
+
+Every question record and canonical question Markdown; all correct answers and explanations; all
+371 bank IDs and existing metadata; `BANK_VERSION` and the `ccdv-f-question-history-v2` localStorage
+key; completed rotation history; the seven-form disjoint capacity and domain/skill quotas; the
+memory-only active-attempt rule; both exam modes and the existing timed/untimed behavior; exact-set
+scoring and submission confirmation; the leave/exit warnings; result filtering; and the existing
+accessibility guarantees (44px touch targets, non-color state indication, keyboard navigation,
+visible focus, ARIA labels). The retired Change-3 drafting/review/generation pipeline is not
+restored.
+
+### C5.3 Verification
+
+`npm test`, `npm run typecheck`, `npm run lint`, and `npm run build` all pass. Two pre-existing
+tests were updated to match intentional copy/heading changes (the start-screen supporting-sentence
+text and the consolidated question heading's accessible name); no test assertion covering scoring,
+rotation, persistence, or accessibility behavior was weakened. Verified in-browser at 1440×900,
+mobile (375×844), and in both light and dark mode, including representative Select TWO, Select
+THREE, code-block, and table questions via a temporary local-only screenshot fixture that was
+removed before this change was committed.
+
+### C5.4 Start-screen refinement follow-up (2026-09-09)
+
+Approved by the user as a focused refinement of the still-unmerged Change 5, using a supplied
+mockup as a direction rather than a pixel-perfect specification. Scoped to the start screen only,
+with no change to question content, scoring, rotation, `BANK_VERSION`, persistence, or the exam
+screen/navigator improvements from C5.1.
+
+- The two mode cards changed from being the click targets themselves to noninteractive containers,
+  each holding one native `<button>` ("Start timed exam" / "Start practice") as the single
+  interactive element. This avoids the whole-card-as-button pattern in favor of an explicit,
+  content-sized amber action per card (~44px tall, dark text on the amber fill, no nested buttons,
+  no competing click targets). Clicking elsewhere in a card (its heading, icon, or description) is
+  inert; only the button starts an attempt, and each button starts its mode exactly once.
+- A small local outline-icon set (`src/components/icons.tsx`: clock, open book, stack-of-pages,
+  arrow) was added — plain inline SVGs with a consistent stroke, no new dependency and no emoji.
+  Icons sit inline next to each mode heading (no oversized icon tiles), and a small arrow rides
+  inside each start button.
+- The mode-card meta line ("120 minutes" / "No time limit") changed from an uppercase amber
+  badge-style label to plain secondary text, matching the "avoid pill badges" direction.
+- A compact bank/rotation summary was added below the existing practice notes, separated by a thin
+  divider rather than a new card: "371 questions. 7 fresh mocks." with a supporting line describing
+  completed-mock rotation within the same browser. The two displayed numbers are read directly from
+  `QUESTION_BANK.length` and `FORM_SIZE` (no second source of truth, no selector change).
+- Card, button, and icon styling is local to `StartScreen.module.css`; the shared `buttons.module.css`
+  primary/secondary button classes and the design tokens from C5.1 are reused, not modified — this
+  refinement does not change button or accent styling anywhere else in the app.
+
+**Preserves:** everything listed in C5.2, plus the exam screen, navigator, and Review/Results
+styling introduced earlier in this same Change 5 — none of it was touched by this follow-up.
+
+**Verification:** `npm test`, `npm run typecheck`, `npm run lint`, and `npm run build` all pass. One
+existing test file was updated for the new start-button accessible names (the old aria-label-based
+card queries no longer apply; no behavioral coverage was removed). Checked in-browser at 1440×900
+and 375×812, light and dark mode: both start buttons launch their correct mode exactly once,
+clicking non-interactive card content does nothing, focusing a start button shows a visible
+high-contrast outline, no page-level horizontal overflow at either width, and the button/icon
+colors keep dark text on the amber fill in both themes.
+
+### C5.5 Mockup-inspired icon and spacing pass (2026-09-09)
+
+Approved by the user as a further, purely visual refinement of the C5.4 start screen, using a
+supplied mockup image as direction. No layout, section order, copy, or interaction change: the
+mode cards are still noninteractive containers with one native start button each; the bank/rotation
+summary still reads its numbers from `QUESTION_BANK.length`/`FORM_SIZE`.
+
+- Mode icons now sit in a small rounded, amber-tinted chip (40px) rather than bare inline glyphs,
+  and the duration label ("120 minutes" / "No time limit") became a small pill badge next to the
+  chip — both restrained in scale (not the mockup's larger icon tiles), reversing the C5.4 note that
+  simplified this to plain text, per the user's explicit direction after seeing the mockup.
+  A new `CheckCircleIcon` was added to the local icon set and placed beside the two practice notes.
+- Start buttons are now full-width within their card, with the arrow pushed to the trailing edge,
+  and pinned to the bottom of the card via `margin-top: auto` so both buttons align on the same
+  baseline regardless of description length — matching "align the buttons... to the end of the
+  cards." Button height remains 44px; only the width and internal alignment changed.
+- A small amber accent bar above the heading was added, matching the mockup's decorative tick.
+- Per the standing instruction that the bank-summary section must not introduce a new action, the
+  mockup's circular refresh-style icon on that row was deliberately not carried over — the section
+  keeps only the informational stack icon.
+
+Still scoped to `StartScreen.tsx`/`StartScreen.module.css`/`icons.tsx`; no shared button, token, or
+exam-screen file was touched. `npm test`, `npm run typecheck`, `npm run lint`, and `npm run build`
+all pass with no test changes needed. Re-verified in-browser at 1440×900, mobile (375×812), and
+dark mode: buttons remain 44px tall and bottom-aligned across both cards, still exactly one button
+per card, no page-level horizontal overflow.
+
+### C5.6 Button sizing and icon-row spacing tweak (2026-09-09)
+
+Approved by the user as a small follow-up to C5.5. The C5.5 start buttons went full-width with the
+arrow at the trailing edge; the user asked for them smaller and left-aligned instead. The button
+reverted to a content-sized, left-aligned control (`align-self: flex-start`, no `width: 100%`,
+slightly tighter horizontal padding) while keeping the same 44px height and the `margin-top: auto`
+bottom-pinning from C5.5, so both cards' buttons still land on the same baseline. The gap between
+each card's icon-chip/duration-pill row and its heading was widened (moved from a uniform flex
+`gap` to an explicit `margin-bottom` on that row) so the icons read as a distinct group above the
+text rather than crowding it.
+
+CSS-only change to `StartScreen.module.css`; no other file touched. `npm test`, `npm run typecheck`,
+`npm run lint`, and `npm run build` all pass with no test changes needed (button accessible names
+and DOM structure are unchanged). Re-verified in-browser at 1440×900, mobile (375×812), and dark
+mode: both buttons still 44px tall, aligned to the same bottom edge across the row, and no
+page-level horizontal overflow.
+
+### C5.7 Pre-submission review screen refinement (2026-09-09)
+
+Approved by the user as a focused refinement of the pre-submission review screen
+(`ReviewSubmitScreen.tsx`), replacing its title, three large statistic cards, and bare
+question-number buttons with a clearer, more compact layout. No question content, answer key,
+scoring, the 371-item bank, domain quotas, `BANK_VERSION`, localStorage keys, completed rotation
+history, memory-only active-attempt behavior, or timed/untimed behavior is affected. The exam
+screen, navigator, start screen, and themes from C5.1–C5.6 are untouched.
+
+**Finding on the reported "53" button:** verified before editing, not a counting defect. The
+screen's `unanswered`/`flagged` filters already used each `FormQuestion.id` — which
+`selectExamForm` (`src/lib/examForm.ts`) deliberately sets to the question's 1–53 *display
+position* (`bankId` holds the separate, never-displayed stable bank ID) — so a lone unanswered
+question at the end of the form correctly rendered as a bare button labeled "53". That was Question
+53's position, not a claim that 53 questions were unanswered; the summary above it already read "1
+Unanswered" correctly. The defect was presentation (an unlabeled numeral easily misread as a count
+sitting directly under a heading and a number that really did mean a count), not the underlying
+arithmetic, which is unchanged by this pass.
+
+**New layout:**
+- Heading "Review before submitting" and a supporting sentence, replacing "Exam Review".
+- One compact completion line ("N of 53 answered") with a subtle amber progress bar representing
+  completion only — no score, correctness, or pass-likelihood implication.
+- Two compact status sections (stacked on mobile, side by side from 640px) instead of three
+  statistic cards and chip grids of bare numbers: "N unanswered question(s)" / "N flagged
+  question(s)" with correct singular/plural wording, a one-line description, and a "Review
+  unanswered" / "Review flagged" action button that jumps straight to the lowest displayed position
+  in the current form matching that state. The two counts are computed independently (a question
+  that is both unanswered and flagged is correctly counted in both, never summed together).
+- Zero-state text ("All questions answered" / "No questions flagged") replaces the action instead of
+  showing a disabled button, and reserves no extra space. When both are simultaneously true, the
+  combined "All questions answered. Ready when you are." message is shown instead — never a claim
+  about correctness or pass likelihood.
+- A clearly separated submission section: the same explanation of what submitting does, a dynamic
+  "N question(s) still unanswered" line when applicable, and Back to exam (secondary) / Submit exam
+  (primary amber) actions. The existing confirmation dialog is preserved unchanged in behavior
+  (opens on first click, states the exact unanswered count, Cancel leaves the attempt untouched,
+  Confirm submits exactly once); its confirm button label changed from "Submit Exam" to "Submit
+  exam" for consistency with the new screen copy.
+- Both shortcuts and "Back to exam" use the existing `goToQuestion`/`returnToExam` actions verbatim
+  — no reducer changes, no new screen, no filtered question session. `GOTO_QUESTION` already only
+  updates `currentQuestion` and clears `reviewing`, so answers, flags, mode, the active form, and
+  the timer are untouched by a shortcut jump, and completed rotation history is never touched by
+  merely opening this screen or using a shortcut.
+- Two small outline icons were added to the shared local icon set (`FlagIcon`, `CircleIcon`) for
+  the status sections, reusing the existing `CheckCircleIcon`/`ArrowRightIcon` from the start-screen
+  icon work; the flagged icon reuses the existing `--color-flag` token so its color matches the
+  exam screen's own flag button.
+
+**Tests:** a new `tests/reviewSubmitScreen.test.tsx` renders the component directly (mocked
+actions, small fixed question arrays — never dependent on the real bank's random content) and
+covers: the exact "52 of 53 answered" / "1 unanswered question" / Question-53-navigation scenario;
+lowest-position selection with non-sequential gaps; lowest-position selection among out-of-order
+flags; a question that is both unanswered and flagged; both zero states; the combined ready
+message; "Back to exam" never triggering a shortcut; a partially-selected multiple-response
+question counting as answered with no leaked key/explanation; and the confirmation dialog's
+open/cancel/confirm-once behavior. `tests/examState.test.ts` gained a reducer-level test proving
+`GOTO_QUESTION` preserves answers, flags, mode, and the start timestamp exactly. `npm test` (87/87),
+`npm run typecheck`, `npm run lint`, and `npm run build` all pass; `tests/appRotationSmoke.test.tsx`
+was updated for the renamed submit button ("Submit Exam" → "Submit exam").
+
+**Verification:** re-checked in-browser at 1440×900 and 375×812, light and dark mode, across the
+52-answered/1-unanswered/0-flagged scenario, a mixed scenario with both shortcuts available, and
+the fully-answered/no-flags ready scenario, plus a full real (non-fixture) run through the actual
+app: started an Untimed attempt, answered and flagged real questions, confirmed "Review unanswered"
+and "Review flagged" landed on the correct real positions, confirmed Previous/answers/flags
+survived the jump, and confirmed submission still recorded completed-rotation history correctly
+afterward. No answer leakage, no horizontal overflow, all interactive targets 44px.
+
+---
+
+## Approved Change 5, C5.8 — Post-submission results redesign (2026-09-09)
+
+Approved by the user as a focused redesign of the results screen (`ResultsScreen.tsx`) and its
+inline answer review (`AnswerReviewList.tsx`), turning a bare score receipt into a study/diagnosis
+view: overall result, performance by domain, and full answer review are now one continuous page.
+No question content, scoring, the 371-item bank, domain quotas, `BANK_VERSION`, localStorage keys,
+completed rotation history, memory-only active-attempt behavior, or timed/untimed behavior is
+affected — this is a presentation and read-only-aggregation change over the existing submitted
+`ExamResult`.
+
+### What changed
+
+- **Overall result.** "Your result" (was "Mock exam score") with mode/completion time as quiet
+  metadata, a large raw percentage, "X of Y correct", a segmented correct/incorrect/unanswered bar,
+  and a text legend — replacing the four detached statistic cards. No pass/fail, "exam ready," or
+  scaled-score claim is made anywhere; the existing unofficial-result disclaimer is kept, moved
+  next to "Take another mock" at the bottom of the page (one disclaimer, not duplicated).
+- **Primary action.** A prominent amber "Review N incorrect answers" (or "Review unanswered
+  questions", or "Review all answers" once nothing is wrong) sits right under the score. It only
+  sets the review section's active filter and scrolls/focuses it — it never touches the attempt,
+  score, answers, flags, or rotation history.
+- **Performance by domain (new section).** For each of the current form's domains: correct/total,
+  raw percentage, and a bar, sorted lowest percentage first with blueprint-order tie-breaking. A
+  small `DOMAIN_LABEL`/`DOMAIN_ORDER` export was added directly to `blueprint.ts` (derived from the
+  blueprint's own `name` field — no new data file, no research-only import) so domain ids render as
+  their production names ("Applications and Integration", never `applications-integration`). A new
+  pure `computeDomainResults` helper (`src/lib/domainResults.ts`) aggregates strictly from the
+  current submitted `FormQuestion[]` and `result.perQuestion` — no second grading definition, no
+  lookup against the full bank, no official exam weighting.
+- **Answer review is part of the page**, not a hidden toggle. Compact filters (Incorrect,
+  Unanswered, Correct, Flagged, All — each showing its live count, zero-count ones disabled rather
+  than hidden) replace the old always-"All" default; the section defaults to Incorrect, else
+  Unanswered, else All (`defaultReviewFilter` in the new `src/lib/reviewFilter.ts`).
+- **Compact accordion rows** (native `<details>/<summary>`, so keyboard/focus/expand semantics are
+  free) replace the old fully-expanded cards: Question N (form position, never `bankId`), status,
+  human-readable domain, a stripped-Markdown stem preview (`src/lib/textPreview.ts` — never leaks
+  raw fenced-code or table syntax into the preview), and a flag badge. The first incorrect/
+  unanswered row starts expanded; closing it does not reopen automatically.
+- **Expanded content** shows the full stem, then a real answer comparison — complete option text
+  mapped from that same question's `options` (never just a letter, never another question's
+  content), "No answer selected" when unanswered, and a merged "Your answer · Correct" line instead
+  of duplicating identical content for a fully correct question. Multi-response answers list every
+  selected and every required option (exact-set grading is never softened to "partially correct");
+  an incorrect multi-response's selected list is annotated per-option (selected-and-correct vs.
+  selected-but-not-correct) with icons, not color alone. The stored explanation renders unchanged
+  below, under "Why this is correct."
+
+### What this change preserves
+
+Everything listed in C5.2/C5.7, plus every prior visual pass. `ResultsScreen`/`AnswerReviewList`'s
+prop types were widened from `Question[]` to `FormQuestion[]` (they already received `FormQuestion`
+data at runtime; this only exposes the `domain` field already on it) — `computeResult` and other
+generic scoring helpers still take plain `Question[]`, unchanged. No answer, correct-answer, or
+explanation content is reachable before a confirmed submission (the results screen only mounts once
+`state.submitted` is true, unchanged).
+
+### Tests
+
+New `tests/domainResults.test.ts` (deterministic 12-question, 8-domain fixture with two intentional
+percentage ties, verifying per-domain math, full reconciliation with the overall result, and
+blueprint-order tie-breaking), `tests/textPreview.test.ts` (fenced code / tables / emphasis /
+truncation), `tests/answerReviewList.test.tsx` (default-filter priority, live filter counts and
+disabled zero-count filters, full option-body answer comparisons for incorrect/unanswered/correct/
+partial-multi-response questions, domain labels, form-position labeling, safe rendering of a code
+block, and a defensive malformed-option-id case that renders without crashing or leaking content),
+and `tests/resultsScreen.test.tsx` (score/percentage/reconciliation, mode and completion time, no
+pass/fail claim, domain section rendering, the primary action's label/filter-selection/focus
+behavior for all three priority cases, and the retake confirm/cancel flow). `tests/
+appRotationSmoke.test.tsx` was updated for the review section now being always-present (no more
+"Review Answers" toggle) and the new "Your result" heading. `npm test` (122/122), `npm run
+typecheck`, `npm run lint`, and `npm run build` all pass.
+
+### Verification
+
+Checked in-browser at 1440×900 (light and dark), 390-width mobile, and an approximated 200%-zoom
+reflow width, across a low-score result (many incorrect), a mixed result (incorrect and unanswered
+both present), and a perfect-score result, using real bank content (a code-block question, a
+Select TWO question with a blockquote, a Select THREE question, and a table question) via a
+temporary local-only fixture removed before committing (confirmed via `git diff`). Also ran one
+full real, non-fixture attempt through the live app (real rotation-selected form, real grading,
+real domain reconciliation, real completed-history write) to confirm the redesigned screen behaves
+identically to the fixture-verified behavior. No page-level horizontal overflow, no answer leakage,
+44px interactive targets throughout, and dark-mode contrast held up for the segmented bar, domain
+bars, and the muted red/green answer-comparison tones.
+
+---
+
+## Approved Change 5, C5.9 — Start-screen editorial redesign (2026-09-09)
+
+Approved by the user as a focused visual redesign of the start screen (`StartScreen.tsx` and its
+CSS module only), using a supplied mockup as the primary visual direction, replacing the prior
+mode-card layout with an open editorial composition. This amendment explicitly authorizes:
+
+- The open, cardless editorial start-screen layout: an asymmetric two-column composition (an
+  introductory column and a mode-selection column, roughly 57%/43% on wide desktop, one fine
+  vertical divider between them) built with CSS Grid, alignment, whitespace, and thin rules instead
+  of an outer hero panel or bordered mode cards.
+- Serif accent typography: the heading's second line ("CCDV-F exam.") uses a system serif stack
+  (`ui-serif, Georgia, "Times New Roman", serif`) for editorial contrast against the sans-serif
+  first line, with no new font load or package.
+- Start-screen-scoped background decoration (a faint CSS grid, a low-contrast amber radial glow,
+  and a concentric-ring "orbit" motif with a few small nodes) implemented entirely with CSS
+  gradients, borders, and pseudo-content — no raster asset, no canvas, no dependency — confined to
+  `StartScreen.module.css`, marked `aria-hidden`, `pointer-events: none`, and clipped so it cannot
+  cause overflow or reduce text contrast. It is not applied to any other screen.
+- Borderless mode rows (icon, title, duration metadata, description, and a compact "Start" action
+  aligned to the row's end, separated by a thin divider) replacing the previous bordered mode
+  cards; a filled amber Start action for Timed and a quieter amber-outlined Start action for
+  Untimed — both remain equally discoverable, equally functional, and clearly interactive text/
+  border color, never gray or disabled-looking.
+- A full-width exam-specification rail (53 questions per mock / 371-question bank / 7 no-repeat
+  mocks, with thin vertical dividers and the existing rotation sentence) replacing the previous
+  bank-summary block, using the same production `FORM_SIZE`, `QUESTION_BANK.length`, and derived
+  `Math.floor(bankSize / formSize)` values already used before this change — no new data source.
+- Compact utility notes (submission/explanations timing, and the refresh/leave warning) presented
+  as a quiet icon-led row instead of the previous boxed note block. One new icon,
+  `AlertCircleIcon`, was added to the existing local icon sprite for the second note.
+- Presentation-only responsive refinements: a single-column stack below ~880px (divider removed),
+  fluid heading sizing via `clamp()`, and a compact three-column specification grid on narrow
+  screens with the rotation sentence spanning full width beneath it.
+
+Visible copy changed to match the mockup and this amendment: the eyebrow, main heading (now
+ending in a period, "Practice for the CCDV-F exam."), supporting sentence, "Choose a mode" heading
+and its supporting line, per-mode description text, and the accessible names of the two start
+actions ("Start timed exam" / "Start untimed practice" — the second changed from the prior "Start
+practice"). The visible button label is the shorter "Start" on both, with the fuller accessible
+name supplied via `aria-label`.
+
+### What this change preserves
+
+All application behavior and data invariants are unchanged: every question record, canonical
+Markdown, option, correct answer, explanation, ID, and metadata; domain quotas; form selection and
+seven-form rotation capacity; exact-set scoring; `BANK_VERSION` and localStorage keys; completed
+rotation history; memory-only active-attempt behavior; Timed and Untimed behavior (including the
+120-minute timer and its absence in Untimed mode); the submission flow, leave/exit warnings, and
+confirmation dialogs; and every previously completed visual pass (exam screen, desktop and mobile
+navigator, pre-submission review, results redesign, domain performance, and the answer-review
+accordions/filters from C5.1–C5.8). The header (`Layout.tsx`) and shared button styles
+(`buttons.module.css`) were not modified; the two Start actions use local, start-screen-scoped
+button styles instead, per the instruction not to change shared components for a start-screen-only
+treatment. The single footer disclaimer (owned by `Layout.tsx`) is unchanged and not duplicated on
+the start screen.
+
+### Tests
+
+New `tests/startScreen.test.tsx` renders `StartScreen` directly and covers: exactly one accessible
+`h1` reading "Practice for the CCDV-F exam."; both Start actions present with their distinct
+accessible names; each action calling `onStart` with the correct mode exactly once; that clicking a
+mode's title, duration, description, or icon never starts an exam; that the page has exactly two
+buttons with no interactive elements nested inside either; that the specification rail's three
+numbers match live production data (`FORM_SIZE`, `QUESTION_BANK.length`, and the derived mock
+count); the review-after-submission note; the refresh/leave warning (checked for wording that does
+not imply persistence); the absence of the exact-set grading explanation and of a start-screen-local
+disclaimer; and that toggling the theme from the start screen starts no exam and writes no rotation
+history. `tests/appRotationSmoke.test.tsx` was updated for the new supporting-copy wording and the
+renamed Untimed accessible name ("Start practice" → "Start untimed practice"); while making that
+edit, an unrelated pre-existing flaky assertion was also tightened (`getByText(/remaining/)`, a
+substring regex that could coincidentally match ordinary question prose containing the word
+"remaining," changed to an exact match against the timer's own text) — a latent flakiness from
+before this change, not something this change introduced, fixed opportunistically while already
+editing that file. `npm test` (134/134), `npm run typecheck`, `npm run lint`, and `npm run build`
+all pass.
+
+### Verification
+
+Checked in-browser at 1440×900 desktop (light and dark), 1280×800 laptop, 390×844 mobile (light and
+dark), and an approximated 200%-zoom reflow width (720px). At both 1440×900 and 1280×800 the entire
+composition — including the specification rail, the attempt-loss warning, and the footer — fit with
+zero page scroll (`scrollHeight` exactly equal to `innerHeight`). Contrast was computed
+programmatically for the eyebrow, supporting text, specification labels, and both Start actions in
+both themes (all ≥5.5:1, well above the 4.5:1 text threshold). No page-level horizontal overflow at
+any width. Ran a real (non-mocked) click-through of both Start actions confirming Timed mode shows
+its 120-minute countdown and Untimed mode shows none, and confirming exiting an unsubmitted attempt
+writes no rotation history. No answer leakage before submission (unaffected — this change does not
+touch the exam or review screens).
+
+### Correction: orbit/halo placement (2026-09-09)
+
+The decorative ring cluster (`.decorOrbit`) introduced above was, as first implemented, centered
+behind the mode-selection column: its rings visually surrounded "Choose a mode" and both mode rows,
+and the thin divider between Timed Exam and Untimed Practice happened to pass through the ring
+cluster's vertical middle, reading as a targeting/crosshair graphic rather than quiet background
+atmosphere. This did not match the supplied reference mockup, where the same motif sits cropped in
+the far upper-right corner, mostly beyond the visible edge.
+
+A first pass moved the cluster's geometric center beyond the page's upper-right corner, but it was
+also shrunk to 440px and left inside the 70rem container's `overflow: hidden`. That overcorrected:
+only a sliver of arc survived, and the container sliced both the arcs and the ambient glow along a
+hard vertical seam at the column's right edge — visibly cut off rather than fading out, and far
+smaller than the reference mockup's broad sweep.
+
+Corrected as follows, still a decoration-only change:
+
+- The decoration layer (`.decor`) now runs edge to edge (`left`/`right: calc(50% - 50vw)`) instead
+  of being clipped to the content column, and its top is pulled up to the header rule, so the glow
+  and arcs fade out on their own rather than being cut by a container. It still clips vertically to
+  the page, so nothing paints over the header, the theme toggle, or the footer. `body` already sets
+  `overflow-x: hidden`, and no horizontal scrollbar is introduced at any width.
+- The halo's center sits just past the content column's upper-right corner and above the page's top
+  edge, so the bullseye itself is never drawn. What shows is the wide lower-left sweep of the arcs
+  across the hero, matching the mockup. No arc or node touches "Choose a mode", either mode row, a
+  Start button, or the divider between them at any width.
+- The halo offset and both diameters are expressed as multiples of the content column's width, so
+  the composition is identical whether the column is 1120px or 600px; a fixed radius against a
+  narrowing column dragged the arcs across the mode rows at intermediate widths. The three rings
+  are spaced tightly near the outer edge (insets 4.5% and 9%) for the same reason, and the nodes sit
+  exactly on the arcs in gaps the copy leaves clear.
+- A bottom mask fades the arcs out above the specification rail instead of ending at an edge.
+- Below 880px — the width at which the hero stops being two columns — the copy runs full width and
+  leaves no clear lane, so the halo is drawn smaller, held further into the corner, and faded out
+  above the eyebrow, with the nodes hidden; below 420px the ring cluster is hidden entirely.
+
+Arcs pass faintly behind the introductory heading and supporting paragraph, as they do in the
+mockup. Verified against the actual rendered text glyphs (not just their bounding boxes), and
+against each ring's computed path and its real mask opacity, at 390 / 480 / 600 / 700 / 800 / 879 /
+880 / 1024 / 1280 / 1584 / 1920px in both themes. No structural divider moved, and no typography,
+button, mode-interaction, specification, or data change was made.
+
+## Approved Change 5, C5.10 — Header, background and mode-row alignment to the reference (2026-09-09)
+
+Approved verbally after a side-by-side comparison of the running start screen against the
+supplied reference. Four differences were identified and confirmed before implementation.
+
+### What changed
+
+**Header reads as transparent.** The header element was already transparent, but the
+decoration layer began at y=69, exactly the header's lower edge, leaving a flat band across
+the top with no grid, glow or arcs behind it, closed off by a full-width `border-bottom`.
+The decoration now spans the whole page and the rule is dropped, so the transition is
+continuous. The rule is retained on every other screen, where there is no backdrop for the
+header to sit on.
+
+**The decoration became a Layout backdrop.** It previously lived inside `StartScreen`,
+whose containing block starts below the header, so it could not reach upward without a
+hard-coded offset that breaks when the header wraps. It is now `StartScreenDecor`, passed to
+`Layout` as an optional `backdrop` and rendered inside a positioned shell wrapper. `header`,
+`main` and `footer` each take a stacking context above it, so decoration can pass behind the
+header without ever painting over the title or the theme toggle. The halo is anchored to the
+top of the page, and its masks are unchanged, so the arc geometry verified under C5.9 holds
+exactly.
+
+**The grid runs the full width.** It was bounded to the 70rem column while the glow bled
+past it, leaving a seam partway across the page. Its fade is now an absolute length from the
+top of the page rather than a percentage of its own box, so it covers the hero regardless of
+how tall the page below it grows.
+
+**Mode rows.** Title and duration were on one line with the duration uppercased. They now
+stack into three lines, `Timed Exam` over `120 minutes` over `Practice at exam pace.`, in
+sentence case. Icons go from 20px to 32px with a thinner stroke, sized in the mode row so the
+shared 20px icon default still serves every other use. Row gap and icon size are reduced at
+phone widths so the descriptions still fit on one line beside the Start button.
+
+**Specification rail.** The note was forced onto its own row by `grid-column: 1 / -1`. Above
+880px it is now a fourth column, divided from the three figures the same way they are divided
+from each other. Below that it still drops to its own row, where a narrow column would force
+it into a ragged measure.
+
+### What this change preserves
+
+No change to question content, scoring, the bank, rotation, persistence, the timer, or any
+screen other than the start screen. The exam, review, and results screens are unaffected
+except for the shell wrapper, which is layout-neutral. Start button sizing and the outlined
+secondary button are deliberately left as set in `3921c79`. Headline type scale is unchanged.
+
+### Verification
+
+Typecheck, lint, 134 tests and the production build all pass. Each ring's computed path was
+traced against real text glyph boxes, weighted by the mask's actual opacity, at 390 / 700 /
+880 / 1024 / 1397 / 1584 / 1920px: no arc or node reaches the header text, the theme toggle,
+the mode-row copy, the Start buttons, or the divider between the modes at any width. Arcs
+pass faintly behind the introductory heading and supporting paragraph, as they do in the
+reference. No horizontal overflow at any width. Checked in both themes, and the exam screen
+was confirmed to render with no backdrop and its header rule restored.
+
+## Approved Change 6 — Release-readiness pass (2026-09-09)
+
+Explicitly authorized by the user as a narrow, final pre-release pass, with a stated scope
+limit: no re-audit of the question bank, no regeneration or alteration of questions,
+explanations or answer keys, no change to blueprint quotas, and no further redesign. Four
+focused items only.
+
+### C6.1 Google Fonts runtime dependency removed
+
+`src/styles/tokens.css` imported Inter from `fonts.googleapis.com` at runtime, which
+conflicts with the static, no-external-runtime-dependency requirement in section 2. The
+`@import` is deleted and `--font-sans` is now a native stack only:
+`system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`. No font files were downloaded or
+committed, no font package or alternative CDN was added, and no typography or layout values
+were retuned. The app now makes no network request to any third party at runtime.
+
+### C6.2 Rotation wording states that history is browser-local
+
+The seven-mock no-repeat guarantee depends on completed-form history held in `localStorage`,
+so it holds per browser rather than per person. The start-screen note now reads:
+
+> No repeats within a mock or across seven completed mocks in this browser. Then a new cycle
+> begins.
+
+Copy only. The rotation implementation, selector logic, storage keys, bank size, and the
+displayed 53 / 371 / 7 figures are untouched, and those figures remain derived from
+`FORM_SIZE`, `QUESTION_BANK.length`, and `Math.floor(BANK_SIZE / FORM_SIZE)` exactly as before.
+
+### C6.3 Destructive confirmations open on the safe action
+
+`ConfirmDialog` focused the confirm button on mount, so an accidental Enter immediately
+performed the destructive action. When `destructive` is true, initial focus now goes to the
+cancel action instead; non-destructive dialogs are unchanged and still open on confirm. This
+covers "Exit exam?" and "Take another mock?"; the submission dialog is not flagged
+destructive and keeps its existing behaviour. The focus trap, Escape to cancel, click-outside
+cancellation, `alertdialog` semantics, and cancel-before-confirm button order are all
+preserved. `tests/confirmDialog.test.tsx` covers the new behaviour and the preserved
+behaviour, including Tab trapping in both directions.
+
+### C6.4 Open Graph metadata
+
+`index.html` gains `og:title`, `og:description`, `og:type` and `og:url` so the deployed link
+previews sensibly in team chat. Copy is consistent with the existing title and description and
+claims no affiliation or endorsement. No social image, no external image dependency, and no
+further SEO work was added.
+
+### What this amendment does not change
+
+No change to question content, the question bank, scoring, rotation behaviour, persistence
+behaviour, timed or untimed behaviour, themes, exam navigation, or review and results
+behaviour. The only user-visible copy change is the one quoted in C6.2.
