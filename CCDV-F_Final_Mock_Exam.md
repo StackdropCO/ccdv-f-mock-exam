@@ -11,7 +11,7 @@
 
 ## 1.
 
-A company must classify **25,000 archived support conversations overnight**. No user is waiting for a response, all documents can be processed independently, and the primary objective is to minimize inference cost while maintaining the currently validated model and prompt.
+A company needs to classify **25,000 archived support conversations**. No user is waiting, the conversations are independent, and there is no hard completion deadline. The application can handle requests that fail or expire and resubmit them later. The validated model and prompt support both realtime Messages requests and Message Batches. The primary objective is to minimize inference cost without changing that model or prompt.
 
 Which approach best fits the requirement?
 
@@ -115,11 +115,11 @@ What should they do instead?
 
 A payment application needs Claude's final response to conform to a known JSON schema. Malformed output causes the downstream service to fail.
 
-Which TWO implementation choices are most appropriate?
+Which implementation choices are most appropriate? Select TWO.
 
 - [x ] A. Use Structured Outputs with the required JSON schema
 - [ ] B. Set temperature to zero and assume valid JSON is then guaranteed
-- [ x] C. Check completion/stop conditions before treating the returned structured content as valid
+- [ x] C. Check for refusal or incomplete generation, then validate the returned data against the application's schema and value requirements before forwarding it
 - [ ] D. Parse arbitrary prose with regular expressions and retry indefinitely on failure
 - [ ] E. Provide one JSON example and remove downstream validation
 
@@ -140,12 +140,12 @@ What is the strongest reason to delegate the vendor analyses to subagents?
 
 ## 9. **Select TWO.**
 
-A production service has stable quality today. The team wants to prevent a future model release from silently changing behavior while still being able to upgrade deliberately.
+A production service uses a validated Claude model. The team wants model-release upgrades to happen only through an explicit, evaluated configuration change. It also wants to detect regressions after an upgrade.
 
-Which TWO practices best support this?
+Which practices support these requirements? Select TWO.
 
-- [ ] A. Always use the newest moving model alias
-- [x ] B. Pin a specific model version in production configuration
+- [ ] A. Use a model alias documented to advance to newer snapshots, without changing production configuration when it advances
+- [x ] B. Configure production with the canonical ID of a fixed model snapshot, whether that ID is dated or dateless
 - [ ] C. Randomly alternate old and new models on every production call without measurement
 - [ x] D. Run the candidate version against an eval/regression suite before promotion and preserve a rollback path
 - [ ] E. Avoid versioning prompts because only the model affects behavior
@@ -450,7 +450,7 @@ Which architectural pattern does this most closely represent?
 
 ## 31.
 
-A service uses Structured Outputs, and Claude returns syntactically valid JSON matching this schema:
+A service uses Structured Outputs. Its schema requires an `approved` boolean and a `refund_amount` number, measured in euros. After normal completion and successful local schema validation, the application receives this JSON object:
 
 ```json
 {
@@ -459,14 +459,14 @@ A service uses Structured Outputs, and Claude returns syntactically valid JSON m
 }
 ```
 
-The schema is valid, but company policy says refunds cannot exceed €500 without additional authorization.
+Company policy requires additional authorization for refunds above €500. That authorization is checked in a separate system and is not encoded in this schema. No additional authorization has been obtained.
 
 What should the application conclude?
 
 - [ ] A. Schema conformance proves the refund decision is correct
 - [ ] B. Structured Outputs eliminate the need for business-rule validation
 - [ ] C. Claude's confidence should determine whether €50,000 is allowed
-- [ ] D. Schema validation proves the shape, not the semantic correctness; business constraints must still be enforced separately
+- [ ] D. The object passes this schema, but the application must block the refund until the separate authorization requirement is satisfied
 
 ---
 
@@ -584,7 +584,7 @@ What is the most useful first engineering improvement?
 
 ## 40.
 
-A developer sends this Messages API history:
+A developer wants an instruction to apply from the beginning of a conversation. They send this `messages` array to the Claude Messages API:
 
 ```json
 [
@@ -593,11 +593,9 @@ A developer sends this Messages API history:
 ]
 ```
 
-They are trying to supply the application-level system instruction in the standard Messages API request.
+What should they change to supply the initial system instruction correctly?
 
-What should they change?
-
-- [ ] A. Supply the system instruction using the request's top-level `system` field and use supported conversational roles in `messages`
+- [ ] A. Move "Always answer in JSON." to the request's top-level `system` field and leave the user message in `messages`
 - [ ] B. Change `"system"` to `"developer"`
 - [ ] C. Put the system instruction in `max_tokens`
 - [ ] D. Store the system message in an MCP resource because the Messages API has no system instructions
@@ -620,9 +618,7 @@ Which TWO prompt/context practices are appropriate?
 
 ## 42.
 
-You open an unfamiliar repository in Claude Code. You want Claude to inspect the codebase and propose a detailed implementation plan, but **it must not edit files or make mutating changes yet**.
-
-Which permission mode best fits?
+You open an unfamiliar repository in Claude Code and want an investigation-and-planning phase before implementation. Which permission mode is specifically intended for researching the codebase and proposing a plan before applying source-code changes?
 
 - [ ] A. `bypassPermissions`
 - [ ] B. `plan`
