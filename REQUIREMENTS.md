@@ -479,3 +479,41 @@ rotation, persistence, or accessibility behavior was weakened. Verified in-brows
 mobile (375×844), and in both light and dark mode, including representative Select TWO, Select
 THREE, code-block, and table questions via a temporary local-only screenshot fixture that was
 removed before this change was committed.
+
+### C5.4 Start-screen refinement follow-up (2026-09-09)
+
+Approved by the user as a focused refinement of the still-unmerged Change 5, using a supplied
+mockup as a direction rather than a pixel-perfect specification. Scoped to the start screen only,
+with no change to question content, scoring, rotation, `BANK_VERSION`, persistence, or the exam
+screen/navigator improvements from C5.1.
+
+- The two mode cards changed from being the click targets themselves to noninteractive containers,
+  each holding one native `<button>` ("Start timed exam" / "Start practice") as the single
+  interactive element. This avoids the whole-card-as-button pattern in favor of an explicit,
+  content-sized amber action per card (~44px tall, dark text on the amber fill, no nested buttons,
+  no competing click targets). Clicking elsewhere in a card (its heading, icon, or description) is
+  inert; only the button starts an attempt, and each button starts its mode exactly once.
+- A small local outline-icon set (`src/components/icons.tsx`: clock, open book, stack-of-pages,
+  arrow) was added — plain inline SVGs with a consistent stroke, no new dependency and no emoji.
+  Icons sit inline next to each mode heading (no oversized icon tiles), and a small arrow rides
+  inside each start button.
+- The mode-card meta line ("120 minutes" / "No time limit") changed from an uppercase amber
+  badge-style label to plain secondary text, matching the "avoid pill badges" direction.
+- A compact bank/rotation summary was added below the existing practice notes, separated by a thin
+  divider rather than a new card: "371 questions. 7 fresh mocks." with a supporting line describing
+  completed-mock rotation within the same browser. The two displayed numbers are read directly from
+  `QUESTION_BANK.length` and `FORM_SIZE` (no second source of truth, no selector change).
+- Card, button, and icon styling is local to `StartScreen.module.css`; the shared `buttons.module.css`
+  primary/secondary button classes and the design tokens from C5.1 are reused, not modified — this
+  refinement does not change button or accent styling anywhere else in the app.
+
+**Preserves:** everything listed in C5.2, plus the exam screen, navigator, and Review/Results
+styling introduced earlier in this same Change 5 — none of it was touched by this follow-up.
+
+**Verification:** `npm test`, `npm run typecheck`, `npm run lint`, and `npm run build` all pass. One
+existing test file was updated for the new start-button accessible names (the old aria-label-based
+card queries no longer apply; no behavioral coverage was removed). Checked in-browser at 1440×900
+and 375×812, light and dark mode: both start buttons launch their correct mode exactly once,
+clicking non-interactive card content does nothing, focusing a start button shows a visible
+high-contrast outline, no page-level horizontal overflow at either width, and the button/icon
+colors keep dark text on the amber fill in both themes.

@@ -21,7 +21,7 @@ describe('application interaction smoke (DOM environment)',()=>{
   it('runs timed navigation, mobile drawer, flags, exit cancel, submit, answer filters and fresh untimed mock',()=>{
     render(<App/>);
     expect(screen.getByText(/53 questions covering the exam/)).not.toBeNull();
-    click(/^Timed Exam\./);
+    click('Start timed exam');
     expect(screen.getByText(/remaining/)).not.toBeNull();
     expect(screen.getByRole('heading',{name:'Question 1 of 53'})).not.toBeNull();
     expect(screen.queryByText('Correct answer')).toBeNull();
@@ -45,7 +45,7 @@ describe('application interaction smoke (DOM environment)',()=>{
     expect(screen.getAllByText('Correct answer')).toHaveLength(53);
     fireEvent.click(within(screen.getByRole('group',{name:'Filter reviewed questions'})).getByRole('button',{name:'Flagged'}));
     expect(screen.getAllByRole('article')).toHaveLength(1);
-    another();click(/^Untimed Practice\./);
+    another();click('Start practice');
     expect(screen.queryByText(/remaining/)).toBeNull();
     submit();
     const second=JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)!);
@@ -57,7 +57,7 @@ describe('application interaction smoke (DOM environment)',()=>{
     const used=new Set<string>();
     let previous:string[]=[];
     for(let i=0;i<8;i++){
-      click(i%2===0?/^Timed Exam\./:/^Untimed Practice\./);
+      click(i%2===0?'Start timed exam':'Start practice');
       submit();
       const h=JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)!);
       expect(h.cycle).toBe(i<7?1:2);

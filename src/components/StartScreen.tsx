@@ -1,5 +1,12 @@
 import type { ExamMode } from "../state/examState";
+import { QUESTION_BANK } from "../data/questionBank";
+import { FORM_SIZE } from "../data/blueprint";
+import { ArrowRightIcon, BookOpenIcon, ClockIcon, StackIcon } from "./icons";
+import btn from "../styles/buttons.module.css";
 import styles from "./StartScreen.module.css";
+
+const BANK_SIZE = QUESTION_BANK.length;
+const MOCKS_PER_CYCLE = Math.floor(BANK_SIZE / FORM_SIZE);
 
 export function StartScreen({ onStart }: { onStart: (mode: ExamMode) => void }) {
   return (
@@ -10,42 +17,53 @@ export function StartScreen({ onStart }: { onStart: (mode: ExamMode) => void }) 
       </p>
 
       <div className={styles.modeGrid}>
-        <button
-          type="button"
-          className={styles.modeCard}
-          onClick={() => onStart("timed")}
-          aria-label="Timed Exam. 120 minutes. Practice against the clock."
-        >
-          <span className={styles.modeCardTitle} aria-hidden="true">
-            Timed Exam
-          </span>
-          <span className={styles.modeCardMeta} aria-hidden="true">
-            120 minutes
-          </span>
-          <span className={styles.modeCardDesc} aria-hidden="true">
-            Practice against the clock.
-          </span>
-        </button>
-        <button
-          type="button"
-          className={styles.modeCard}
-          onClick={() => onStart("untimed")}
-          aria-label="Untimed Practice. No time limit. Take your time with each question."
-        >
-          <span className={styles.modeCardTitle} aria-hidden="true">
-            Untimed Practice
-          </span>
-          <span className={styles.modeCardMeta} aria-hidden="true">
-            No time limit
-          </span>
-          <span className={styles.modeCardDesc} aria-hidden="true">
-            Take your time with each question.
-          </span>
-        </button>
+        <div className={styles.modeCard}>
+          <div className={styles.modeCardHeader}>
+            <ClockIcon className={styles.modeIcon} />
+            <div>
+              <h2 className={styles.modeCardTitle}>Timed Exam</h2>
+              <p className={styles.modeCardMeta}>120 minutes</p>
+            </div>
+          </div>
+          <p className={styles.modeCardDesc}>Practice against the clock.</p>
+          <button type="button" className={`${btn.primary} ${styles.startButton}`} onClick={() => onStart("timed")}>
+            Start timed exam
+            <ArrowRightIcon />
+          </button>
+        </div>
+
+        <div className={styles.modeCard}>
+          <div className={styles.modeCardHeader}>
+            <BookOpenIcon className={styles.modeIcon} />
+            <div>
+              <h2 className={styles.modeCardTitle}>Untimed Practice</h2>
+              <p className={styles.modeCardMeta}>No time limit</p>
+            </div>
+          </div>
+          <p className={styles.modeCardDesc}>Take your time with each question.</p>
+          <button type="button" className={`${btn.primary} ${styles.startButton}`} onClick={() => onStart("untimed")}>
+            Start practice
+            <ArrowRightIcon />
+          </button>
+        </div>
       </div>
 
-      <p className={styles.note}>Review your answers and explanations after you submit.</p>
-      <p className={styles.note}>Leaving or refreshing clears your current attempt.</p>
+      <div className={styles.notes}>
+        <p className={styles.note}>Review your answers and explanations after you submit.</p>
+        <p className={styles.note}>Leaving or refreshing clears your current attempt.</p>
+      </div>
+
+      <div className={styles.bankSummary}>
+        <StackIcon className={styles.bankSummaryIcon} />
+        <div>
+          <p className={styles.bankSummaryHeading}>
+            {BANK_SIZE} questions. {MOCKS_PER_CYCLE} fresh mocks.
+          </p>
+          <p className={styles.bankSummaryBody}>
+            No repeats within a mock or across seven completed mocks. Then a new cycle begins.
+          </p>
+        </div>
+      </div>
     </div>
   );
 }
