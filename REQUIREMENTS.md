@@ -818,16 +818,35 @@ cluster's vertical middle, reading as a targeting/crosshair graphic rather than 
 atmosphere. This did not match the supplied reference mockup, where the same motif sits cropped in
 the far upper-right corner, mostly beyond the visible edge.
 
-Corrected by moving the ring cluster's own geometric center beyond the page's visible upper-right
-corner (offsets more negative than half its width/height in both `top` and `right`), so only a
-small lower-left crescent remains visible, cropped naturally by the page edge and sitting in empty
-background space above and to the right of "Choose a mode" — never over its text, over either mode
-row, over a Start button, or over the divider between them. The three small nodes were repositioned
-to the newly-visible crescent for the same reason. The mobile override (≤640px) was rebalanced the
-same way at a smaller size, and the ring cluster is now hidden entirely below 420px, where the
-mockup's corner motif has no room to read as anything but clutter; the separate ambient radial glow
-(`.decorGlow`) and the page grid are unchanged. No structural divider moved, no typography, button,
-mode-interaction, specification, or data change was made — this was a `.decorOrbit`/`.decorNode*`
-positioning correction only, verified to clear the actual rendered text glyphs (not just their
-bounding boxes) at every breakpoint checked, including the single-column reflow width where the
-introductory heading and the mode column share the same horizontal band.
+A first pass moved the cluster's geometric center beyond the page's upper-right corner, but it was
+also shrunk to 440px and left inside the 70rem container's `overflow: hidden`. That overcorrected:
+only a sliver of arc survived, and the container sliced both the arcs and the ambient glow along a
+hard vertical seam at the column's right edge — visibly cut off rather than fading out, and far
+smaller than the reference mockup's broad sweep.
+
+Corrected as follows, still a decoration-only change:
+
+- The decoration layer (`.decor`) now runs edge to edge (`left`/`right: calc(50% - 50vw)`) instead
+  of being clipped to the content column, and its top is pulled up to the header rule, so the glow
+  and arcs fade out on their own rather than being cut by a container. It still clips vertically to
+  the page, so nothing paints over the header, the theme toggle, or the footer. `body` already sets
+  `overflow-x: hidden`, and no horizontal scrollbar is introduced at any width.
+- The halo's center sits just past the content column's upper-right corner and above the page's top
+  edge, so the bullseye itself is never drawn. What shows is the wide lower-left sweep of the arcs
+  across the hero, matching the mockup. No arc or node touches "Choose a mode", either mode row, a
+  Start button, or the divider between them at any width.
+- The halo offset and both diameters are expressed as multiples of the content column's width, so
+  the composition is identical whether the column is 1120px or 600px; a fixed radius against a
+  narrowing column dragged the arcs across the mode rows at intermediate widths. The three rings
+  are spaced tightly near the outer edge (insets 4.5% and 9%) for the same reason, and the nodes sit
+  exactly on the arcs in gaps the copy leaves clear.
+- A bottom mask fades the arcs out above the specification rail instead of ending at an edge.
+- Below 880px — the width at which the hero stops being two columns — the copy runs full width and
+  leaves no clear lane, so the halo is drawn smaller, held further into the corner, and faded out
+  above the eyebrow, with the nodes hidden; below 420px the ring cluster is hidden entirely.
+
+Arcs pass faintly behind the introductory heading and supporting paragraph, as they do in the
+mockup. Verified against the actual rendered text glyphs (not just their bounding boxes), and
+against each ring's computed path and its real mask opacity, at 390 / 480 / 600 / 700 / 800 / 879 /
+880 / 1024 / 1280 / 1584 / 1920px in both themes. No structural divider moved, and no typography,
+button, mode-interaction, specification, or data change was made.
