@@ -1,8 +1,7 @@
 import type { ExamMode } from "../state/examState";
 import { QUESTION_BANK } from "../data/questionBank";
 import { FORM_SIZE } from "../data/blueprint";
-import { ArrowRightIcon, BookOpenIcon, CheckCircleIcon, ClockIcon, StackIcon } from "./icons";
-import btn from "../styles/buttons.module.css";
+import { AlertCircleIcon, ArrowRightIcon, BookOpenIcon, CheckCircleIcon, ClockIcon } from "./icons";
 import styles from "./StartScreen.module.css";
 
 const BANK_SIZE = QUESTION_BANK.length;
@@ -10,65 +9,112 @@ const MOCKS_PER_CYCLE = Math.floor(BANK_SIZE / FORM_SIZE);
 
 export function StartScreen({ onStart }: { onStart: (mode: ExamMode) => void }) {
   return (
-    <div className={styles.wrap}>
-      <span className={styles.accentBar} aria-hidden="true" />
-      <h1 className={styles.title}>Practice for the CCDV-F exam</h1>
-      <p className={styles.supporting}>
-        53 questions covering the exam&rsquo;s topics, with more questions on the areas that count most.
-      </p>
-
-      <div className={styles.modeGrid}>
-        <div className={styles.modeCard}>
-          <div className={styles.modeCardTop}>
-            <span className={styles.modeIconChip}>
-              <ClockIcon className={styles.modeIcon} />
-            </span>
-            <span className={styles.durationBadge}>120 minutes</span>
-          </div>
-          <h2 className={styles.modeCardTitle}>Timed Exam</h2>
-          <p className={styles.modeCardDesc}>Practice against the clock.</p>
-          <button type="button" className={`${btn.primary} ${styles.startButton}`} onClick={() => onStart("timed")}>
-            Start timed exam
-            <ArrowRightIcon />
-          </button>
-        </div>
-
-        <div className={styles.modeCard}>
-          <div className={styles.modeCardTop}>
-            <span className={styles.modeIconChip}>
-              <BookOpenIcon className={styles.modeIcon} />
-            </span>
-            <span className={styles.durationBadge}>No time limit</span>
-          </div>
-          <h2 className={styles.modeCardTitle}>Untimed Practice</h2>
-          <p className={styles.modeCardDesc}>Take your time with each question.</p>
-          <button type="button" className={`${btn.primary} ${styles.startButton}`} onClick={() => onStart("untimed")}>
-            Start practice
-            <ArrowRightIcon />
-          </button>
+    <div className={styles.page}>
+      <div className={styles.decor} aria-hidden="true">
+        <div className={styles.decorGrid} />
+        <div className={styles.decorGlow} />
+        <div className={styles.decorOrbit}>
+          <span className={styles.decorRing} />
+          <span className={styles.decorRing} />
+          <span className={styles.decorRing} />
+          <span className={`${styles.decorNode} ${styles.decorNode1}`} />
+          <span className={`${styles.decorNode} ${styles.decorNode2}`} />
+          <span className={`${styles.decorNode} ${styles.decorNode3}`} />
         </div>
       </div>
 
-      <div className={styles.notes}>
-        <CheckCircleIcon className={styles.notesIcon} />
-        <div>
-          <p className={styles.note}>Review your answers and explanations after you submit.</p>
-          <p className={styles.note}>Leaving or refreshing clears your current attempt.</p>
+      <div className={styles.hero}>
+        <div className={styles.intro}>
+          <span className={styles.accentBar} aria-hidden="true" />
+          <p className={styles.eyebrow}>Claude Certified Developer &mdash; Foundations</p>
+          <h1 className={styles.heading}>
+            <span className={styles.headingSans}>Practice for the</span>{" "}
+            <span className={styles.headingSerif}>CCDV-F exam.</span>
+          </h1>
+          <p className={styles.supporting}>
+            A focused 53-question mock shaped around the exam&rsquo;s domains. Review every answer when you finish.
+          </p>
+        </div>
+
+        <div className={styles.modes}>
+          <h2 className={styles.modesHeading}>Choose a mode</h2>
+          <p className={styles.modesSupporting}>Same question mix. Different pace.</p>
+
+          <div className={styles.modeRow}>
+            <span className={styles.modeIcon}>
+              <ClockIcon />
+            </span>
+            <div className={styles.modeInfo}>
+              <div className={styles.modeTitleRow}>
+                <span className={styles.modeTitle}>Timed Exam</span>
+                <span className={styles.modeMeta}>120 minutes</span>
+              </div>
+              <p className={styles.modeDesc}>Practice at exam pace.</p>
+            </div>
+            <button
+              type="button"
+              className={`${styles.modeStart} ${styles.modeStartPrimary}`}
+              onClick={() => onStart("timed")}
+              aria-label="Start timed exam"
+            >
+              Start
+              <ArrowRightIcon />
+            </button>
+          </div>
+
+          <div className={styles.modeDivider} aria-hidden="true" />
+
+          <div className={styles.modeRow}>
+            <span className={styles.modeIcon}>
+              <BookOpenIcon />
+            </span>
+            <div className={styles.modeInfo}>
+              <div className={styles.modeTitleRow}>
+                <span className={styles.modeTitle}>Untimed Practice</span>
+                <span className={styles.modeMeta}>No time limit</span>
+              </div>
+              <p className={styles.modeDesc}>Work through every question.</p>
+            </div>
+            <button
+              type="button"
+              className={styles.modeStart}
+              onClick={() => onStart("untimed")}
+              aria-label="Start untimed practice"
+            >
+              Start
+              <ArrowRightIcon />
+            </button>
+          </div>
         </div>
       </div>
 
-      <div className={styles.bankSummary}>
-        <span className={styles.bankSummaryIconChip}>
-          <StackIcon className={styles.bankSummaryIcon} />
+      <div className={styles.specRail}>
+        <div className={styles.specItem}>
+          <span className={styles.specNumber}>{FORM_SIZE}</span>
+          <span className={styles.specLabel}>Questions per mock</span>
+        </div>
+        <div className={styles.specItem}>
+          <span className={styles.specNumber}>{BANK_SIZE}</span>
+          <span className={styles.specLabel}>Question bank</span>
+        </div>
+        <div className={styles.specItem}>
+          <span className={styles.specNumber}>{MOCKS_PER_CYCLE}</span>
+          <span className={styles.specLabel}>No-repeat mocks</span>
+        </div>
+        <p className={styles.specNote}>
+          No repeats within a mock or across seven completed mocks. Then a new cycle begins.
+        </p>
+      </div>
+
+      <div className={styles.utilityNotes}>
+        <span className={styles.utilityNote}>
+          <CheckCircleIcon className={styles.utilityIcon} />
+          Answers and explanations after submission
         </span>
-        <div>
-          <p className={styles.bankSummaryHeading}>
-            {BANK_SIZE} questions. {MOCKS_PER_CYCLE} fresh mocks.
-          </p>
-          <p className={styles.bankSummaryBody}>
-            No repeats within a mock or across seven completed mocks. Then a new cycle begins.
-          </p>
-        </div>
+        <span className={styles.utilityNote}>
+          <AlertCircleIcon className={styles.utilityIcon} />
+          Refreshing or leaving clears your current attempt
+        </span>
       </div>
     </div>
   );

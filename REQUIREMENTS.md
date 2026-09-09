@@ -717,3 +717,94 @@ real domain reconciliation, real completed-history write) to confirm the redesig
 identically to the fixture-verified behavior. No page-level horizontal overflow, no answer leakage,
 44px interactive targets throughout, and dark-mode contrast held up for the segmented bar, domain
 bars, and the muted red/green answer-comparison tones.
+
+---
+
+## Approved Change 5, C5.9 — Start-screen editorial redesign (2026-09-09)
+
+Approved by the user as a focused visual redesign of the start screen (`StartScreen.tsx` and its
+CSS module only), using a supplied mockup as the primary visual direction, replacing the prior
+mode-card layout with an open editorial composition. This amendment explicitly authorizes:
+
+- The open, cardless editorial start-screen layout: an asymmetric two-column composition (an
+  introductory column and a mode-selection column, roughly 57%/43% on wide desktop, one fine
+  vertical divider between them) built with CSS Grid, alignment, whitespace, and thin rules instead
+  of an outer hero panel or bordered mode cards.
+- Serif accent typography: the heading's second line ("CCDV-F exam.") uses a system serif stack
+  (`ui-serif, Georgia, "Times New Roman", serif`) for editorial contrast against the sans-serif
+  first line, with no new font load or package.
+- Start-screen-scoped background decoration (a faint CSS grid, a low-contrast amber radial glow,
+  and a concentric-ring "orbit" motif with a few small nodes) implemented entirely with CSS
+  gradients, borders, and pseudo-content — no raster asset, no canvas, no dependency — confined to
+  `StartScreen.module.css`, marked `aria-hidden`, `pointer-events: none`, and clipped so it cannot
+  cause overflow or reduce text contrast. It is not applied to any other screen.
+- Borderless mode rows (icon, title, duration metadata, description, and a compact "Start" action
+  aligned to the row's end, separated by a thin divider) replacing the previous bordered mode
+  cards; a filled amber Start action for Timed and a quieter amber-outlined Start action for
+  Untimed — both remain equally discoverable, equally functional, and clearly interactive text/
+  border color, never gray or disabled-looking.
+- A full-width exam-specification rail (53 questions per mock / 371-question bank / 7 no-repeat
+  mocks, with thin vertical dividers and the existing rotation sentence) replacing the previous
+  bank-summary block, using the same production `FORM_SIZE`, `QUESTION_BANK.length`, and derived
+  `Math.floor(bankSize / formSize)` values already used before this change — no new data source.
+- Compact utility notes (submission/explanations timing, and the refresh/leave warning) presented
+  as a quiet icon-led row instead of the previous boxed note block. One new icon,
+  `AlertCircleIcon`, was added to the existing local icon sprite for the second note.
+- Presentation-only responsive refinements: a single-column stack below ~880px (divider removed),
+  fluid heading sizing via `clamp()`, and a compact three-column specification grid on narrow
+  screens with the rotation sentence spanning full width beneath it.
+
+Visible copy changed to match the mockup and this amendment: the eyebrow, main heading (now
+ending in a period, "Practice for the CCDV-F exam."), supporting sentence, "Choose a mode" heading
+and its supporting line, per-mode description text, and the accessible names of the two start
+actions ("Start timed exam" / "Start untimed practice" — the second changed from the prior "Start
+practice"). The visible button label is the shorter "Start" on both, with the fuller accessible
+name supplied via `aria-label`.
+
+### What this change preserves
+
+All application behavior and data invariants are unchanged: every question record, canonical
+Markdown, option, correct answer, explanation, ID, and metadata; domain quotas; form selection and
+seven-form rotation capacity; exact-set scoring; `BANK_VERSION` and localStorage keys; completed
+rotation history; memory-only active-attempt behavior; Timed and Untimed behavior (including the
+120-minute timer and its absence in Untimed mode); the submission flow, leave/exit warnings, and
+confirmation dialogs; and every previously completed visual pass (exam screen, desktop and mobile
+navigator, pre-submission review, results redesign, domain performance, and the answer-review
+accordions/filters from C5.1–C5.8). The header (`Layout.tsx`) and shared button styles
+(`buttons.module.css`) were not modified; the two Start actions use local, start-screen-scoped
+button styles instead, per the instruction not to change shared components for a start-screen-only
+treatment. The single footer disclaimer (owned by `Layout.tsx`) is unchanged and not duplicated on
+the start screen.
+
+### Tests
+
+New `tests/startScreen.test.tsx` renders `StartScreen` directly and covers: exactly one accessible
+`h1` reading "Practice for the CCDV-F exam."; both Start actions present with their distinct
+accessible names; each action calling `onStart` with the correct mode exactly once; that clicking a
+mode's title, duration, description, or icon never starts an exam; that the page has exactly two
+buttons with no interactive elements nested inside either; that the specification rail's three
+numbers match live production data (`FORM_SIZE`, `QUESTION_BANK.length`, and the derived mock
+count); the review-after-submission note; the refresh/leave warning (checked for wording that does
+not imply persistence); the absence of the exact-set grading explanation and of a start-screen-local
+disclaimer; and that toggling the theme from the start screen starts no exam and writes no rotation
+history. `tests/appRotationSmoke.test.tsx` was updated for the new supporting-copy wording and the
+renamed Untimed accessible name ("Start practice" → "Start untimed practice"); while making that
+edit, an unrelated pre-existing flaky assertion was also tightened (`getByText(/remaining/)`, a
+substring regex that could coincidentally match ordinary question prose containing the word
+"remaining," changed to an exact match against the timer's own text) — a latent flakiness from
+before this change, not something this change introduced, fixed opportunistically while already
+editing that file. `npm test` (134/134), `npm run typecheck`, `npm run lint`, and `npm run build`
+all pass.
+
+### Verification
+
+Checked in-browser at 1440×900 desktop (light and dark), 1280×800 laptop, 390×844 mobile (light and
+dark), and an approximated 200%-zoom reflow width (720px). At both 1440×900 and 1280×800 the entire
+composition — including the specification rail, the attempt-loss warning, and the footer — fit with
+zero page scroll (`scrollHeight` exactly equal to `innerHeight`). Contrast was computed
+programmatically for the eyebrow, supporting text, specification labels, and both Start actions in
+both themes (all ≥5.5:1, well above the 4.5:1 text threshold). No page-level horizontal overflow at
+any width. Ran a real (non-mocked) click-through of both Start actions confirming Timed mode shows
+its 120-minute countdown and Untimed mode shows none, and confirming exiting an unsubmitted attempt
+writes no rotation history. No answer leakage before submission (unaffected — this change does not
+touch the exam or review screens).
