@@ -252,3 +252,100 @@ The results screen may show "Mode: Timed Exam" / "Mode: Untimed Practice" alongs
 - Switching theme never affects exam content, answers, flags, timer, or any other exam state.
 - The toggle is a real, keyboard-operable button with an accessible name describing the action (e.g. "Switch to light mode" / "Switch to dark mode"), not an unlabeled icon, and it retains visible focus styling in both themes.
 - Implemented via semantic design tokens (background/surface/text/border/accent/selected/focus-ring/success/danger/warning) rather than duplicated per-theme component styles.
+
+---
+
+## Approved Change 2 — Large Question Bank and Non-Repeating Mock Rotation
+
+Approved by the user on 2026-09-08. This amendment preserves all previous history and supersedes only the fixed-bank, fixed-question-order, and theme-only persistence restrictions described below. Approval of the change is not a claim that research or implementation is complete.
+
+### C2.1 Research gate and quality contract
+
+Before bulk generation or application implementation, independently verify the current CCDV-F exam guide, objectives, domain weights, formats, timing, and public sample rationales against authoritative Anthropic sources. Prefer official certification, Platform, Claude Code, Agent SDK, MCP, and Pearson VUE materials. Never use leaked questions or dumps. Label unpublished details and inferences explicitly.
+
+Create research/EXAM_BLUEPRINT.md, research/SOURCE_MATRIX.md, and research/FORM_CONSTRUCTION.md before generation. Freeze them only when internally consistent and sufficiently evidenced. A material source conflict or inability to verify the blueprint blocks generation; do not substitute the existing bank or third-party practice material for official evidence.
+
+Each new accepted item must map to an official domain/objective, have authoritative source references, a stable globally unique ID, concept metadata, type, selectCount, valid options and exact answer set, and a concise explanation. Record internal rationales for every distractor. Review source support, unstated assumptions, version dependence, plausible alternative answers, and semantic duplication. Rewrite or reject ambiguous, weak, or repetitive items. Do not claim review occurred unless it actually did.
+
+### C2.2 Size and legacy protection
+
+Target approximately 318 new questions only if the verified blueprint and sustained quality permit it. Prefer whole disjoint 53-question forms. Quality takes priority over quantity. Determine generation counts after mapping the existing 53 to verified objectives; do not assume they already match domain quotas.
+
+Preserve all existing question text, options, answer keys, explanations, and canonical Markdown. Add metadata without rewriting content. Record concerns and proposed corrections in research/LEGACY_QUESTION_AUDIT.md; corrections require separate explicit approval. Record draft/rejection/approval counts, domain/objective and response-type distributions, answer-position distribution, source coverage, and actual reviews in research/QUESTION_BANK_AUDIT.md.
+
+### C2.3 Static architecture and form selection
+
+Keep the static React/TypeScript SPA and current reducer. No backend, database, accounts, external runtime question service, Redux persistence, or bank administration UI. Organize the static bank in maintainable domain-sized modules if useful.
+
+A pure, deterministic-testable selector constructs exactly 53 questions matching verified domain quotas, with sensible objective breadth and distinct concept keys where feasible. Mix domain order; never randomize option order. Stable bank IDs are separate from visible positions 1–53. Validate IDs, metadata, answer sets, sources, duplicates, and per-domain capacity; selection must fail clearly if bank defects prevent a valid form.
+
+### C2.4 Rotation and persistence
+
+Both Timed and Untimed use the same selector. Select once on explicit mode choice and retain the form only in memory throughout navigation, flagging, review, and theme changes.
+
+Only successful final submission consumes the selected IDs. Completed forms are disjoint within a cycle. When any domain lacks enough unused items for the next full valid form, reset the entire cycle before selection; never partially repeat a form. Avoid the immediately preceding completed form after reset wherever feasible.
+
+Persist only theme preference and a small completed-rotation record containing bankVersion, cycle, usedQuestionIds, and lastCompletedFormIds (suggested key: ccdv-f-question-history-v2). Active selected form, answers, flags, position, timer, mode, results, and submission session are never persisted. Aborted attempts do not advance history, including when selection provisionally required a cycle reset. Invalid or incompatible history resets safely.
+
+### C2.5 UX preservation
+
+Preserve mode selection, 120-minute timed countdown without automatic submission, untimed behavior, themes, navigation, flags, review/confirmation, exact-set scoring, results and filters, leave warning, Exit Exam, mobile layout, and accessibility. Retake returns to mode selection before selecting a fresh form. Minimal larger-bank messaging and a “Take another mock” CTA are allowed; no redesign or new bank-management features.
+
+### C2.6 Verification and delivery
+
+Test selector size, quotas, uniqueness, valid IDs, unused selection, complete disjoint cycles, exhaustion/reset, previous-form avoidance, aborted/submitted history, malformed/stale storage, deterministic RNG, and mode equivalence. Validate all content metadata and exact legacy preservation. Simulate hundreds/thousands of forms over repeated cycles. Functionally check timed/untimed navigation, flags, confirmation, submission, answer review, retake, reload, completed-history persistence, themes, and mobile navigation.
+
+Run npm test, npm run typecheck, npm run lint, and npm run build without weakening meaningful tests. Report exact sources, confirmed and unknown blueprint facts, counts, algorithm, persisted fields, files changed, tests and smoke results, legacy concerns, and remaining uncertainty. Work from main on a dedicated branch; do not merge or deploy automatically.
+
+
+### Approved Change 2 — Research methodology clarification (2026-09-08)
+
+The user explicitly accepts a provenance-bearing mirror of the official Exam Guide plus credible independent corroboration for blueprint facts when Skilljar is inaccessible. Direct authenticated Skilljar access is not a generation prerequisite. Technical answer correctness still normally requires current first-party documentation, unique answer sets, and item-level ambiguity and duplicate review. The earlier blocked research checkpoint is superseded by this clarification; prior history remains preserved.
+
+---
+
+## Approved Change 3 — Independent review, correction, and repository cleanup (2026-09-09)
+
+Approved by the user as a focused change: independently review, correct, and merge the 318-item
+question-bank expansion introduced by Change 2, then clean up the repository so only what is
+needed to run, test, and maintain the app remains.
+
+### C3.1 Independent verification
+
+The Change 2 blueprint and research methodology were independently re-verified against the real
+exam guide, fetched directly from Anthropic's own hosting (not only the previously-cited mirror):
+every domain weight, skill weight, format detail, and sample-question rationale matched exactly.
+All 318 new items were independently re-reviewed, split by domain, each checked against freshly
+fetched live documentation (not the original authoring citations alone) for a unique defensible
+answer, sound distractors, currency, and semantic duplication against the legacy 53. The six
+previously disclosed legacy concerns (precision caveats on Q1, Q7, Q9, Q40; content concerns on
+Q31, Q42) were independently re-confirmed against current documentation and left unchanged, per
+the original-content preservation rule.
+
+### C3.2 Corrections applied
+
+Two new items rested on an MCP protocol mechanism removed in a spec revision published before the
+original research checkpoint but not caught by it; both were rewritten against current guidance.
+Four new items were near-duplicates of an existing legacy question (the same discriminator in
+different scenario dress) and were retargeted to a distinct, freshly-sourced fact within their
+objective. No item required rejection. Full before/after detail is in the pull request that
+carried this change and in Git history; see
+[QUESTION_BANK_SUMMARY.md](research/QUESTION_BANK_SUMMARY.md) for the current summary.
+
+### C3.3 Repository cleanup
+
+The Change 2 drafting/review pipeline (`research/drafts/`, `research/reviews/`,
+`research/question-sources.json`, `research/source-registry.json`,
+`scripts/build-question-bank.mjs`, the `bank:generate` script) is retired. The 318 new questions
+in `src/data/questions/new/` are now hand-maintained, directly-edited production files — there is
+no separate draft/approval/generation step, and no script, test, or doc references a deleted
+research file. `src/data/blueprint.ts` absorbed the skill-level `target`/`newTarget` allocation
+data previously kept only in `research/blueprint.json`. `research/EXAM_BLUEPRINT.md` and
+`research/LEGACY_QUESTION_AUDIT.md` are kept as live references; a new
+`research/QUESTION_BANK_SUMMARY.md` replaces the retired audit/report files with a permanent,
+non-stale summary. The detailed drafting, peer-review, and independent-review trail is preserved
+in Git history and in this change's pull request, not duplicated in the working tree.
+
+Everything else approved in Change 2 — the static architecture, the pure selector, the
+memory-only active-attempt rule, the completed-history persistence contract, and the UX
+preservation rules — is unchanged by this cleanup.

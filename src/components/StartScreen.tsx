@@ -13,6 +13,7 @@ export function StartScreen({ onStart }: { onStart: (mode: ExamMode) => void }) 
         </span>
       </div>
 
+      <p className={styles.noSaveNote}>Each mock selects 53 questions from a larger bank. Completed mocks rotate through fresh questions.</p>
       <p className={styles.modeHeading}>Choose your mode</p>
       <div className={styles.modeGrid}>
         <button
@@ -35,7 +36,7 @@ export function StartScreen({ onStart }: { onStart: (mode: ExamMode) => void }) 
           type="button"
           className={styles.modeCard}
           onClick={() => onStart("untimed")}
-          aria-label="Untimed Practice. No time limit. Work through the same exam at your own pace."
+          aria-label="Untimed Practice. No time limit. Work through a mock at your own pace."
         >
           <span className={styles.modeCardTitle} aria-hidden="true">
             Untimed Practice
@@ -44,7 +45,7 @@ export function StartScreen({ onStart }: { onStart: (mode: ExamMode) => void }) 
             No time limit
           </span>
           <span className={styles.modeCardDesc} aria-hidden="true">
-            Work through the same exam at your own pace.
+            Work through a mock at your own pace.
           </span>
         </button>
       </div>

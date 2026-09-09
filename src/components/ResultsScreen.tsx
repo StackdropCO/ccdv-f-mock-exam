@@ -64,7 +64,7 @@ export function ResultsScreen({ state, questions, onRetake }: ResultsScreenProps
           {reviewing ? "Hide Review" : "Review Answers"}
         </button>
         <button type="button" className={btn.secondary} onClick={() => setConfirmingRetake(true)}>
-          Retake Exam
+          Take another mock
         </button>
       </div>
 
@@ -77,9 +77,9 @@ export function ResultsScreen({ state, questions, onRetake }: ResultsScreenProps
 
       {confirmingRetake && (
         <ConfirmDialog
-          title="Retake exam?"
+          title="Take another mock?"
           message="This will clear your answers, flags, and score, and return you to the start screen to choose Timed or Untimed again."
-          confirmLabel="Retake Exam"
+          confirmLabel="Take another mock"
           destructive
           onConfirm={onRetake}
           onCancel={() => setConfirmingRetake(false)}
