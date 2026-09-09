@@ -24,9 +24,12 @@ export function NavigatorPanel({
 }: NavigatorPanelProps) {
   return (
     <aside className={styles.desktopPanel} aria-label="Question navigator panel">
-      <h2 className={styles.panelTitle}>
-        Questions ({answeredCount} of {totalCount} answered)
-      </h2>
+      <div className={styles.panelHeader}>
+        <h2 className={styles.panelTitle}>Questions</h2>
+        <p className={styles.panelProgress}>
+          {answeredCount} of {totalCount} answered
+        </p>
+      </div>
       <NavigatorGrid questions={questions} currentId={currentId} answers={answers} flags={flags} onJump={onJump} />
     </aside>
   );

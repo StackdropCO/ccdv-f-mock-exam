@@ -28,23 +28,22 @@ export function ExamScreen({ state, questions, actions }: ExamScreenProps) {
   const selected = state.answers[question.id] ?? [];
   const isFlagged = !!state.flags[question.id];
   const answeredCount = questions.filter((q) => (state.answers[q.id]?.length ?? 0) > 0).length;
-  const unansweredCount = questions.length - answeredCount;
   const isLast = question.id === questions.length;
 
   return (
     <div className={styles.page}>
       <div className={styles.examLayout}>
         <div className={styles.content}>
-          <div className={styles.topBar}>
-            <div>
-              <p className={styles.progressText}>
+          <div className={styles.header}>
+            <div className={styles.headerMain}>
+              <h1 className={styles.questionHeading}>
                 Question <strong>{question.id}</strong> of {questions.length}
-              </p>
-              <p className={styles.progressText}>
-                {answeredCount} answered &middot; {unansweredCount} unanswered
-              </p>
+              </h1>
+              {question.type === "multiple" && (
+                <p className={styles.badge}>Select {SELECT_WORD[question.selectCount] ?? question.selectCount}</p>
+              )}
             </div>
-            <div className={styles.timerRow}>
+            <div className={styles.headerActions}>
               <NavigatorMobile
                 questions={questions}
                 currentId={question.id}
@@ -54,14 +53,17 @@ export function ExamScreen({ state, questions, actions }: ExamScreenProps) {
                 answeredCount={answeredCount}
                 totalCount={questions.length}
               />
+              <button
+                type="button"
+                className={`${styles.flagButton} ${isFlagged ? styles.flagged : ""}`}
+                onClick={() => actions.toggleFlag(question.id)}
+                aria-pressed={isFlagged}
+              >
+                <span aria-hidden="true">⚑</span>
+                {isFlagged ? "Flagged for review" : "Flag for review"}
+              </button>
             </div>
           </div>
-
-          {question.type === "multiple" && (
-            <p className={styles.badge}>Select {SELECT_WORD[question.selectCount] ?? question.selectCount}</p>
-          )}
-
-          <h1 className={styles.questionTitle}>Question {question.id}</h1>
 
           <div className={styles.questionBody}>
             <ExamMarkdown>{question.body}</ExamMarkdown>
@@ -82,18 +84,6 @@ export function ExamScreen({ state, questions, actions }: ExamScreenProps) {
                 }
               />
             ))}
-          </div>
-
-          <div className={styles.flagRow}>
-            <button
-              type="button"
-              className={`${styles.flagButton} ${isFlagged ? styles.flagged : ""}`}
-              onClick={() => actions.toggleFlag(question.id)}
-              aria-pressed={isFlagged}
-            >
-              <span aria-hidden="true">⚑</span>
-              {isFlagged ? "Flagged for review" : "Flag for review"}
-            </button>
           </div>
 
           <div className={styles.footerNav}>

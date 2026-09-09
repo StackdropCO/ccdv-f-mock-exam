@@ -412,3 +412,70 @@ questions, and does not restore any part of the retired drafting/review/generati
 non-blocking domain-wide content-balance observations and the remaining soft near-duplicate calls
 recorded during Change 3 are still open observations, not resolved by this patch. Fixing these six
 items does not imply every other editorial concern in the bank has been resolved.
+
+---
+
+## Approved Change 5 — Visual Refinement (2026-09-09)
+
+Approved by the user as a focused, presentation-only change: revised introductory/interface copy,
+a Stackdrop-branded accent palette, and a responsive layout/navigator refinement, built on branch
+`visual-refinement`. No question content, scoring, rotation, or persistence behavior is affected.
+
+### C5.1 What this change authorizes
+
+- Revised start-screen and header copy: header product name "CCDV-F Practice" with a small "by
+  Stackdrop" attribution; a new main heading, supporting sentence, and mode-card descriptions using
+  the exact wording the user supplied; a single footer disclaimer ("Independent practice material.
+  Not affiliated with or endorsed by Anthropic or Pearson VUE.") in place of the previous duplicate
+  disclaimer boxes.
+- Removal of redundant start-screen instructional copy (the four-item feature list, the standalone
+  "No login required" line, the "Choose your mode" heading, and the second disclaimer box) without
+  replacing it with another long explanation; the existing 53-question count is not duplicated as a
+  separate count card.
+- A Stackdrop amber accent (`#FBB03A`) introduced as a design token, split into a button-fill color
+  (`--color-accent`, paired with dark `--color-accent-fg` text — never white text on the amber
+  fill) and a separate, higher-contrast `--color-accent-text` / `--color-focus` token for small
+  text, icons, hover/active borders, and focus indicators on light backgrounds, verified against
+  WCAG contrast math rather than eyeballed. The pre-existing flag/success/danger colors remain
+  semantically distinct from the new accent; the flagged-question color was shifted to a
+  rust/burnt-orange so flagged and selected/current states stay visually distinguishable even
+  though both are now warm hues. Updated consistently across light, system-preference dark, and
+  explicit dark mode, preserving the existing theme-resolution precedence and persistence.
+- A warm off-white page background with white (`--color-surface`) content surfaces for cards,
+  panels, dialogs, and answer rows, replacing the previous plain-white/slate palette.
+- A responsive two-column exam-screen layout (single column below ~1100px, `minmax(0,1fr)` +
+  340px sidebar above it) replacing the previous flex layout capped at a fixed 44rem question
+  column; a consolidated single "Question N of 53" heading (removing the separate duplicate
+  question-number heading and the separate answered/unanswered progress line, which is now shown
+  once in the desktop navigator and once in the mobile navigator trigger); the flag control moved
+  into the question header, aligned right on desktop and wrapping naturally on mobile.
+- A navigator grid changed from an auto-fill layout to an explicit six-column grid at the sidebar
+  width (53 questions across nine rows instead of fourteen), with calmer unanswered/answered/
+  current/flagged visual states that remain distinguishable in combination, and a bounded-height
+  scroll on the sticky desktop panel for unusually short viewports only.
+- Presentation-only token, spacing, and button-hierarchy consistency updates carried into the
+  Review & Submit screen, confirmation dialogs, results screen, answer-review filters, and the
+  theme toggle, with no behavior change to any of those flows.
+- A global `-webkit-tap-highlight-color: transparent` reset so the browser's default blue tap
+  flash on touch devices doesn't clash with the new accent color.
+
+### C5.2 What this change preserves
+
+Every question record and canonical question Markdown; all correct answers and explanations; all
+371 bank IDs and existing metadata; `BANK_VERSION` and the `ccdv-f-question-history-v2` localStorage
+key; completed rotation history; the seven-form disjoint capacity and domain/skill quotas; the
+memory-only active-attempt rule; both exam modes and the existing timed/untimed behavior; exact-set
+scoring and submission confirmation; the leave/exit warnings; result filtering; and the existing
+accessibility guarantees (44px touch targets, non-color state indication, keyboard navigation,
+visible focus, ARIA labels). The retired Change-3 drafting/review/generation pipeline is not
+restored.
+
+### C5.3 Verification
+
+`npm test`, `npm run typecheck`, `npm run lint`, and `npm run build` all pass. Two pre-existing
+tests were updated to match intentional copy/heading changes (the start-screen supporting-sentence
+text and the consolidated question heading's accessible name); no test assertion covering scoring,
+rotation, persistence, or accessibility behavior was weakened. Verified in-browser at 1440×900,
+mobile (375×844), and in both light and dark mode, including representative Select TWO, Select
+THREE, code-block, and table questions via a temporary local-only screenshot fixture that was
+removed before this change was committed.

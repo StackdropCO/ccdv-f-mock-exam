@@ -10,7 +10,7 @@
   min-height: 44px;
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-md);
-  background: var(--color-bg);
+  background: var(--color-surface);
   color: var(--color-fg-muted);
   font-size: var(--text-sm);
   font-weight: 500;
@@ -18,9 +18,9 @@
 }
 
 .filterButton.active {
-  border-color: var(--color-accent);
+  border-color: var(--color-focus);
   background: var(--color-accent-subtle);
-  color: var(--color-accent);
+  color: var(--color-accent-text);
   font-weight: 600;
 }
 
@@ -34,6 +34,7 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   padding: var(--space-5);
+  background: var(--color-surface);
 }
 
 .cardHeader {

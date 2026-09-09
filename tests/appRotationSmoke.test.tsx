@@ -20,10 +20,10 @@ function another(){
 describe('application interaction smoke (DOM environment)',()=>{
   it('runs timed navigation, mobile drawer, flags, exit cancel, submit, answer filters and fresh untimed mock',()=>{
     render(<App/>);
-    expect(screen.getByText(/Each mock selects 53/)).not.toBeNull();
+    expect(screen.getByText(/53 questions covering the exam/)).not.toBeNull();
     click(/^Timed Exam\./);
     expect(screen.getByText(/remaining/)).not.toBeNull();
-    expect(screen.getByRole('heading',{name:'Question 1'})).not.toBeNull();
+    expect(screen.getByRole('heading',{name:'Question 1 of 53'})).not.toBeNull();
     expect(screen.queryByText('Correct answer')).toBeNull();
     const options=screen.getByRole('group',{name:'Answer options for question 1'});
     fireEvent.click(within(options).queryAllByRole('radio').at(0) ?? within(options).getAllByRole('checkbox')[0]);
@@ -35,9 +35,9 @@ describe('application interaction smoke (DOM environment)',()=>{
     expect(within(drawer).getAllByRole('button')).toHaveLength(54);
     fireEvent.click(within(drawer).getByRole('button',{name:/^Question 12,/}));
     expect(screen.queryByRole('dialog')).toBeNull();
-    expect(screen.getByRole('heading',{name:'Question 12'})).not.toBeNull();
+    expect(screen.getByRole('heading',{name:'Question 12 of 53'})).not.toBeNull();
     click('Exit Exam');click('Continue Exam');
-    expect(screen.getByRole('heading',{name:'Question 12'})).not.toBeNull();
+    expect(screen.getByRole('heading',{name:'Question 12 of 53'})).not.toBeNull();
     submit();
     expect(screen.getByRole('heading',{name:'Mock exam score'})).not.toBeNull();
     const first=JSON.parse(localStorage.getItem(HISTORY_STORAGE_KEY)!);

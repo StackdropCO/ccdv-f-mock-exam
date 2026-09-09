@@ -18,7 +18,8 @@ export function Layout({ modeLabel, timerStartTimestamp, onExitExam, theme, onTo
     <>
       <header className={styles.header}>
         <p className={styles.title}>
-          <span className={styles.titleAccent}>CCDV-F</span> Final Mock Exam
+          <span className={styles.titleAccent}>CCDV-F</span> Practice
+          <span className={styles.attribution}>by Stackdrop</span>
         </p>
         <div className={styles.headerRight}>
           {modeLabel && <span className={styles.modeIndicator}>{modeLabel}</span>}
@@ -34,7 +35,7 @@ export function Layout({ modeLabel, timerStartTimestamp, onExitExam, theme, onTo
       <main className={styles.main}>{children}</main>
       <footer className={styles.footer}>
         <p className={styles.disclaimer}>
-          Unofficial practice exam. Not affiliated with or endorsed by Anthropic or Pearson VUE.
+          Independent practice material. Not affiliated with or endorsed by Anthropic or Pearson VUE.
         </p>
       </footer>
     </>
