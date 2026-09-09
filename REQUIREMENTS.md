@@ -544,3 +544,20 @@ exam-screen file was touched. `npm test`, `npm run typecheck`, `npm run lint`, a
 all pass with no test changes needed. Re-verified in-browser at 1440×900, mobile (375×812), and
 dark mode: buttons remain 44px tall and bottom-aligned across both cards, still exactly one button
 per card, no page-level horizontal overflow.
+
+### C5.6 Button sizing and icon-row spacing tweak (2026-09-09)
+
+Approved by the user as a small follow-up to C5.5. The C5.5 start buttons went full-width with the
+arrow at the trailing edge; the user asked for them smaller and left-aligned instead. The button
+reverted to a content-sized, left-aligned control (`align-self: flex-start`, no `width: 100%`,
+slightly tighter horizontal padding) while keeping the same 44px height and the `margin-top: auto`
+bottom-pinning from C5.5, so both cards' buttons still land on the same baseline. The gap between
+each card's icon-chip/duration-pill row and its heading was widened (moved from a uniform flex
+`gap` to an explicit `margin-bottom` on that row) so the icons read as a distinct group above the
+text rather than crowding it.
+
+CSS-only change to `StartScreen.module.css`; no other file touched. `npm test`, `npm run typecheck`,
+`npm run lint`, and `npm run build` all pass with no test changes needed (button accessible names
+and DOM structure are unchanged). Re-verified in-browser at 1440×900, mobile (375×812), and dark
+mode: both buttons still 44px tall, aligned to the same bottom edge across the row, and no
+page-level horizontal overflow.

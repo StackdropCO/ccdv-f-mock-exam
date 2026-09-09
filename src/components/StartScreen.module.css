@@ -42,7 +42,6 @@
 .modeCard {
   display: flex;
   flex-direction: column;
-  gap: var(--space-3);
   padding: var(--space-5);
   border: 1px solid var(--color-border-strong);
   border-radius: var(--radius-lg);
@@ -54,6 +53,7 @@
   display: flex;
   align-items: center;
   gap: var(--space-3);
+  margin-bottom: var(--space-5);
 }
 
 .modeIconChip {
@@ -81,25 +81,24 @@
 }
 
 .modeCardTitle {
-  margin: 0;
+  margin: 0 0 var(--space-2);
   font-size: var(--text-lg);
   font-weight: 700;
   line-height: 1.3;
 }
 
 .modeCardDesc {
-  margin: 0;
+  margin: 0 0 var(--space-4);
   font-size: var(--text-sm);
   color: var(--color-fg-muted);
   line-height: 1.5;
 }
 
 .startButton {
-  justify-content: space-between;
-  width: 100%;
+  align-self: flex-start;
   margin-top: auto;
-  padding-top: var(--space-3);
-  padding-bottom: var(--space-3);
+  padding-left: var(--space-4);
+  padding-right: var(--space-4);
 }
 
 .startButton svg {
