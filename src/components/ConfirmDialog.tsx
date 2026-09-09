@@ -23,17 +23,21 @@ export function ConfirmDialog({
   onCancel,
 }: ConfirmDialogProps) {
   const confirmRef = useRef<HTMLButtonElement>(null);
+  const cancelRef = useRef<HTMLButtonElement>(null);
   const dialogRef = useRef<HTMLDivElement>(null);
   useFocusTrap(dialogRef, true);
 
   useEffect(() => {
-    confirmRef.current?.focus();
+    // A destructive dialog opens on its safe action, so a stray Enter dismisses the dialog
+    // rather than discarding an attempt or a result. Non-destructive dialogs still open on
+    // the confirm action, where Enter completes the flow the user already chose.
+    (destructive ? cancelRef : confirmRef).current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") onCancel();
     };
     document.addEventListener("keydown", onKey);
     return () => document.removeEventListener("keydown", onKey);
-  }, [onCancel]);
+  }, [onCancel, destructive]);
 
   return (
     <div className={styles.backdrop} onClick={onCancel}>
@@ -50,7 +54,7 @@ export function ConfirmDialog({
         </h2>
         <p className={styles.body}>{message}</p>
         <div className={styles.actions}>
-          <button type="button" className={btn.secondary} onClick={onCancel}>
+          <button ref={cancelRef} type="button" className={btn.secondary} onClick={onCancel}>
             {cancelLabel}
           </button>
           <button

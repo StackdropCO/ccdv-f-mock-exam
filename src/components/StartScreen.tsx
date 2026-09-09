@@ -89,7 +89,7 @@ export function StartScreen({ onStart }: { onStart: (mode: ExamMode) => void }) 
           <span className={styles.specLabel}>No-repeat mocks</span>
         </div>
         <p className={styles.specNote}>
-          No repeats within a mock or across seven completed mocks. Then a new cycle begins.
+          No repeats within a mock or across seven completed mocks in this browser. Then a new cycle begins.
         </p>
       </div>
 

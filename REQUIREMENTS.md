@@ -906,3 +906,55 @@ the mode-row copy, the Start buttons, or the divider between the modes at any wi
 pass faintly behind the introductory heading and supporting paragraph, as they do in the
 reference. No horizontal overflow at any width. Checked in both themes, and the exam screen
 was confirmed to render with no backdrop and its header rule restored.
+
+## Approved Change 6 — Release-readiness pass (2026-09-09)
+
+Explicitly authorized by the user as a narrow, final pre-release pass, with a stated scope
+limit: no re-audit of the question bank, no regeneration or alteration of questions,
+explanations or answer keys, no change to blueprint quotas, and no further redesign. Four
+focused items only.
+
+### C6.1 Google Fonts runtime dependency removed
+
+`src/styles/tokens.css` imported Inter from `fonts.googleapis.com` at runtime, which
+conflicts with the static, no-external-runtime-dependency requirement in section 2. The
+`@import` is deleted and `--font-sans` is now a native stack only:
+`system-ui, -apple-system, "Segoe UI", Roboto, sans-serif`. No font files were downloaded or
+committed, no font package or alternative CDN was added, and no typography or layout values
+were retuned. The app now makes no network request to any third party at runtime.
+
+### C6.2 Rotation wording states that history is browser-local
+
+The seven-mock no-repeat guarantee depends on completed-form history held in `localStorage`,
+so it holds per browser rather than per person. The start-screen note now reads:
+
+> No repeats within a mock or across seven completed mocks in this browser. Then a new cycle
+> begins.
+
+Copy only. The rotation implementation, selector logic, storage keys, bank size, and the
+displayed 53 / 371 / 7 figures are untouched, and those figures remain derived from
+`FORM_SIZE`, `QUESTION_BANK.length`, and `Math.floor(BANK_SIZE / FORM_SIZE)` exactly as before.
+
+### C6.3 Destructive confirmations open on the safe action
+
+`ConfirmDialog` focused the confirm button on mount, so an accidental Enter immediately
+performed the destructive action. When `destructive` is true, initial focus now goes to the
+cancel action instead; non-destructive dialogs are unchanged and still open on confirm. This
+covers "Exit exam?" and "Take another mock?"; the submission dialog is not flagged
+destructive and keeps its existing behaviour. The focus trap, Escape to cancel, click-outside
+cancellation, `alertdialog` semantics, and cancel-before-confirm button order are all
+preserved. `tests/confirmDialog.test.tsx` covers the new behaviour and the preserved
+behaviour, including Tab trapping in both directions.
+
+### C6.4 Open Graph metadata
+
+`index.html` gains `og:title`, `og:description`, `og:type` and `og:url` so the deployed link
+previews sensibly in team chat. Copy is consistent with the existing title and description and
+claims no affiliation or endorsement. No social image, no external image dependency, and no
+further SEO work was added.
+
+### What this amendment does not change
+
+No change to question content, the question bank, scoring, rotation behaviour, persistence
+behaviour, timed or untimed behaviour, themes, exam navigation, or review and results
+behaviour. The only user-visible copy change is the one quoted in C6.2.
