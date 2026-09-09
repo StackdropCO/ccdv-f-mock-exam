@@ -37,6 +37,26 @@ describe("examReducer - mode stability while navigating", () => {
     expect(state.mode).toBe("timed");
     expect(state.startTimestamp).toBe(1000);
   });
+
+  it("GOTO_QUESTION (the review screen's shortcut jumps) only moves currentQuestion and leaves review, preserving every other field untouched", () => {
+    let state = examReducer(createInitialState(), { type: "START_EXAM", mode: "timed", startTimestamp: 1000 });
+    state = examReducer(state, { type: "SELECT_SINGLE", questionId: 1, optionId: "A" });
+    state = examReducer(state, { type: "TOGGLE_MULTI", questionId: 9, optionId: "B" });
+    state = examReducer(state, { type: "TOGGLE_FLAG", id: 7 });
+    state = examReducer(state, { type: "TOGGLE_FLAG", id: 30 });
+    state = examReducer(state, { type: "GOTO_REVIEW" });
+    const beforeJump = state;
+
+    state = examReducer(state, { type: "GOTO_QUESTION", id: 53 });
+
+    expect(state.currentQuestion).toBe(53);
+    expect(state.reviewing).toBe(false);
+    expect(state.answers).toEqual(beforeJump.answers);
+    expect(state.flags).toEqual(beforeJump.flags);
+    expect(state.mode).toBe(beforeJump.mode);
+    expect(state.startTimestamp).toBe(beforeJump.startTimestamp);
+    expect(state.submitted).toBe(false);
+  });
 });
 
 describe("examReducer - does not auto-submit as time passes", () => {

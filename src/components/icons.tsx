@@ -53,6 +53,23 @@ export function CheckCircleIcon(props: IconProps) {
   );
 }
 
+export function CircleIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <circle cx="12" cy="12" r="8.25" />
+    </svg>
+  );
+}
+
+export function FlagIcon(props: IconProps) {
+  return (
+    <svg {...base} {...props}>
+      <path d="M5.5 21V4" />
+      <path d="M5.5 4.75c1.05-.6 2.25-.9 3.5-.9 1.5 0 2.75.6 4 1.2 1 .5 2 .9 3 .9.8 0 1.5-.2 2-.5v7.6c-.5.3-1.2.5-2 .5-1 0-2-.4-3-.9-1.25-.6-2.5-1.2-4-1.2-1.25 0-2.45.3-3.5.9z" />
+    </svg>
+  );
+}
+
 export function ArrowRightIcon(props: IconProps) {
   return (
     <svg {...base} width={16} height={16} {...props}>

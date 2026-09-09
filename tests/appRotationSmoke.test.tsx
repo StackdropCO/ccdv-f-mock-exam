@@ -9,8 +9,8 @@ const click=(name:string|RegExp)=>fireEvent.click(screen.getByRole('button',{nam
 function submit(){
   click(/^Question 53,/);
   click('Review & Submit');
-  click('Submit Exam');
-  fireEvent.click(within(screen.getByRole('alertdialog')).getByRole('button',{name:'Submit Exam'}));
+  click('Submit exam');
+  fireEvent.click(within(screen.getByRole('alertdialog')).getByRole('button',{name:'Submit exam'}));
 }
 function another(){
   click('Take another mock');

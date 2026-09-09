@@ -561,3 +561,72 @@ CSS-only change to `StartScreen.module.css`; no other file touched. `npm test`, 
 and DOM structure are unchanged). Re-verified in-browser at 1440×900, mobile (375×812), and dark
 mode: both buttons still 44px tall, aligned to the same bottom edge across the row, and no
 page-level horizontal overflow.
+
+### C5.7 Pre-submission review screen refinement (2026-09-09)
+
+Approved by the user as a focused refinement of the pre-submission review screen
+(`ReviewSubmitScreen.tsx`), replacing its title, three large statistic cards, and bare
+question-number buttons with a clearer, more compact layout. No question content, answer key,
+scoring, the 371-item bank, domain quotas, `BANK_VERSION`, localStorage keys, completed rotation
+history, memory-only active-attempt behavior, or timed/untimed behavior is affected. The exam
+screen, navigator, start screen, and themes from C5.1–C5.6 are untouched.
+
+**Finding on the reported "53" button:** verified before editing, not a counting defect. The
+screen's `unanswered`/`flagged` filters already used each `FormQuestion.id` — which
+`selectExamForm` (`src/lib/examForm.ts`) deliberately sets to the question's 1–53 *display
+position* (`bankId` holds the separate, never-displayed stable bank ID) — so a lone unanswered
+question at the end of the form correctly rendered as a bare button labeled "53". That was Question
+53's position, not a claim that 53 questions were unanswered; the summary above it already read "1
+Unanswered" correctly. The defect was presentation (an unlabeled numeral easily misread as a count
+sitting directly under a heading and a number that really did mean a count), not the underlying
+arithmetic, which is unchanged by this pass.
+
+**New layout:**
+- Heading "Review before submitting" and a supporting sentence, replacing "Exam Review".
+- One compact completion line ("N of 53 answered") with a subtle amber progress bar representing
+  completion only — no score, correctness, or pass-likelihood implication.
+- Two compact status sections (stacked on mobile, side by side from 640px) instead of three
+  statistic cards and chip grids of bare numbers: "N unanswered question(s)" / "N flagged
+  question(s)" with correct singular/plural wording, a one-line description, and a "Review
+  unanswered" / "Review flagged" action button that jumps straight to the lowest displayed position
+  in the current form matching that state. The two counts are computed independently (a question
+  that is both unanswered and flagged is correctly counted in both, never summed together).
+- Zero-state text ("All questions answered" / "No questions flagged") replaces the action instead of
+  showing a disabled button, and reserves no extra space. When both are simultaneously true, the
+  combined "All questions answered. Ready when you are." message is shown instead — never a claim
+  about correctness or pass likelihood.
+- A clearly separated submission section: the same explanation of what submitting does, a dynamic
+  "N question(s) still unanswered" line when applicable, and Back to exam (secondary) / Submit exam
+  (primary amber) actions. The existing confirmation dialog is preserved unchanged in behavior
+  (opens on first click, states the exact unanswered count, Cancel leaves the attempt untouched,
+  Confirm submits exactly once); its confirm button label changed from "Submit Exam" to "Submit
+  exam" for consistency with the new screen copy.
+- Both shortcuts and "Back to exam" use the existing `goToQuestion`/`returnToExam` actions verbatim
+  — no reducer changes, no new screen, no filtered question session. `GOTO_QUESTION` already only
+  updates `currentQuestion` and clears `reviewing`, so answers, flags, mode, the active form, and
+  the timer are untouched by a shortcut jump, and completed rotation history is never touched by
+  merely opening this screen or using a shortcut.
+- Two small outline icons were added to the shared local icon set (`FlagIcon`, `CircleIcon`) for
+  the status sections, reusing the existing `CheckCircleIcon`/`ArrowRightIcon` from the start-screen
+  icon work; the flagged icon reuses the existing `--color-flag` token so its color matches the
+  exam screen's own flag button.
+
+**Tests:** a new `tests/reviewSubmitScreen.test.tsx` renders the component directly (mocked
+actions, small fixed question arrays — never dependent on the real bank's random content) and
+covers: the exact "52 of 53 answered" / "1 unanswered question" / Question-53-navigation scenario;
+lowest-position selection with non-sequential gaps; lowest-position selection among out-of-order
+flags; a question that is both unanswered and flagged; both zero states; the combined ready
+message; "Back to exam" never triggering a shortcut; a partially-selected multiple-response
+question counting as answered with no leaked key/explanation; and the confirmation dialog's
+open/cancel/confirm-once behavior. `tests/examState.test.ts` gained a reducer-level test proving
+`GOTO_QUESTION` preserves answers, flags, mode, and the start timestamp exactly. `npm test` (87/87),
+`npm run typecheck`, `npm run lint`, and `npm run build` all pass; `tests/appRotationSmoke.test.tsx`
+was updated for the renamed submit button ("Submit Exam" → "Submit exam").
+
+**Verification:** re-checked in-browser at 1440×900 and 375×812, light and dark mode, across the
+52-answered/1-unanswered/0-flagged scenario, a mixed scenario with both shortcuts available, and
+the fully-answered/no-flags ready scenario, plus a full real (non-fixture) run through the actual
+app: started an Untimed attempt, answered and flagged real questions, confirmed "Review unanswered"
+and "Review flagged" landed on the correct real positions, confirmed Previous/answers/flags
+survived the jump, and confirmed submission still recorded completed-rotation history correctly
+afterward. No answer leakage, no horizontal overflow, all interactive targets 44px.
