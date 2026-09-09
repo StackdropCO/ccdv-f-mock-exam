@@ -10,19 +10,6 @@ const MOCKS_PER_CYCLE = Math.floor(BANK_SIZE / FORM_SIZE);
 export function StartScreen({ onStart }: { onStart: (mode: ExamMode) => void }) {
   return (
     <div className={styles.page}>
-      <div className={styles.decor} aria-hidden="true">
-        <div className={styles.decorGrid} />
-        <div className={styles.decorGlow} />
-        <div className={styles.decorOrbit}>
-          <span className={styles.decorRing} />
-          <span className={styles.decorRing} />
-          <span className={styles.decorRing} />
-          <span className={`${styles.decorNode} ${styles.decorNode1}`} />
-          <span className={`${styles.decorNode} ${styles.decorNode2}`} />
-          <span className={`${styles.decorNode} ${styles.decorNode3}`} />
-        </div>
-      </div>
-
       <div className={styles.hero}>
         <div className={styles.intro}>
           <span className={styles.accentBar} aria-hidden="true" />

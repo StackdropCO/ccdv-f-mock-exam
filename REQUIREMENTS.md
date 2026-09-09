@@ -850,3 +850,59 @@ mockup. Verified against the actual rendered text glyphs (not just their boundin
 against each ring's computed path and its real mask opacity, at 390 / 480 / 600 / 700 / 800 / 879 /
 880 / 1024 / 1280 / 1584 / 1920px in both themes. No structural divider moved, and no typography,
 button, mode-interaction, specification, or data change was made.
+
+## Approved Change 5, C5.10 — Header, background and mode-row alignment to the reference (2026-09-09)
+
+Approved verbally after a side-by-side comparison of the running start screen against the
+supplied reference. Four differences were identified and confirmed before implementation.
+
+### What changed
+
+**Header reads as transparent.** The header element was already transparent, but the
+decoration layer began at y=69, exactly the header's lower edge, leaving a flat band across
+the top with no grid, glow or arcs behind it, closed off by a full-width `border-bottom`.
+The decoration now spans the whole page and the rule is dropped, so the transition is
+continuous. The rule is retained on every other screen, where there is no backdrop for the
+header to sit on.
+
+**The decoration became a Layout backdrop.** It previously lived inside `StartScreen`,
+whose containing block starts below the header, so it could not reach upward without a
+hard-coded offset that breaks when the header wraps. It is now `StartScreenDecor`, passed to
+`Layout` as an optional `backdrop` and rendered inside a positioned shell wrapper. `header`,
+`main` and `footer` each take a stacking context above it, so decoration can pass behind the
+header without ever painting over the title or the theme toggle. The halo is anchored to the
+top of the page, and its masks are unchanged, so the arc geometry verified under C5.9 holds
+exactly.
+
+**The grid runs the full width.** It was bounded to the 70rem column while the glow bled
+past it, leaving a seam partway across the page. Its fade is now an absolute length from the
+top of the page rather than a percentage of its own box, so it covers the hero regardless of
+how tall the page below it grows.
+
+**Mode rows.** Title and duration were on one line with the duration uppercased. They now
+stack into three lines, `Timed Exam` over `120 minutes` over `Practice at exam pace.`, in
+sentence case. Icons go from 20px to 32px with a thinner stroke, sized in the mode row so the
+shared 20px icon default still serves every other use. Row gap and icon size are reduced at
+phone widths so the descriptions still fit on one line beside the Start button.
+
+**Specification rail.** The note was forced onto its own row by `grid-column: 1 / -1`. Above
+880px it is now a fourth column, divided from the three figures the same way they are divided
+from each other. Below that it still drops to its own row, where a narrow column would force
+it into a ragged measure.
+
+### What this change preserves
+
+No change to question content, scoring, the bank, rotation, persistence, the timer, or any
+screen other than the start screen. The exam, review, and results screens are unaffected
+except for the shell wrapper, which is layout-neutral. Start button sizing and the outlined
+secondary button are deliberately left as set in `3921c79`. Headline type scale is unchanged.
+
+### Verification
+
+Typecheck, lint, 134 tests and the production build all pass. Each ring's computed path was
+traced against real text glyph boxes, weighted by the mask's actual opacity, at 390 / 700 /
+880 / 1024 / 1397 / 1584 / 1920px: no arc or node reaches the header text, the theme toggle,
+the mode-row copy, the Start buttons, or the divider between the modes at any width. Arcs
+pass faintly behind the introductory heading and supporting paragraph, as they do in the
+reference. No horizontal overflow at any width. Checked in both themes, and the exam screen
+was confirmed to render with no backdrop and its header rule restored.

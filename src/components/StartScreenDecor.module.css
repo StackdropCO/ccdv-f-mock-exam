@@ -1,0 +1,170 @@
+/*
+  Start-screen background atmosphere: a faint grid, a warm corner glow, and a large
+  concentric-ring halo.
+
+  This is rendered as a Layout backdrop, so its box spans the whole page rather than just
+  the content column. The glow, grid and arcs therefore run behind the header instead of
+  stopping at it, which is what keeps the header reading as transparent rather than as an
+  opaque bar. Layout gives the header, main and footer a stacking context above this layer,
+  so nothing here ever paints over the title or the theme toggle.
+*/
+.decor {
+  /*
+    Halo geometry is expressed as multiples of the content column's width, so the arcs fall
+    in the same place relative to the copy whether the column is 1120px or 600px wide. A
+    fixed radius against a narrowing column drags the arcs across the mode rows.
+    --halo-y is measured from the top of the page.
+  */
+  --halo-column: min(70rem, 100vw - 2 * var(--space-4));
+  --halo-x: calc(var(--halo-column) * 0.508);
+  --halo-y: 35px;
+  --halo-diameter: calc(var(--halo-column) * 1.261);
+  --glow-diameter: calc(var(--halo-column) * 0.929);
+
+  --decor-line: rgba(36, 28, 16, 0.05);
+  --decor-glow: rgba(251, 176, 58, 0.16);
+  --decor-ring: rgba(251, 176, 58, 0.22);
+  --decor-node: rgba(251, 176, 58, 0.55);
+
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Same light/system-dark/explicit-dark precedence as the app's design tokens. */
+@media (prefers-color-scheme: dark) {
+  :global(html:not([data-theme="light"])) .decor {
+    --decor-line: rgba(236, 230, 218, 0.06);
+    --decor-glow: rgba(251, 176, 58, 0.12);
+    --decor-ring: rgba(251, 176, 58, 0.16);
+    --decor-node: rgba(251, 176, 58, 0.5);
+  }
+}
+
+:global(html[data-theme="dark"]) .decor {
+  --decor-line: rgba(236, 230, 218, 0.06);
+  --decor-glow: rgba(251, 176, 58, 0.12);
+  --decor-ring: rgba(251, 176, 58, 0.16);
+  --decor-node: rgba(251, 176, 58, 0.5);
+}
+
+/*
+  The grid runs the full width now that nothing clips it to the column, so it no longer
+  ends on a seam partway across the page. Its fade is an absolute length measured from the
+  top of the page, so it covers the hero regardless of how tall the page below it grows.
+*/
+.decorGrid {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(to right, var(--decor-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--decor-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: linear-gradient(to bottom, black 0, transparent 640px);
+  -webkit-mask-image: linear-gradient(to bottom, black 0, transparent 640px);
+}
+
+.decorGlow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--glow-diameter);
+  height: var(--glow-diameter);
+  transform: translate(calc(-50% + var(--halo-x)), calc(-50% + var(--halo-y)));
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--decor-glow), transparent 70%);
+}
+
+/*
+  The ring cluster's own center sits just past the content column's upper-right corner, in
+  the empty space beside the header, so no bullseye lands on "Choose a mode", the mode rows,
+  the Start buttons, or the divider between them. What shows is the wide lower-left sweep of
+  the arcs across the hero, fading out above the specification rail rather than at an edge.
+*/
+.decorOrbit {
+  --orbit-fade: linear-gradient(to bottom, black 0%, black 70%, transparent 78%);
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: var(--halo-diameter);
+  height: var(--halo-diameter);
+  transform: translate(calc(-50% + var(--halo-x)), calc(-50% + var(--halo-y)));
+  mask-image: var(--orbit-fade);
+  -webkit-mask-image: var(--orbit-fade);
+}
+
+.decorRing {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--decor-ring);
+  border-radius: 50%;
+}
+
+/*
+  The rings sit tightly near the outer edge. Pulling the inner two outwards keeps their
+  sweep to the left of the mode column at the narrower two-column widths, where the copy
+  reflows upwards but the halo scales with the column.
+*/
+.decorRing:nth-child(2) {
+  inset: 4.5%;
+}
+
+.decorRing:nth-child(3) {
+  inset: 9%;
+}
+
+/* Nodes sit on the arcs themselves, in the gaps the hero copy leaves clear. */
+.decorNode {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--decor-node);
+  transform: translate(-50%, -50%);
+}
+
+.decorNode1 {
+  top: 57.5%;
+  left: 0.6%;
+}
+
+.decorNode2 {
+  top: 63.2%;
+  left: 6.4%;
+}
+
+.decorNode3 {
+  top: 68.8%;
+  left: 13.5%;
+}
+
+/*
+  Single-column layout (the hero splits into two columns at 880px, so this covers every
+  narrower width): the copy runs the full width, so there is no clear lane for the sweep.
+  The halo is drawn smaller, held further into the corner, and faded out above the eyebrow,
+  a soft glint under the header rather than arcs crossing the text. The nodes go with it,
+  since a stray dot beside a word reads as a typo.
+*/
+@media (max-width: 879px) {
+  .decor {
+    --halo-x: calc(var(--halo-column) * 0.53);
+    --halo-diameter: calc(var(--halo-column) * 1.09);
+    --glow-diameter: calc(var(--halo-column) * 0.99);
+  }
+
+  .decorOrbit {
+    --orbit-fade: linear-gradient(to bottom, black 0%, black 58%, transparent 65%);
+    opacity: 0.7;
+  }
+
+  .decorNode {
+    display: none;
+  }
+}
+
+@media (max-width: 420px) {
+  .decorOrbit {
+    display: none;
+  }
+}
