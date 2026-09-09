@@ -808,3 +808,26 @@ any width. Ran a real (non-mocked) click-through of both Start actions confirmin
 its 120-minute countdown and Untimed mode shows none, and confirming exiting an unsubmitted attempt
 writes no rotation history. No answer leakage before submission (unaffected — this change does not
 touch the exam or review screens).
+
+### Correction: orbit/halo placement (2026-09-09)
+
+The decorative ring cluster (`.decorOrbit`) introduced above was, as first implemented, centered
+behind the mode-selection column: its rings visually surrounded "Choose a mode" and both mode rows,
+and the thin divider between Timed Exam and Untimed Practice happened to pass through the ring
+cluster's vertical middle, reading as a targeting/crosshair graphic rather than quiet background
+atmosphere. This did not match the supplied reference mockup, where the same motif sits cropped in
+the far upper-right corner, mostly beyond the visible edge.
+
+Corrected by moving the ring cluster's own geometric center beyond the page's visible upper-right
+corner (offsets more negative than half its width/height in both `top` and `right`), so only a
+small lower-left crescent remains visible, cropped naturally by the page edge and sitting in empty
+background space above and to the right of "Choose a mode" — never over its text, over either mode
+row, over a Start button, or over the divider between them. The three small nodes were repositioned
+to the newly-visible crescent for the same reason. The mobile override (≤640px) was rebalanced the
+same way at a smaller size, and the ring cluster is now hidden entirely below 420px, where the
+mockup's corner motif has no room to read as anything but clutter; the separate ambient radial glow
+(`.decorGlow`) and the page grid are unchanged. No structural divider moved, no typography, button,
+mode-interaction, specification, or data change was made — this was a `.decorOrbit`/`.decorNode*`
+positioning correction only, verified to clear the actual rendered text glyphs (not just their
+bounding boxes) at every breakpoint checked, including the single-column reflow width where the
+introductory heading and the mode column share the same horizontal band.

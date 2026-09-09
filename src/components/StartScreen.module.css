@@ -57,12 +57,18 @@
   background: radial-gradient(circle, var(--decor-glow), transparent 70%);
 }
 
+/*
+  The ring cluster's own center sits beyond the page's upper-right corner (offsets more
+  negative than -width/2), so only a small lower-left crescent is ever visible, cropped by
+  the page edge — background atmosphere in the empty corner, never behind "Choose a mode",
+  the mode rows, the Start buttons, or the divider between them.
+*/
 .decorOrbit {
   position: absolute;
-  top: 4%;
-  right: 4%;
-  width: 340px;
-  height: 340px;
+  top: -340px;
+  right: -300px;
+  width: 440px;
+  height: 440px;
 }
 
 .decorRing {
@@ -89,27 +95,33 @@
 }
 
 .decorNode1 {
-  top: 2%;
-  left: 46%;
+  top: 62%;
+  left: 8%;
 }
 
 .decorNode2 {
-  top: 62%;
-  left: 92%;
+  top: 78%;
+  left: 30%;
 }
 
 .decorNode3 {
-  top: 84%;
-  left: 20%;
+  top: 40%;
+  left: 4%;
 }
 
 @media (max-width: 640px) {
   .decorOrbit {
-    width: 220px;
-    height: 220px;
-    top: -4%;
-    right: -6%;
-    opacity: 0.7;
+    width: 260px;
+    height: 260px;
+    top: -165px;
+    right: -140px;
+    opacity: 0.6;
+  }
+}
+
+@media (max-width: 420px) {
+  .decorOrbit {
+    display: none;
   }
 }
 
