@@ -1,22 +1,11 @@
 name: Feature request
-description: Suggest an improvement to the app itself (not question content).
+description: Suggest an improvement.
 labels: ["enhancement"]
+
 body:
   - type: textarea
-    id: problem
+    id: idea
     attributes:
-      label: What problem would this solve?
+      label: What would you like to see?
     validations:
       required: true
-  - type: textarea
-    id: proposal
-    attributes:
-      label: Proposed solution
-    validations:
-      required: false
-  - type: textarea
-    id: alternatives
-    attributes:
-      label: Alternatives considered
-    validations:
-      required: false
