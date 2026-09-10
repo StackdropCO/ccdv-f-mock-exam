@@ -4,7 +4,7 @@ This file covers the question-bank *content* (question stems, options, answer ke
 
 ## License
 
-The complete practice-question bank — all 371 questions, including the 53 original questions in `src/data/questions.ts` and the 318 expanded-bank questions in `src/data/questions/new/` — is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+The complete practice-question bank — all 371 questions, including the 53 original questions in `src/data/questions.ts` and the 318 expanded-bank questions in `src/data/questions/domains/` — is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
 
 If you reuse this content, attribute it to the **ccdv-f-mock-exam project** and link back to this repository.
 

@@ -25,7 +25,7 @@ New practice questions and corrections to existing ones are welcome. See [docs/q
 - At least one authoritative first-party source URL supporting the answer (Anthropic/Claude documentation, the MCP specification, or primary language/protocol documentation)
 - Exactly one defensible correct answer — distractors should be plausible but clearly wrong for a statable reason, not wrong by ambiguity or trick wording
 - A short explanation of why the correct answer is correct
-- A `conceptKey` that isn't already covered by another question in the same objective (check `src/data/questions/new/` for existing items in that domain first)
+- A `conceptKey` that isn't already covered by another question in the same objective (check `src/data/questions/domains/` for existing items in that domain first)
 
 **Do not submit real, recalled, leaked, reconstructed, or otherwise non-public certification exam questions — in any form, including paraphrased or "from memory."** Original practice questions written against public documentation are what this project is for; anything resembling actual exam content will be rejected and the PR closed.
 

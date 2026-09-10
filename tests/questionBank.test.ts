@@ -2,7 +2,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { QUESTION_BANK } from '../src/data/questionBank';
-import { NEW_QUESTIONS } from '../src/data/questions/new';
+import { DOMAIN_QUESTIONS } from '../src/data/questions/domains';
 import { QUESTIONS } from '../src/data/questions';
 import { BLUEPRINT } from '../src/data/blueprint';
 import { assertBank, assertForm } from '../src/data/validateBank';
@@ -13,7 +13,8 @@ const hash = (s: string) => createHash('sha256').update(s).digest('hex');
 
 // Authoritative first-party domains every new item's sourceRefs must resolve to: Anthropic/Claude
 // product docs, the MCP specification, or primary language/protocol/web-standard references for
-// the Software Engineering Foundations skill (see LEGACY_QUESTION_AUDIT.md / EXAM_BLUEPRINT.md).
+// the Software Engineering Foundations skill (see docs/audits/legacy-question-audit.md and
+// docs/audits/exam-blueprint-provenance.md).
 const AUTHORITATIVE_HOSTS = [
   'platform.claude.com', 'code.claude.com', 'docs.claude.com', 'www.anthropic.com', 'anthropic.com',
   'support.claude.com', 'claude.com', 'modelcontextprotocol.io',
@@ -37,20 +38,20 @@ describe('published question bank', () => {
   });
 
   it('contains exactly 318 approved new items and meets every frozen domain and skill count', () => {
-    expect(NEW_QUESTIONS).toHaveLength(318);
+    expect(DOMAIN_QUESTIONS).toHaveLength(318);
     expect(QUESTION_BANK).toHaveLength(371);
     expect(() => assertBank(QUESTION_BANK, 7)).not.toThrow();
     for (const d of BLUEPRINT) {
       expect(QUESTION_BANK.filter(q => q.domain === d.id)).toHaveLength(d.quota * 7);
       for (const o of d.objectives) {
         expect(QUESTION_BANK.filter(q => q.objective === o.id)).toHaveLength(o.target);
-        expect(NEW_QUESTIONS.filter(q => q.objective === o.id)).toHaveLength(o.newTarget);
+        expect(DOMAIN_QUESTIONS.filter(q => q.objective === o.id)).toHaveLength(o.newTarget);
       }
     }
   });
 
   it('gives every approved item at least one https source reference from an authoritative first-party host', () => {
-    for (const q of NEW_QUESTIONS) {
+    for (const q of DOMAIN_QUESTIONS) {
       expect(q.qualityStatus).toBe('APPROVED');
       expect(q.sourceRefs.length).toBeGreaterThan(0);
       for (const url of q.sourceRefs) {
@@ -81,8 +82,8 @@ describe('published question bank', () => {
       // bank with nothing left over and nothing repeated.
       expect(used.size).toBe(371);
     }
-    // Documented in LEGACY_QUESTION_AUDIT.md / QUESTION_BANK_SUMMARY.md: concept-key collisions are
-    // a soft preference, not a hard constraint, and become more likely as a cycle's pools narrow.
+    // Documented in docs/architecture.md: concept-key collisions are a soft preference, not a hard
+    // constraint, and become more likely as a cycle's pools narrow.
     expect(conceptRepeatForms).toBeLessThan(1400 * 0.1);
   }, 30_000);
 });
