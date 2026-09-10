@@ -41,7 +41,7 @@ describe("examReducer - mode stability while navigating", () => {
   it("GOTO_QUESTION (the review screen's shortcut jumps) only moves currentQuestion and leaves review, preserving every other field untouched", () => {
     let state = examReducer(createInitialState(), { type: "START_EXAM", mode: "timed", startTimestamp: 1000 });
     state = examReducer(state, { type: "SELECT_SINGLE", questionId: 1, optionId: "A" });
-    state = examReducer(state, { type: "TOGGLE_MULTI", questionId: 9, optionId: "B" });
+    state = examReducer(state, { type: "TOGGLE_MULTI", questionId: 9, optionId: "B", selectCount: 2 });
     state = examReducer(state, { type: "TOGGLE_FLAG", id: 7 });
     state = examReducer(state, { type: "TOGGLE_FLAG", id: 30 });
     state = examReducer(state, { type: "GOTO_REVIEW" });
@@ -111,5 +111,36 @@ describe("examReducer - RESET (Exit Exam / Retake)", () => {
     let state = examReducer(createInitialState(), { type: "START_EXAM", mode: "untimed", startTimestamp: 5000 });
     state = examReducer(state, { type: "RESET" });
     expect(state).toEqual(createInitialState());
+  });
+});
+
+describe("examReducer - TOGGLE_MULTI enforces selectCount", () => {
+  it("accepts up to selectCount options and ignores a further selection instead of accepting a third", () => {
+    let state = examReducer(createInitialState(), { type: "START_EXAM", mode: "untimed", startTimestamp: 1000 });
+    state = examReducer(state, { type: "TOGGLE_MULTI", questionId: 1, optionId: "A", selectCount: 2 });
+    state = examReducer(state, { type: "TOGGLE_MULTI", questionId: 1, optionId: "C", selectCount: 2 });
+    expect(state.answers[1]).toEqual(["A", "C"]);
+
+    // A third option on a Select TWO question must not be accepted.
+    state = examReducer(state, { type: "TOGGLE_MULTI", questionId: 1, optionId: "E", selectCount: 2 });
+    expect(state.answers[1]).toEqual(["A", "C"]);
+  });
+
+  it("still allows deselecting an already-picked option once the cap is reached, then re-picking another", () => {
+    let state = examReducer(createInitialState(), { type: "START_EXAM", mode: "untimed", startTimestamp: 1000 });
+    state = examReducer(state, { type: "TOGGLE_MULTI", questionId: 1, optionId: "A", selectCount: 2 });
+    state = examReducer(state, { type: "TOGGLE_MULTI", questionId: 1, optionId: "C", selectCount: 2 });
+    state = examReducer(state, { type: "TOGGLE_MULTI", questionId: 1, optionId: "A", selectCount: 2 });
+    expect(state.answers[1]).toEqual(["C"]);
+    state = examReducer(state, { type: "TOGGLE_MULTI", questionId: 1, optionId: "E", selectCount: 2 });
+    expect(state.answers[1]).toEqual(["C", "E"]);
+  });
+
+  it("enforces a selectCount of 3 the same way", () => {
+    let state = examReducer(createInitialState(), { type: "START_EXAM", mode: "untimed", startTimestamp: 1000 });
+    for (const optionId of ["A", "B", "C", "D"]) {
+      state = examReducer(state, { type: "TOGGLE_MULTI", questionId: 1, optionId, selectCount: 3 });
+    }
+    expect(state.answers[1]).toEqual(["A", "B", "C"]);
   });
 });

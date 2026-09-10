@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useReducer, useRef, useState } from "react";
 import { QUESTION_BANK } from "../data/questionBank";
 import { completeExamForm, selectExamForm, type ExamForm, type RotationHistory } from "../lib/examForm";
 import { readQuestionHistory, writeQuestionHistory } from "../lib/questionHistory";
@@ -17,7 +17,7 @@ export function useExamState() {
   const active = useRef(false);
   const startHistory = useRef<RotationHistory | null>(null);
   const memoryHistory = useRef<RotationHistory | null>(null);
-  const questions = form?.questions ?? [];
+  const questions = useMemo(() => form?.questions ?? [], [form]);
 
   const isUnfinished = state.started && !state.submitted;
 
@@ -49,8 +49,9 @@ export function useExamState() {
   }, []);
 
   const toggleMultiOption = useCallback((questionId: number, optionId: string) => {
-    dispatch({ type: "TOGGLE_MULTI", questionId, optionId });
-  }, []);
+    const selectCount = questions.find((q) => q.id === questionId)?.selectCount ?? Infinity;
+    dispatch({ type: "TOGGLE_MULTI", questionId, optionId, selectCount });
+  }, [questions]);
 
   const goToQuestion = useCallback((id: number) => {
     dispatch({ type: "GOTO_QUESTION", id });

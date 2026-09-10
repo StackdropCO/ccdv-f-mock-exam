@@ -70,20 +70,25 @@ export function ExamScreen({ state, questions, actions }: ExamScreenProps) {
           </div>
 
           <div className={styles.options} role="group" aria-label={`Answer options for question ${question.id}`}>
-            {question.options.map((opt) => (
-              <AnswerChoice
-                key={opt.id}
-                option={opt}
-                questionId={question.id}
-                inputType={question.type === "single" ? "radio" : "checkbox"}
-                selected={selected.includes(opt.id)}
-                onToggle={() =>
-                  question.type === "single"
-                    ? actions.selectSingle(question.id, opt.id)
-                    : actions.toggleMultiOption(question.id, opt.id)
-                }
-              />
-            ))}
+            {question.options.map((opt) => {
+              const isSelected = selected.includes(opt.id);
+              const atCap = question.type === "multiple" && !isSelected && selected.length >= question.selectCount;
+              return (
+                <AnswerChoice
+                  key={opt.id}
+                  option={opt}
+                  questionId={question.id}
+                  inputType={question.type === "single" ? "radio" : "checkbox"}
+                  selected={isSelected}
+                  disabled={atCap}
+                  onToggle={() =>
+                    question.type === "single"
+                      ? actions.selectSingle(question.id, opt.id)
+                      : actions.toggleMultiOption(question.id, opt.id)
+                  }
+                />
+              );
+            })}
           </div>
 
           <div className={styles.footerNav}>

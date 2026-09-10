@@ -433,29 +433,29 @@ export const agentsWorkflows: BankQuestion[] = [
     "conceptKey": "subagent-tool-surface-for-focused-role",
     "type": "single",
     "selectCount": 1,
-    "body": "A documentation reviewer should inspect Markdown files but has no task requiring commands, edits, or external services. You are defining its Agent SDK AgentDefinition. Which configuration most directly expresses that narrow capability set?",
+    "body": "A documentation reviewer subagent should inspect Markdown files but has no task requiring commands, file edits, or calls to external services. You are defining the capabilities it will be given. Which configuration most directly expresses that narrow capability set?",
     "options": [
       {
         "id": "A",
-        "body": "Set its tools to Read, Glob, and Grep."
+        "body": "Grant it only the file-reading and search capabilities its review work requires."
       },
       {
         "id": "B",
-        "body": "Omit tools and assume the reviewer name removes mutating capabilities."
+        "body": "Grant no explicit capability list and assume the reviewer's name prevents mutating actions."
       },
       {
         "id": "C",
-        "body": "Add a sentence saying “read-only” while leaving all tools available."
+        "body": "Add a sentence saying \"read-only\" while leaving every capability available."
       },
       {
         "id": "D",
-        "body": "Give it Bash so it can implement every action through a shell."
+        "body": "Give it a general-purpose shell capability so it can carry out whatever it needs."
       }
     ],
     "correctAnswers": [
       "A"
     ],
-    "explanation": "An AgentDefinition tools list restricts the subagent’s available tools. Naming or describing a role alone does not remove capabilities.",
+    "explanation": "The capabilities a subagent is actually granted are what bound it, so a narrow role should receive only the ones its work requires. Naming or describing a role removes nothing, and a general-purpose shell restores exactly the reach the restriction was meant to prevent.",
     "sourceRefs": [
       "https://code.claude.com/docs/en/agent-sdk/subagents"
     ],
@@ -535,34 +535,34 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-016",
     "domain": "agents-workflows",
     "objective": "D1.2",
-    "conceptKey": "agent-sdk-subprocess-hosting-model",
+    "conceptKey": "claude-agent-sdk-team-controlled",
     "type": "single",
     "selectCount": 1,
-    "body": "A platform team estimates Agent SDK capacity as if each active agent were only a lightweight stateless HTTP request object. What documented runtime fact must change that estimate?",
+    "body": "A team wants an agent that can inspect a repository, edit files, run tests, and iterate until the task is complete. The team is prepared to host the runtime itself and wants direct control over filesystem access and tool permissions. Which implementation path best fits?",
     "options": [
       {
         "id": "A",
-        "body": "A new local process is created for each text token, with no session state."
+        "body": "Use Message Batches because batch jobs provide an interactive filesystem."
       },
       {
         "id": "B",
-        "body": "All self-hosted SDK work executes only in the remote model-provider process."
+        "body": "Use a single stateless Messages API call with no tool loop."
       },
       {
         "id": "C",
-        "body": "All concurrent SDK sessions are multiplexed into one guaranteed shared subprocess."
+        "body": "Put the repository contents in an MCP resource and assume that performs edits automatically."
       },
       {
         "id": "D",
-        "body": "An active SDK session has a CLI subprocess with local working state."
+        "body": "Use the Claude Agent SDK in the team's controlled runtime."
       }
     ],
     "correctAnswers": [
       "D"
     ],
-    "explanation": "The SDK supervises a CLI subprocess that owns shell and filesystem state. Concurrency planning must account for those processes rather than treating the SDK as a stateless wrapper.",
+    "explanation": "The Agent SDK is designed for hosted agent loops with tools and local working state. A single Messages call does not itself provide the iterative coding loop, while Message Batches target asynchronous independent requests rather than interactive repository work.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/hosting"
+      "https://code.claude.com/docs/en/agent-sdk/overview"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -570,34 +570,34 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-017",
     "domain": "agents-workflows",
     "objective": "D1.2",
-    "conceptKey": "claude-code-programmatic-print-mode",
+    "conceptKey": "messages-api-keep-tool-execution-loop",
     "type": "single",
     "selectCount": 1,
-    "body": "A Rust service wants to drive Claude Code’s existing agent loop without writing its own model/tool loop. It cannot embed Python or TypeScript libraries, but it may run a subprocess and parse JSON. Which supported integration approach fits?",
+    "body": "A service already has a mature execution engine that validates every proposed action, invokes internal tools, records audit logs, and controls retries. It needs Claude only to decide which tool to call next. Which approach gives the application the clearest ownership of that loop?",
     "options": [
       {
         "id": "A",
-        "body": "Import the TypeScript Agent SDK directly as a native Rust crate."
+        "body": "Give Claude direct access to the internal tools and keep only a prompt-level instruction describing the old validation policy."
       },
       {
         "id": "B",
-        "body": "Run the Claude Code CLI in print mode with JSON output."
+        "body": "Convert every tool into prompt text and ask Claude to simulate the results."
       },
       {
         "id": "C",
-        "body": "Call a raw Messages API request and assume it runs local file tools."
+        "body": "Use the Messages API and keep the tool-execution loop in the application."
       },
       {
         "id": "D",
-        "body": "Encode Rust source as an MCP prompt and expect it to launch the loop."
+        "body": "Replace the execution engine with Message Batches."
       }
     ],
     "correctAnswers": [
-      "B"
+      "C"
     ],
-    "explanation": "For languages other than Python and TypeScript, the documented bridge to the same loop is the CLI as a subprocess with print mode and JSON output.",
+    "explanation": "When an application already needs to own action validation, execution, retries, and logging, a manual Messages tool loop preserves that control. Higher-level agent runtimes are useful when the application wants them to own more of the loop.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/overview"
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -608,29 +608,29 @@ export const agentsWorkflows: BankQuestion[] = [
     "conceptKey": "sdk-final-result-versus-intermediate-message",
     "type": "single",
     "selectCount": 1,
-    "body": "An SDK integration marks a task successful as soon as it sees any AssistantMessage containing text. In a failing run, the text said “I will inspect the error” before further tool calls. What should determine loop outcome instead?",
+    "body": "An agent integration marks a task successful as soon as it sees any assistant message containing text. In a failing run, that text said \"I will inspect the error\" and the agent then made further tool calls. What should determine the loop outcome instead?",
     "options": [
       {
         "id": "A",
-        "body": "Whether the first text is grammatical."
+        "body": "Whether the first assistant text is grammatical."
       },
       {
         "id": "B",
-        "body": "Whether any tool was requested."
+        "body": "Whether the agent requested any tool at all."
       },
       {
         "id": "C",
-        "body": "The ResultMessage and its success or error subtype."
+        "body": "The run's terminal result and whether it reported success or an error."
       },
       {
         "id": "D",
-        "body": "Whether the system init event contains a session ID."
+        "body": "Whether the run's start-up event included a session identifier."
       }
     ],
     "correctAnswers": [
       "C"
     ],
-    "explanation": "Assistant messages occur throughout execution. The result message records the loop outcome, and its subtype distinguishes success from stopping on an error or limit.",
+    "explanation": "Assistant messages are emitted throughout a run, so a statement of intent is progress commentary rather than evidence of completion. Only the run's terminal result reports whether it finished successfully or stopped on an error or a limit.",
     "sourceRefs": [
       "https://code.claude.com/docs/en/agent-sdk/agent-loop"
     ],
@@ -643,11 +643,11 @@ export const agentsWorkflows: BankQuestion[] = [
     "conceptKey": "sdk-turn-cap-not-output-token-limit",
     "type": "single",
     "selectCount": 1,
-    "body": "A tool-using SDK agent must stop after a configured number of model/tool round trips, even when every individual response is short. Which setting controls that boundary?",
+    "body": "A tool-using agent must stop after a configured number of model and tool round trips, even when every individual response is short. Which setting controls that boundary?",
     "options": [
       {
         "id": "A",
-        "body": "maxTurns in TypeScript, or max_turns in Python."
+        "body": "A harness-level cap on how many model and tool round trips the loop may run."
       },
       {
         "id": "B",
@@ -655,7 +655,7 @@ export const agentsWorkflows: BankQuestion[] = [
       },
       {
         "id": "C",
-        "body": "A smaller allowedTools list that still contains the repeatedly called tool."
+        "body": "A smaller allowed-tool list that still contains the repeatedly called tool."
       },
       {
         "id": "D",
@@ -665,7 +665,7 @@ export const agentsWorkflows: BankQuestion[] = [
     "correctAnswers": [
       "A"
     ],
-    "explanation": "The SDK’s turn limit bounds tool-use round trips. Short output or small logs do not bound how many times the loop executes.",
+    "explanation": "Bounding iterations requires a limit on the loop itself. Per-response output budgets, narrower tool lists, and per-call timeouts each constrain a single step while leaving the number of repetitions unbounded.",
     "sourceRefs": [
       "https://code.claude.com/docs/en/agent-sdk/agent-loop"
     ],
@@ -675,34 +675,34 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-020",
     "domain": "agents-workflows",
     "objective": "D1.2",
-    "conceptKey": "claude-code-partial-output-streaming",
+    "conceptKey": "surface-intermediate-progress-separately-declare",
     "type": "single",
     "selectCount": 1,
-    "body": "A TypeScript SDK app correctly receives complete assistant responses but needs to render text while each response is being generated. Which change addresses that specific gap?",
+    "body": "An agent can take several minutes to investigate a repository. Users need visible progress while it works, but the application must not mistake progress text for a completed task. What is the best integration design?",
     "options": [
       {
         "id": "A",
-        "body": "Treat each complete AssistantMessage as one token."
+        "body": "Hide all progress and declare success after a fixed number of seconds."
       },
       {
         "id": "B",
-        "body": "Enable includePartialMessages and handle text deltas in stream_event messages."
+        "body": "Treat the first assistant text as the final result."
       },
       {
         "id": "C",
-        "body": "Start a new query for every character."
+        "body": "Surface intermediate progress separately and declare completion only when the agent run reaches its actual terminal outcome."
       },
       {
         "id": "D",
-        "body": "Wait only for the final ResultMessage."
+        "body": "Mark the task complete whenever any tool starts."
       }
     ],
     "correctAnswers": [
-      "B"
+      "C"
     ],
-    "explanation": "Partial-message streaming adds raw events as generation proceeds. The app must extract text deltas rather than waiting for complete assistant messages.",
+    "explanation": "Long-running agents can emit intermediate messages while still using tools or reasoning. The UI should distinguish progress from the terminal result so it neither appears frozen nor reports success prematurely.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/streaming-output"
+      "https://code.claude.com/docs/en/agent-sdk/overview"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -710,34 +710,40 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-021",
     "domain": "agents-workflows",
     "objective": "D1.2",
-    "conceptKey": "sdk-stream-complete-message-double-display",
-    "type": "single",
-    "selectCount": 1,
-    "body": "With partial SDK output enabled, a UI appends text deltas and then appends the complete AssistantMessage text to the same buffer. Users see each response twice. Which fix preserves streaming without duplicating output?",
+    "conceptKey": "incremental-output-final-assembled-response",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A customer-facing agent streams progress while using tools. The product team wants the UI to remain responsive without showing the same generated text twice. Which TWO principles should guide the implementation? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "Disable tool execution."
+        "body": "Treat incremental output and the final assembled response as representations of the same generation rather than independent answers."
       },
       {
         "id": "B",
-        "body": "Append the complete message once more to identify the final copy."
+        "body": "Append every partial update and then append the complete final text again."
       },
       {
         "id": "C",
-        "body": "Delete all non-text events and stop reading after the first delta."
+        "body": "Maintain enough state to reconcile streamed content with the completed message."
       },
       {
         "id": "D",
-        "body": "Use deltas for incremental display and reconcile the complete message instead of appending it again."
+        "body": "Start a new agent run for every streamed fragment."
+      },
+      {
+        "id": "E",
+        "body": "Discard the terminal result whenever streaming was enabled."
       }
     ],
     "correctAnswers": [
-      "D"
+      "A",
+      "C"
     ],
-    "explanation": "Partial events are emitted in addition to complete assistant messages. Treating both as new text duplicates the same content.",
+    "explanation": "Streaming gives incremental views of a response that is later complete. A client should reconcile those views rather than blindly append both copies, while still retaining the terminal outcome for correctness.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/streaming-output"
+      "https://platform.claude.com/docs/en/build-with-claude/streaming",
+      "https://code.claude.com/docs/en/agent-sdk/overview"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -745,34 +751,34 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-022",
     "domain": "agents-workflows",
     "objective": "D1.2",
-    "conceptKey": "managed-agent-environment-session-distinction",
+    "conceptKey": "managed-agent-runtime-intended-provide",
     "type": "single",
     "selectCount": 1,
-    "body": "A Managed Agents integration has a reusable model/prompt/tool configuration and a sandbox configuration. It needs a separate task execution that references both. Which object represents that execution?",
+    "body": "A team needs customer agents with stateful sessions, isolated runtime environments, and persistent execution history. They prefer Anthropic to operate that agent infrastructure rather than running agent containers themselves. Which direction best matches the requirement?",
     "options": [
       {
         "id": "A",
-        "body": "An environment."
+        "body": "Use a local stdio MCP server as the complete hosting platform."
       },
       {
         "id": "B",
-        "body": "A tool schema."
+        "body": "Use a managed agent runtime intended to provide hosted sessions and execution infrastructure."
       },
       {
         "id": "C",
-        "body": "A session."
+        "body": "Use prompt caching as a replacement for persistent session state."
       },
       {
         "id": "D",
-        "body": "The reusable agent definition itself."
+        "body": "Use one synchronous Messages request per customer and assume server-side memory."
       }
     ],
     "correctAnswers": [
-      "C"
+      "B"
     ],
-    "explanation": "A session is the running agent instance within an environment. Agent and environment resources describe configuration rather than one specific task execution.",
+    "explanation": "The deciding requirement is who operates the stateful agent runtime. A managed agent service fits when the provider should own sessions and execution infrastructure; Messages and prompt caching do not create durable agent sessions.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/managed-agents/overview"
+      "https://code.claude.com/docs/en/agent-sdk/overview"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -780,34 +786,35 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-023",
     "domain": "agents-workflows",
     "objective": "D1.2",
-    "conceptKey": "managed-session-created-without-work-event",
+    "conceptKey": "way-continue-intended-agent-session",
     "type": "single",
     "selectCount": 1,
-    "body": "Using the documented Managed Agents beta API, an application creates a session with agent and environment IDs but sends no initial events. It expects a task mentioned only in the application’s local variable to begin. What is missing?",
+    "body": "An agent helps an analyst over several follow-up turns. The analyst expects each follow-up to build on the previous investigation. What must the application preserve?",
     "options": [
       {
         "id": "A",
-        "body": "A user event delivering the task to that session."
+        "body": "Only the model name used on the first turn."
       },
       {
         "id": "B",
-        "body": "An arbitrary assistant message fabricated as a completed result."
+        "body": "A prompt-cache key, because a cache is a durable conversation store."
       },
       {
         "id": "C",
-        "body": "A local Agent SDK subprocess for every managed session."
+        "body": "Only the most recent user sentence, because agent runtimes reconstruct the rest automatically."
       },
       {
         "id": "D",
-        "body": "A new environment for each sentence of the task."
+        "body": "A way to continue the intended agent session or otherwise restore the relevant prior state."
       }
     ],
     "correctAnswers": [
-      "A"
+      "D"
     ],
-    "explanation": "Creating a session and sending its work are separate steps unless initial events are supplied. The task must be delivered as a user event.",
+    "explanation": "Multi-turn agent work requires continuity of the relevant session or state. Model selection and prompt caching do not by themselves preserve the prior investigation.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/managed-agents/sessions"
+      "https://code.claude.com/docs/en/agent-sdk/overview",
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -815,34 +822,34 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-024",
     "domain": "agents-workflows",
     "objective": "D1.2",
-    "conceptKey": "managed-agent-version-pin-at-session-start",
+    "conceptKey": "evaluation-explicitly-identified-stable-configuration",
     "type": "single",
     "selectCount": 1,
-    "body": "A Managed Agents beta deployment must compare two agent configurations reproducibly. Passing only an agent ID selects its latest version, which may change during the experiment. What session-creation choice removes that variability?",
+    "body": "A team is comparing two versions of an agent configuration. During the experiment, engineers continue editing the default configuration. What practice makes the comparison defensible?",
     "options": [
       {
         "id": "A",
-        "body": "Pin only the environment ID while continuing to use the bare agent ID."
+        "body": "Change the prompt and model between cases to increase variation."
       },
       {
         "id": "B",
-        "body": "Pass the agent reference with the required explicit version."
+        "body": "Record only the final answers and ignore which configuration produced them."
       },
       {
         "id": "C",
-        "body": "Record whichever version is latest before launching each unpinned session."
+        "body": "Run each evaluation against an explicitly identified, stable configuration version."
       },
       {
         "id": "D",
-        "body": "Keep one local SDK package version fixed while using the same bare managed-agent ID."
+        "body": "Use the mutable default configuration for every run but record only the date each case was executed."
       }
     ],
     "correctAnswers": [
-      "B"
+      "C"
     ],
-    "explanation": "A versioned agent reference pins which agent configuration the session runs. A bare ID selects the latest version.",
+    "explanation": "Evaluation requires knowing what was actually tested. Pinning or otherwise identifying the agent configuration prevents an evolving default from contaminating the comparison.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/managed-agents/sessions"
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -885,34 +892,40 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-026",
     "domain": "agents-workflows",
     "objective": "D1.2",
-    "conceptKey": "sdk-headless-not-default-interactive-prompt",
-    "type": "single",
-    "selectCount": 1,
-    "body": "A headless SDK agent runs in default permission mode. A requested tool is not covered by an allow rule, and no canUseTool callback is configured. What should the developer expect under the documented SDK behavior?",
+    "conceptKey": "define-happen-approval-cannot-obtained",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A headless production agent may propose actions that sometimes require human approval. There is no interactive terminal operator watching the process. Which TWO design choices are appropriate? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "The terminal always opens an interactive approval dialog."
+        "body": "Automatically approve every action so the process never blocks."
       },
       {
         "id": "B",
-        "body": "The request automatically switches to bypassPermissions."
+        "body": "Define what should happen when approval cannot be obtained, such as deny or escalate."
       },
       {
         "id": "C",
-        "body": "The tool is denied."
+        "body": "Provide an application-level approval path that can pause and decide on a concrete proposed action."
       },
       {
         "id": "D",
-        "body": "The tool runs because default means approve everything."
+        "body": "Assume the runtime will always open a terminal prompt when approval is needed."
+      },
+      {
+        "id": "E",
+        "body": "Move the approval rule into generated prose after the action executes."
       }
     ],
     "correctAnswers": [
+      "B",
       "C"
     ],
-    "explanation": "In SDK default mode, uncovered tools go to canUseTool; without that callback they are denied. A headless embedding should not expect an interactive terminal prompt.",
+    "explanation": "A headless service needs an explicit programmatic approval and fallback path. Human-in-the-loop control must exist in the application flow before consequential execution, not depend on an unattended terminal.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/agent-loop"
+      "https://code.claude.com/docs/en/agent-sdk/overview",
+      "https://code.claude.com/docs/en/permissions"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -920,34 +933,35 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-027",
     "domain": "agents-workflows",
     "objective": "D1.2",
-    "conceptKey": "sdk-budget-includes-subagent-spend",
+    "conceptKey": "delegated-model-usage-request-level-cost",
     "type": "single",
     "selectCount": 1,
-    "body": "An SDK deployment uses Claude Code v2.1.217 or later and delegates work to several subagents. It must account for the whole query when applying its configured spend cap. Which statement follows the documented budget behavior?",
+    "body": "A lead agent delegates research to several subagents. The team caps the cost of each user request, but its dashboard counts only the lead agent's visible response tokens. Why is that accounting insufficient?",
     "options": [
       {
         "id": "A",
-        "body": "Subagent requests count toward the query’s total spend used by maxBudgetUsd / max_budget_usd."
+        "body": "Subagents are free whenever their outputs are summarized."
       },
       {
         "id": "B",
-        "body": "Subagent requests are excluded because they have separate conversation contexts."
+        "body": "Include delegated model usage in the request-level cost budget."
       },
       {
         "id": "C",
-        "body": "A maxTurns value alone is an exact dollar-denominated cap."
+        "body": "A budget applies only to the text displayed to the user."
       },
       {
         "id": "D",
-        "body": "The cap applies only to text returned to the end user, excluding tool-use work."
+        "body": "Only tool calls are billable in multi-agent systems."
       }
     ],
     "correctAnswers": [
-      "A"
+      "B"
     ],
-    "explanation": "The SDK query budget includes subagent spend. Separate worker contexts do not create free or excluded model requests.",
+    "explanation": "Delegation isolates context but does not eliminate inference work. Production budgeting should include the model usage caused by the complete orchestration, not merely the lead agent's final prose.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/agent-loop"
+      "https://platform.claude.com/docs/en/about-claude/models/optimizing-for-cost-and-intelligence",
+      "https://www.anthropic.com/engineering/building-effective-agents"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -955,34 +969,35 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-028",
     "domain": "agents-workflows",
     "objective": "D1.2",
-    "conceptKey": "sdk-tool-execution-owned-by-harness",
+    "conceptKey": "tool-failure-observation-agent-recover",
     "type": "single",
     "selectCount": 1,
-    "body": "A team migrating a manual loop to the Agent SDK sees a tool-use block in an AssistantMessage and executes that tool itself. The SDK then executes it too. What responsibility was carried over incorrectly?",
+    "body": "An agent calls a flaky read-only inventory tool. When the tool returns an explicit transient error, the agent currently invents an inventory value and continues. What should the system encourage instead?",
     "options": [
       {
         "id": "A",
-        "body": "The responsibility to display progress."
+        "body": "Remove the failed tool call from the history."
       },
       {
         "id": "B",
-        "body": "The responsibility to execute normal SDK-managed tool requests."
+        "body": "Return the tool failure as an observation so the agent can recover appropriately."
       },
       {
         "id": "C",
-        "body": "The responsibility to inspect final outcomes."
+        "body": "Convert transient failures into an empty normal result so the loop can continue without an error branch."
       },
       {
         "id": "D",
-        "body": "The responsibility to store the application’s own business records."
+        "body": "Replace every tool error with an empty successful result."
       }
     ],
     "correctAnswers": [
       "B"
     ],
-    "explanation": "The Agent SDK executes requested tools and feeds their results back into its loop. Executing the same managed call again outside that loop duplicates the action.",
+    "explanation": "Tool failures are part of the environment the agent must reason about. Hiding or fabricating results breaks the agent loop; exposing the failure enables an appropriate recovery strategy.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/agent-loop"
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls",
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1065,34 +1080,35 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-031",
     "domain": "agents-workflows",
     "objective": "D1.2",
-    "conceptKey": "sdk-stream-consume-through-completion",
+    "conceptKey": "intermediate-statement-intent-evidence-required",
     "type": "single",
     "selectCount": 1,
-    "body": "An SDK consumer breaks out of its message iterator immediately after receiving ResultMessage. The integration must also process any trailing system events, which the documented stream can emit. What should it do?",
+    "body": "During a repository task, the agent says, “I found the likely bug and will run the tests next.” The application immediately reports the task as successful. What is wrong with that completion rule?",
     "options": [
       {
         "id": "A",
-        "body": "Record the result when received, then continue iterating to stream completion."
+        "body": "The application should report success as soon as the agent sounds confident."
       },
       {
         "id": "B",
-        "body": "Assume all system events precede the result and discard the remainder."
+        "body": "Agents should never communicate progress before completion."
       },
       {
         "id": "C",
-        "body": "Restart the completed task to recover trailing events."
+        "body": "Any text emitted before a tool call is necessarily an error."
       },
       {
         "id": "D",
-        "body": "Treat every trailing event as a new user request."
+        "body": "An intermediate statement of intent is not evidence that the required action and verification finished."
       }
     ],
     "correctAnswers": [
-      "A"
+      "D"
     ],
-    "explanation": "ResultMessage marks the loop outcome, but a small number of system events can follow. Consuming the stream to completion preserves those events.",
+    "explanation": "Production agent completion should be tied to the run's actual completion and required verification, not to an intermediate natural-language statement that may precede further tool use.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/agent-loop"
+      "https://code.claude.com/docs/en/agent-sdk/overview",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1135,34 +1151,35 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-033",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "sdk-explicit-session-versus-most-recent",
+    "conceptKey": "maintain-authorized-customer-to-session-mapping-resume",
     "type": "single",
     "selectCount": 1,
-    "body": "A server handles several independent customer conversations in one working directory. A returning customer’s session is not the most recently active one. Which session-selection method avoids continuing the wrong conversation?",
+    "body": "A support service runs many independent customer conversations. A returning customer must continue their own prior investigation, not whichever session happened to run most recently. What is the safest design?",
     "options": [
       {
         "id": "A",
-        "body": "Use continue because it always identifies the current customer."
+        "body": "Maintain an authorized customer-to-session mapping and resume the specifically associated state."
       },
       {
         "id": "B",
-        "body": "Pick the last transcript written by any customer."
+        "body": "Let Claude infer the customer from unrelated conversation history."
       },
       {
         "id": "C",
-        "body": "Start a fresh session and assume the customer ID retrieves its history automatically."
+        "body": "Use one shared session for every customer so context is easier to manage."
       },
       {
         "id": "D",
-        "body": "Look up that customer’s authorized session ID and pass it to resume."
+        "body": "Continue the most recently active session globally."
       }
     ],
     "correctAnswers": [
-      "D"
+      "A"
     ],
-    "explanation": "Continue selects the most recent session in the directory; resume targets a specific session ID. Multi-session applications must select the intended authorized conversation explicitly.",
+    "explanation": "Session continuity in a multi-user service must be explicitly scoped to the authenticated user or task. A global 'most recent' session risks both incorrect context and cross-customer disclosure.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/sessions"
+      "https://code.claude.com/docs/en/agent-sdk/overview",
+      "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1170,34 +1187,35 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-034",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "session-fork-preserves-original-thread",
+    "conceptKey": "isolated-branch-new-agent-context",
     "type": "single",
     "selectCount": 1,
-    "body": "An analyst wants to explore a contrary hypothesis using an existing SDK conversation’s evidence, while keeping the original conversation unchanged for later continuation. Which operation fits?",
+    "body": "An analyst wants to explore a contrary hypothesis without losing the original line of investigation. Both paths should start from the same established evidence. What is the best conceptual approach?",
     "options": [
       {
         "id": "A",
-        "body": "Fork the existing session and retain both session IDs."
+        "body": "Run both hypotheses in the same undifferentiated context and accept whichever answer appears last."
       },
       {
         "id": "B",
-        "body": "Resume the original and overwrite its direction with the contrary hypothesis."
+        "body": "Delete the earlier evidence so the new hypothesis is not biased."
       },
       {
         "id": "C",
-        "body": "Use continue and assume it creates a branch."
+        "body": "Create an isolated branch or new agent context seeded with the relevant established state, while preserving the original."
       },
       {
         "id": "D",
-        "body": "Delete the original transcript after copying only its title."
+        "body": "Overwrite the original history and rely on memory to reconstruct it later."
       }
     ],
     "correctAnswers": [
-      "A"
+      "C"
     ],
-    "explanation": "Forking creates a separate conversation initialized from the original history. The original thread remains available under its own ID.",
+    "explanation": "When two lines of reasoning may diverge, isolating them preserves the original state and prevents one path from contaminating the other. The important principle is deliberate context branching, not a particular SDK method.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/sessions"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows",
+      "https://www.anthropic.com/engineering/building-effective-agents"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1205,34 +1223,35 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-035",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "session-fork-not-filesystem-branch",
+    "conceptKey": "shared-execution-environment-merely-model",
     "type": "single",
     "selectCount": 1,
-    "body": "Two SDK sessions fork from the same history and work in the same directory. One edits a source file. The other subsequently reads the edited file. Which explanation is correct?",
+    "body": "Two coding agents investigate different approaches in separate conversation contexts but write to the same checkout at the same time. Their edits interfere with one another. What did the architecture fail to isolate?",
     "options": [
       {
         "id": "A",
-        "body": "Forking failed because a fork must copy the entire disk."
+        "body": "The answer format, because JSON would prevent file conflicts."
       },
       {
         "id": "B",
-        "body": "Only the model’s temperature can make file contents differ."
+        "body": "The prompt cache, because caching automatically merges files."
       },
       {
         "id": "C",
-        "body": "Forking branches conversation history, while the directory remains shared."
+        "body": "The model family, because separate agents require different models."
       },
       {
         "id": "D",
-        "body": "Each session receives a private filesystem whenever its ID differs."
+        "body": "The shared execution environment, not merely the model context."
       }
     ],
     "correctAnswers": [
-      "C"
+      "D"
     ],
-    "explanation": "A session fork does not branch the filesystem. Separate working copies or another filesystem isolation strategy are needed to keep edits apart.",
+    "explanation": "Separate conversational contexts do not automatically isolate external state such as a shared filesystem. Parallel agents that mutate the same resources need execution isolation or coordination as well as context isolation.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/sessions"
+      "https://www.anthropic.com/engineering/building-effective-agents",
+      "https://code.claude.com/docs/en/agent-sdk/overview"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1280,34 +1299,39 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-037",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "sdk-stateless-transcript-write-option",
-    "type": "single",
-    "selectCount": 1,
-    "body": "A TypeScript Agent SDK integration performs independent one-shot tasks and must suppress SDK session transcript writes to disk. It does not need later resumption. Which documented option directly implements that requirement?",
+    "conceptKey": "durable-preference-application-managed-state-associated",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A customer-support agent serves many customers. It should remember a customer's preferred contact method across future sessions, but one customer's information must never appear in another customer's conversation.\n\nWhich TWO design choices best satisfy the requirement? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "Set persistSession: false for the query."
+        "body": "Store the durable preference in application-managed state associated with the authenticated customer"
       },
       {
         "id": "B",
-        "body": "Use a fresh query each time and assume fresh sessions are never written to disk."
+        "body": "Keep every customer's complete conversation permanently in one shared agent context"
       },
       {
         "id": "C",
-        "body": "Record a new session ID after each task while keeping default persistence."
+        "body": "Retrieve only the relevant customer's stored preference when constructing that customer's active context"
       },
       {
         "id": "D",
-        "body": "Delete transcripts only after completion, allowing them to be written during the task."
+        "body": "Put all customer preferences in the agent's global system prompt so they survive new sessions"
+      },
+      {
+        "id": "E",
+        "body": "Rely on the model to remember the preference after the original conversation is no longer supplied"
       }
     ],
     "correctAnswers": [
-      "A"
+      "A",
+      "C"
     ],
-    "explanation": "TypeScript persistSession: false keeps the session in memory for the call instead of writing its transcript. A fresh default session can still be persisted.",
+    "explanation": "Durable information that must survive sessions should be persisted outside the transient model context. Its scope should match the entity it belongs to—in this case the authenticated customer—and only relevant state should be brought back into that customer's active context.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/sessions"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1315,39 +1339,34 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-038",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "checkpoint-tracked-tools-not-shell-writes",
-    "type": "multiple",
-    "selectCount": 2,
-    "body": "File checkpointing is enabled for a main SDK agent. It changes alpha.ts using Edit, beta.ts using Write, and gamma.ts through a Bash command. Select TWO changes the documented checkpoint mechanism tracks.",
+    "conceptKey": "deliberate-checkpoint-versioned-recovery-point",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A coding agent makes a sequence of risky edits. The team wants a recoverable point before the refactor so it can restore known-good file state if later verification fails. Which pattern best supports that?",
     "options": [
       {
         "id": "A",
-        "body": "The Edit change to alpha.ts."
+        "body": "Rely on the agent to remember the original files from conversation history."
       },
       {
         "id": "B",
-        "body": "The Bash change to gamma.ts."
+        "body": "Increase the model's context window instead of recording file state."
       },
       {
         "id": "C",
-        "body": "The Write change to beta.ts."
+        "body": "Wait until after a failure, then ask Claude to recreate the old files from memory."
       },
       {
         "id": "D",
-        "body": "All later edits made by unrelated external programs."
-      },
-      {
-        "id": "E",
-        "body": "Every database update caused by a shell script."
+        "body": "Create a deliberate checkpoint or versioned recovery point before the risky changes."
       }
     ],
     "correctAnswers": [
-      "A",
-      "C"
+      "D"
     ],
-    "explanation": "Checkpointing tracks designated file-editing tools, including Edit and Write. Bash changes and unrelated external side effects are outside that mechanism.",
+    "explanation": "Recoverability should be represented in durable system state such as version control or a checkpoint, not in model memory. This lets verification failures trigger a controlled rollback.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/file-checkpointing"
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1355,39 +1374,34 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-039",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "file-rewind-keeps-conversation",
-    "type": "multiple",
-    "selectCount": 2,
-    "body": "An SDK application calls rewindFiles for tracked regular files. The intended changes are restored to the selected checkpoint, with no skipped or unsafe paths. It then sends a follow-up. Select TWO statements about the state after the rewind.",
+    "conceptKey": "restoring-local-files-automatically-undo",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An agent edits configuration files and also sends an external notification. The team later restores the files to an earlier checkpoint. What must it still account for?",
     "options": [
       {
         "id": "A",
-        "body": "The earlier conversation messages have necessarily been deleted."
+        "body": "Restoring local files does not automatically undo external side effects such as a notification already sent."
       },
       {
         "id": "B",
-        "body": "The tracked files have been restored to the selected checkpoint."
+        "body": "The conversation history is necessarily deleted by the file rollback."
       },
       {
         "id": "C",
-        "body": "The session has necessarily been forked to a new ID."
+        "body": "Every external side effect is rewound whenever files are restored."
       },
       {
         "id": "D",
-        "body": "The conversation still contains its earlier discussion unless handled separately."
-      },
-      {
-        "id": "E",
-        "body": "Any previously sent email has necessarily been recalled."
+        "body": "The model provider automatically recalls all tool actions after a checkpoint restore."
       }
     ],
     "correctAnswers": [
-      "B",
-      "D"
+      "A"
     ],
-    "explanation": "File rewinding restores tracked filesystem state while retaining conversation context. It is not a conversation fork or rollback of external actions.",
+    "explanation": "Rollback scope matters. File-state recovery cannot be assumed to reverse independent external actions, so irreversible or compensating actions need their own controls.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/file-checkpointing"
+      "https://www.anthropic.com/engineering/building-effective-agents"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1465,34 +1479,35 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-042",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "programmatic-agent-definition-precedence",
+    "conceptKey": "establish-authoritative-definition-effective-source",
     "type": "single",
     "selectCount": 1,
-    "body": "An SDK application supplies a programmatic agent named reviewer and also has a filesystem definition with that name. Their prompts differ. The reviewer follows the programmatic prompt. What explains this?",
+    "body": "A team defines the same specialist agent in two places with different instructions. Engineers cannot reliably tell which definition a deployment is using. What is the best configuration-management fix?",
     "options": [
       {
         "id": "A",
-        "body": "The filesystem prompt is always concatenated after the programmatic prompt."
+        "body": "Increase the model's reasoning effort so configuration ambiguity no longer matters."
       },
       {
         "id": "B",
-        "body": "The name collision guarantees a random choice each turn."
+        "body": "Establish one authoritative definition or make the effective source explicit and versioned."
       },
       {
         "id": "C",
-        "body": "The larger file wins automatically."
+        "body": "Add a third copy so at least one is likely to be correct."
       },
       {
         "id": "D",
-        "body": "The programmatic definition takes precedence over the same-named filesystem definition."
+        "body": "Keep both divergent definitions and let whichever loads first win."
       }
     ],
     "correctAnswers": [
-      "D"
+      "B"
     ],
-    "explanation": "Programmatic agent definitions take precedence over filesystem definitions with the same name. Maintaining both with divergent content can therefore obscure the effective configuration.",
+    "explanation": "Agent behavior should be reproducible. Multiple divergent sources of truth create hidden configuration drift; consolidating or explicitly versioning the effective definition makes evaluation and deployment defensible.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/subagents"
+      "https://code.claude.com/docs/en/settings",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1500,34 +1515,34 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-043",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "long-running-feature-ledger-prevents-premature-done",
+    "conceptKey": "verified-progress-unresolved-work-discovered",
     "type": "single",
     "selectCount": 1,
-    "body": "A coding agent works across many fresh contexts. After implementing the landing page, a later session declares the whole product complete even though several required flows are missing. Which harness artifact most directly exposes that incompleteness?",
+    "body": "A long-running agent will continue tomorrow in a fresh runtime. It has completed three of eight required tasks and discovered a constraint that affects the remaining work. What should be persisted for the handoff?",
     "options": [
       {
         "id": "A",
-        "body": "A summary listing only the features implemented in the preceding session."
+        "body": "Only the final sentence the agent generated today."
       },
       {
         "id": "B",
-        "body": "A durable feature list with acceptance steps and per-feature completion status."
+        "body": "Nothing; a fresh agent can infer all prior progress from the original goal."
       },
       {
         "id": "C",
-        "body": "The diff from the most recent commit, without the complete requirement list."
+        "body": "The verified progress, unresolved work, and the discovered constraint in durable application state."
       },
       {
         "id": "D",
-        "body": "A completion flag set whenever the latest build compiles successfully."
+        "body": "Only the model name and temperature."
       }
     ],
     "correctAnswers": [
-      "B"
+      "C"
     ],
-    "explanation": "A feature ledger makes remaining requirements visible across sessions. Visible progress on one part no longer substitutes for evidence that every required feature works.",
+    "explanation": "Long-running work needs durable task state when active context or runtime state will disappear. Persisting verified progress and unresolved constraints preserves continuity without retaining every raw interaction.",
     "sourceRefs": [
-      "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1535,39 +1550,40 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-044",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "fresh-agent-baseline-verification",
+    "conceptKey": "relevant-current-state-repository-service",
     "type": "multiple",
     "selectCount": 2,
-    "body": "A fresh coding-agent session inherits a repository and progress notes from yesterday. Before adding the next feature, it must avoid building on an unnoticed broken baseline. Select TWO actions that directly establish the starting state.",
+    "body": "A fresh agent resumes a multi-day implementation from a durable handoff. Which TWO checks help it avoid building on stale assumptions? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "Read recent progress notes and version-control history."
+        "body": "Verify relevant current state, such as the repository or service condition, before taking dependent actions."
       },
       {
         "id": "B",
-        "body": "Assume yesterday’s summary proves today’s checkout works."
+        "body": "Read the persisted task state and remaining constraints."
       },
       {
         "id": "C",
-        "body": "Run a basic end-to-end check of the current application."
+        "body": "Mark every previously attempted task complete without verification."
       },
       {
         "id": "D",
-        "body": "Begin a broad refactor before inspecting the repository."
+        "body": "Discard all handoff information and restart discovery from zero."
       },
       {
         "id": "E",
-        "body": "Mark unfinished features complete to simplify the task list."
+        "body": "Assume the handoff proves the current external environment is unchanged."
       }
     ],
     "correctAnswers": [
       "A",
-      "C"
+      "B"
     ],
-    "explanation": "Reading the handoff establishes intended recent work; exercising the current application checks the actual baseline. Neither a stale summary nor immediate new edits establishes both.",
+    "explanation": "A durable handoff explains intended state, while a fresh observation verifies the environment still matches it. Both are needed when work spans sessions and external state may have changed.",
     "sourceRefs": [
-      "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows",
+      "https://www.anthropic.com/engineering/building-effective-agents"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1575,34 +1591,34 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-045",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "agent-feature-ledger-criteria-integrity",
+    "conceptKey": "evidence-changing-completion-status-keeping",
     "type": "single",
     "selectCount": 1,
-    "body": "A long-running coding-agent harness keeps a feature ledger with original acceptance steps and a passes field. Agents may update completion status after verification, but the approved requirements must remain unchanged. A worker makes its task appear complete by deleting an unmet acceptance step. Which ledger-update policy directly prevents this failure while permitting legitimate progress updates?",
+    "body": "An agent tracks a multi-step migration against an approved acceptance checklist. To make progress reporting trustworthy, which rule should the application enforce?",
     "options": [
       {
         "id": "A",
-        "body": "Allow deletion of an acceptance step whenever the current implementation cannot satisfy it."
+        "body": "The checklist should contain only the steps already finished."
       },
       {
         "id": "B",
-        "body": "Accept any ledger edit accompanied by a passing build, even if requirements changed."
+        "body": "A successful model response automatically marks every checklist item complete."
       },
       {
         "id": "C",
-        "body": "Allow agents to replace the original acceptance steps with a summary of implemented behavior."
+        "body": "Require evidence before changing completion status, while keeping approved requirements fixed."
       },
       {
         "id": "D",
-        "body": "Reject edits to acceptance descriptions or steps; permit verified updates to completion status."
+        "body": "The agent may remove any requirement it finds difficult."
       }
     ],
     "correctAnswers": [
-      "D"
+      "C"
     ],
-    "explanation": "The harness must preserve the acceptance definition while recording verified progress. Restricting ledger updates to status changes prevents an agent from making unfinished work disappear by rewriting the requirements.",
+    "explanation": "Durable task tracking is useful only if the success criteria remain stable. Progress should update from evidence rather than by redefining the target.",
     "sourceRefs": [
-      "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents"
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1610,39 +1626,40 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-046",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "agent-handoff-clean-incremental-state",
+    "conceptKey": "unresolved-uncertainties-affect-parent-next",
     "type": "multiple",
     "selectCount": 2,
-    "body": "A long-running agent has time for one bounded feature before its context ends. Previous sessions left half-finished changes that the next session spent hours untangling. Select TWO handoff practices that directly reduce this problem.",
+    "body": "A parent agent delegates a large repository investigation to a subagent. The parent needs to continue efficiently after the worker finishes. Which TWO handoff properties are most useful? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "Start several additional features just before ending."
+        "body": "Include unresolved uncertainties that could affect the parent's next decision."
       },
       {
         "id": "B",
-        "body": "Leave a verified, coherent incremental change recorded in version control."
+        "body": "Return the decision-relevant findings and evidence rather than every raw file read."
       },
       {
         "id": "C",
-        "body": "Rely on compaction to reconstruct every undocumented file change exactly."
+        "body": "Copy the worker's entire context into the parent regardless of relevance."
       },
       {
         "id": "D",
-        "body": "Write a concise progress update with completed work and remaining steps."
+        "body": "Hide all caveats so the handoff is shorter."
       },
       {
         "id": "E",
-        "body": "Delete the tests that currently fail without recording why."
+        "body": "Return only 'done' with no findings."
       }
     ],
     "correctAnswers": [
-      "B",
-      "D"
+      "A",
+      "B"
     ],
-    "explanation": "A coherent versioned increment plus explicit progress notes gives the next session a recoverable working state and task handoff. Unfinished undocumented work defeats both goals.",
+    "explanation": "Subagents help context management when they compress substantial work into relevant findings while preserving important uncertainty. Dumping the entire worker context defeats the isolation benefit.",
     "sourceRefs": [
-      "https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows",
+      "https://www.anthropic.com/engineering/building-effective-agents"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1650,34 +1667,34 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-047",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "sdk-compaction-boundary-observation",
+    "conceptKey": "preserve-decision-relevant-constraints-needed-continue",
     "type": "single",
     "selectCount": 1,
-    "body": "An SDK event consumer sees a system event with subtype compact_boundary during a long investigation. What happened to the agent context?",
+    "body": "A long-running agent must compact old conversation history. One old message contains an unresolved legal constraint needed later. What should the compaction process optimize for?",
     "options": [
       {
         "id": "A",
-        "body": "Older conversation history was summarized to free context space."
+        "body": "Keeping only the most recent message."
       },
       {
         "id": "B",
-        "body": "A file checkpoint was created for a pending source edit."
+        "body": "Preserve decision-relevant constraints needed to continue the task."
       },
       {
         "id": "C",
-        "body": "The SDK loaded the most recent session’s full transcript in response to continue."
+        "body": "Keeping every raw token forever so no summarization is ever needed."
       },
       {
         "id": "D",
-        "body": "The SDK finished a subagent and replaced the parent’s entire conversation with that worker’s transcript."
+        "body": "Minimizing summary length regardless of lost requirements."
       }
     ],
     "correctAnswers": [
-      "A"
+      "B"
     ],
-    "explanation": "The compact boundary event identifies conversation compaction. It concerns context management, not file restoration, permissions, or model training.",
+    "explanation": "Context compaction is useful only if it preserves the information required to continue the task. Relevant constraints outrank maximum compression.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/agent-loop"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1685,39 +1702,40 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-048",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "subagent-depth-versus-concurrency-controls",
+    "conceptKey": "bound-concurrent-delegated-work-run-level",
     "type": "multiple",
     "selectCount": 2,
-    "body": "An SDK deployment uses Claude Code v2.1.219 or later, with ultracode inactive. It must allow four first-level subagents to run simultaneously, refuse a fifth concurrent worker, and prevent those workers from spawning their own subagents. Select TWO documented limit settings that directly express these requirements.",
+    "body": "A lead agent can launch many independent workers, but the deployment has a strict cost ceiling and limited external API capacity. Which TWO controls should the orchestration layer provide? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "Set CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH to 4."
+        "body": "A bound on concurrent delegated work."
       },
       {
         "id": "B",
-        "body": "Set CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS to 1."
+        "body": "A rule that every worker must use the most expensive model."
       },
       {
         "id": "C",
-        "body": "Set CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH to 1."
+        "body": "A run-level budget or stopping condition tied to the product limits."
       },
       {
         "id": "D",
-        "body": "Set CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS to 4."
+        "body": "A larger final answer token limit as the only control."
       },
       {
         "id": "E",
-        "body": "Leave depth and concurrency unset and use only a dollar budget."
+        "body": "Unlimited worker creation because parallelism always lowers total cost."
       }
     ],
     "correctAnswers": [
-      "C",
-      "D"
+      "A",
+      "C"
     ],
-    "explanation": "Spawn depth 1 permits children of the main agent but no grandchildren. The concurrent-subagent limit separately caps how many workers can run at once.",
+    "explanation": "Parallel agents can improve elapsed time but also multiply model and tool usage. Concurrency limits and explicit budgets bound resource consumption independently of model enthusiasm.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/subagents"
+      "https://www.anthropic.com/engineering/building-effective-agents",
+      "https://platform.claude.com/docs/en/about-claude/models/optimizing-for-cost-and-intelligence"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1725,34 +1743,35 @@ export const agentsWorkflows: BankQuestion[] = [
     "id": "AW-049",
     "domain": "agents-workflows",
     "objective": "D1.3",
-    "conceptKey": "subagent-resume-session-and-agent-identities",
+    "conceptKey": "scoped-access-specialist-detailed-state",
     "type": "single",
     "selectCount": 1,
-    "body": "A custom SDK subagent completed an investigation. A later query must ask that same worker a follow-up using its detailed prior work, not launch a fresh worker with the same role name. The application retains and supplies the same programmatic agents definition on the later query. Under the documented resume workflow, which identifiers are needed?",
+    "body": "A specialist subagent completed a deep investigation and produced a concise summary. Later, a follow-up question depends on details that were not included in that summary. What is the best design if such follow-ups are an expected requirement?",
     "options": [
       {
         "id": "A",
-        "body": "Only the role name, because every worker of a role shares one transcript."
+        "body": "Assume the parent model permanently remembers details it never received."
       },
       {
         "id": "B",
-        "body": "The containing session ID and the completed subagent’s agent ID."
+        "body": "Retain scoped access to the specialist's detailed state for expected follow-ups."
       },
       {
         "id": "C",
-        "body": "The parent session ID alone, with no identity for the particular worker."
+        "body": "Put every specialist's full history into every future parent request."
       },
       {
         "id": "D",
-        "body": "The worker agent ID in an unrelated new session with no restored parent transcript."
+        "body": "Discard the specialist state and rerun only the final summary prompt when a detailed follow-up arrives."
       }
     ],
     "correctAnswers": [
       "B"
     ],
-    "explanation": "Resuming the containing session makes its subagent transcript available; the agent ID identifies the specific worker to continue. A role name alone does not select a past execution.",
+    "explanation": "Summaries are efficient but lossy. If detailed follow-ups are part of the product, the architecture needs durable, scoped access to the relevant specialist state without bloating every parent context.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/subagents"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows",
+      "https://code.claude.com/docs/en/agent-sdk/overview"
     ],
     "qualityStatus": "APPROVED"
   }

@@ -23,6 +23,15 @@
   background: var(--color-accent-subtle);
 }
 
+.row.disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.row.disabled:hover {
+  border-color: var(--color-border);
+}
+
 .row:has(input:focus-visible) {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
@@ -35,6 +44,10 @@
   margin: 0.15em 0 0;
   accent-color: var(--color-accent);
   cursor: pointer;
+}
+
+.input:disabled {
+  cursor: not-allowed;
 }
 
 .optionId {

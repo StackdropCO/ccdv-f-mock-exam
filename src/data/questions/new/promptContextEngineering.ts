@@ -110,34 +110,34 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-004",
     "domain": "prompt-context-engineering",
     "objective": "D6.1",
-    "conceptKey": "context-editing-client-history-unchanged",
+    "conceptKey": "full-audit-record-externally-sending",
     "type": "single",
     "selectCount": 1,
-    "body": "An integration enables server-side tool-result clearing with `clear_tool_uses_20250919`. After the API clears old results for inference, the application still has their full text in its local history. What is the documented interpretation?",
+    "body": "A long-running tool-using agent has accumulated many old search results. The application keeps the full transcript for audit purposes, but Claude no longer needs most of those results to continue. What design best balances the two requirements?",
     "options": [
       {
         "id": "A",
-        "body": "The clearing operation failed"
+        "body": "Keep the full audit record externally while sending Claude a curated active context containing only relevant state."
       },
       {
         "id": "B",
-        "body": "The application must overwrite its stored transcript with placeholders"
+        "body": "Delete the audit record whenever context becomes large."
       },
       {
         "id": "C",
-        "body": "The API has replaced both its inference context and the application's stored audit transcript"
+        "body": "Ask Claude to ignore the old results while continuing to include all of them."
       },
       {
         "id": "D",
-        "body": "Server-side editing affects the prompt sent to Claude; the client can retain its full history"
+        "body": "Send the full audit transcript on every turn because stored data must always be model-visible."
       }
     ],
     "correctAnswers": [
-      "D"
+      "A"
     ],
-    "explanation": "Context editing runs server-side before inference. The client continues managing its unmodified conversation history.",
+    "explanation": "Application storage and model context are separate concerns. You can retain a complete audit trail while curating the finite active context used for inference.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/context-editing"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -145,34 +145,34 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-005",
     "domain": "prompt-context-engineering",
     "objective": "D6.1",
-    "conceptKey": "context-editing-protect-tool-class",
+    "conceptKey": "selective-retention-prune-replaceable-observations",
     "type": "single",
     "selectCount": 1,
-    "body": "Tool-result clearing is appropriate for an agent's search results, but every result from `read_active_contract` must remain available even when old. With the documented clearing strategy enabled, which setting directly expresses that exception?",
+    "body": "An agent may safely discard old web-search results, but the latest signed contract terms must remain available throughout the task. What context-management strategy fits?",
     "options": [
       {
         "id": "A",
-        "body": "Add `read_active_contract` to `exclude_tools`"
+        "body": "Keep every tool result forever."
       },
       {
         "id": "B",
-        "body": "Increase the number of recent tool interactions kept, without a named-tool exception"
+        "body": "Clear every old tool result indiscriminately."
       },
       {
         "id": "C",
-        "body": "Lower the clearing trigger so search results are removed sooner"
+        "body": "Replace the exact contract terms with a short generated summary even though the terms remain decision-critical."
       },
       {
         "id": "D",
-        "body": "Set clear_tool_inputs to false and otherwise use defaults"
+        "body": "Apply selective retention: prune replaceable observations while preserving task-critical evidence."
       }
     ],
     "correctAnswers": [
-      "A"
+      "D"
     ],
-    "explanation": "`exclude_tools` protects specified tools' uses and results from clearing. It expresses the tool-specific retention requirement directly.",
+    "explanation": "Context management should follow information value. Disposable observations can be removed while critical evidence and durable constraints remain.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/context-editing"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -180,34 +180,34 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-006",
     "domain": "prompt-context-engineering",
     "objective": "D6.1",
-    "conceptKey": "compaction-pause-preserve-verbatim",
+    "conceptKey": "inspect-augment-continuation-context-autonomous",
     "type": "single",
     "selectCount": 1,
-    "body": "A supported API integration uses `compact_20260112`. Before continuing after each summary, the application must append the latest user constraint verbatim. Which configuration provides that intervention point?",
+    "body": "An application compacts a long conversation into a summary. Before continuing, it must ensure a newly received legal constraint is present verbatim. What is the safest workflow?",
     "options": [
       {
         "id": "A",
-        "body": "Raise the compaction trigger while leaving automatic continuation enabled"
+        "body": "Discard the summary and all previous state."
       },
       {
         "id": "B",
-        "body": "Enable `pause_after_compaction`, then continue with the compaction block and required additional content"
+        "body": "Assume every summary preserves exact wording automatically."
       },
       {
         "id": "C",
-        "body": "Discard the summary and send only the latest constraint"
+        "body": "Put the constraint only in application logs that Claude cannot see."
       },
       {
         "id": "D",
-        "body": "Place the exact-preservation rule only in summarization instructions and let the API continue immediately"
+        "body": "Inspect or augment the continuation context before autonomous work resumes."
       }
     ],
     "correctAnswers": [
-      "B"
+      "D"
     ],
-    "explanation": "Pausing after compaction lets the application add content before continuation. Preserve the compaction block when resuming the shortened conversation.",
+    "explanation": "When exact state must survive compaction, the application should deliberately preserve or reintroduce it before continuing. Summarization is lossy by nature.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/compaction"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -215,34 +215,35 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-007",
     "domain": "prompt-context-engineering",
     "objective": "D6.1",
-    "conceptKey": "compaction-custom-instructions-replace",
+    "conceptKey": "define-test-task-state-compaction",
     "type": "single",
     "selectCount": 1,
-    "body": "A developer sets custom `instructions` on `compact_20260112` to preserve database names and assumes the default summary instructions are still appended. What should the reviewer flag?",
+    "body": "A custom compaction prompt says only, 'Summarize the conversation briefly.' After compaction, the agent forgets unresolved requirements and pending tool failures. What should the team change?",
     "options": [
       {
         "id": "A",
-        "body": "Custom instructions are appended after the default summary prompt"
+        "body": "Keep only the latest assistant answer."
       },
       {
         "id": "B",
-        "body": "The default remains active whenever custom instructions mention only one topic"
+        "body": "Assume a more capable model makes summary requirements unnecessary."
       },
       {
         "id": "C",
-        "body": "Custom instructions replace the default summary prompt, so they must state all needed retention requirements"
+        "body": "Define and test which task state compaction must preserve."
       },
       {
         "id": "D",
-        "body": "Custom instructions alter only the first compaction, after which the default is always restored"
+        "body": "Make the summary shorter."
       }
     ],
     "correctAnswers": [
       "C"
     ],
-    "explanation": "Custom compaction instructions replace the default prompt rather than supplementing it. Include the state needed for successful continuation.",
+    "explanation": "Compaction quality depends on preserving the state needed for future work. The summary instructions and eval should explicitly cover open requirements, decisions, and unresolved failures.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/compaction"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -285,34 +286,34 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-009",
     "domain": "prompt-context-engineering",
     "objective": "D6.1",
-    "conceptKey": "context-editing-clear-inputs-explicit",
+    "conceptKey": "old-tool-interactions-prune-summarize",
     "type": "single",
     "selectCount": 1,
-    "body": "An agent's old tool calls contain large code snippets in their input arguments. The team enables tool-result clearing with default `clear_tool_inputs` behavior, yet those arguments remain. Why?",
+    "body": "Old tool calls contain huge code snippets in their arguments as well as large results. The team removes only the results, but context remains bloated. What should it investigate?",
     "options": [
       {
         "id": "A",
-        "body": "By default the strategy clears results; clearing tool inputs must be enabled separately"
+        "body": "Whether temperature is too low."
       },
       {
         "id": "B",
-        "body": "A cache hit prevents the context-editing strategy from examining tool arguments"
+        "body": "Whether the user message should be duplicated."
       },
       {
         "id": "C",
-        "body": "The strategy protects every code-containing block regardless of configuration"
+        "body": "Measure what remains in old tool interactions and prune or summarize safe parts."
       },
       {
         "id": "D",
-        "body": "Inputs are cleared only when their tool is listed in exclude_tools"
+        "body": "Whether a larger output limit will shrink the input context."
       }
     ],
     "correctAnswers": [
-      "A"
+      "C"
     ],
-    "explanation": "Default tool-result clearing retains tool inputs. Set `clear_tool_inputs` when the application also intends to remove those old arguments.",
+    "explanation": "Context engineering requires measuring what actually occupies the window. Removing one component of an old interaction may not solve the problem if large arguments or other blocks remain.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/context-editing"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -320,39 +321,39 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-010",
     "domain": "prompt-context-engineering",
     "objective": "D6.1",
-    "conceptKey": "context-token-counting-no-new-compaction",
+    "conceptKey": "count-estimate-tokens-actual-model",
     "type": "multiple",
     "selectCount": 2,
-    "body": "An application using `compact_20260112` calls the token-counting endpoint before sending a long conversation. The history includes an existing compaction block. Select TWO statements describing what this preflight count does.",
+    "body": "Before sending a long multi-turn request, a team wants to know whether it fits the selected model's context budget. Which TWO practices are appropriate? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "Generates a new summary whenever the configured compaction threshold is exceeded"
+        "body": "Count or estimate tokens using the actual model and complete request structure."
       },
       {
         "id": "B",
-        "body": "Applies the existing compaction block when calculating effective context size"
+        "body": "Assume prompt caching removes cached content from the context window."
       },
       {
         "id": "C",
-        "body": "Produces the assistant's next answer along with the token count"
+        "body": "Include existing compacted/summarized state in the estimate as it will actually be sent."
       },
       {
         "id": "D",
-        "body": "Does not trigger a new compaction"
+        "body": "Increase max_tokens and assume that enlarges the model's context window."
       },
       {
         "id": "E",
-        "body": "Replaces every tool result in the client's stored transcript"
+        "body": "Count only the newest user sentence."
       }
     ],
     "correctAnswers": [
-      "B",
-      "D"
+      "A",
+      "C"
     ],
-    "explanation": "Token counting accounts for existing compaction blocks but does not generate new summaries. A count is a preflight measurement, not a compaction execution.",
+    "explanation": "Preflight context planning should reflect the actual request the model will receive. Cached or summarized content still has to be represented correctly in the context budget.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/compaction"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -360,34 +361,35 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-011",
     "domain": "prompt-context-engineering",
     "objective": "D6.1",
-    "conceptKey": "context-editing-minimum-clear-threshold",
+    "conceptKey": "weigh-context-savings-cache-loss",
     "type": "single",
     "selectCount": 1,
-    "body": "With tool-result clearing enabled, a team wants to avoid invalidating a useful cached prefix for a negligible reduction. Which documented control can require a minimum amount of removable content before clearing is applied?",
+    "body": "A team considers pruning old tool results, but doing so would save only a tiny amount of context while destroying a highly reusable cached prefix. What should guide the decision?",
     "options": [
       {
         "id": "A",
-        "body": "Increase the number of recent tool uses retained with keep"
+        "body": "Weigh the context savings against the cache loss and prune only when worthwhile."
       },
       {
         "id": "B",
-        "body": "Lower trigger so clearing begins earlier"
+        "body": "Choose based only on the number of tool calls, regardless of their size."
       },
       {
         "id": "C",
-        "body": "`clear_at_least`"
+        "body": "Always prune something on every turn."
       },
       {
         "id": "D",
-        "body": "Set clear_tool_inputs to true on every call"
+        "body": "Never prune anything once caching is enabled."
       }
     ],
     "correctAnswers": [
-      "C"
+      "A"
     ],
-    "explanation": "`clear_at_least` prevents the strategy from applying unless it can clear the specified amount. That can make a cache-breaking edit worthwhile.",
+    "explanation": "Context editing and caching interact economically. The correct choice is workload-dependent: preserve useful cache reuse when pruning would yield negligible benefit.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/context-editing"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows",
+      "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -780,34 +782,34 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-023",
     "domain": "prompt-context-engineering",
     "objective": "D6.2",
-    "conceptKey": "prompt-prefill-unsupported-migration",
+    "conceptKey": "platform-supported-structured-output-mechanism-validate",
     "type": "single",
     "selectCount": 1,
-    "body": "An integration moves to Claude Sonnet 4.6 and sends a partial final assistant message to force a JSON opening brace. Requests now return 400. Which change addresses the documented incompatibility?",
+    "body": "An older integration forces JSON by beginning the assistant's answer with a hand-written partial object. A newer model/configuration no longer supports that pattern reliably. What is the better production approach when a JSON schema is required?",
     "options": [
       {
         "id": "A",
-        "body": "Remove the final-turn prefill and use supported structured output configuration for the JSON requirement"
+        "body": "Use the platform's supported structured-output mechanism and validate the result."
       },
       {
         "id": "B",
-        "body": "Retry the identical request until the prefill is accepted"
+        "body": "Ask for 'valid JSON' in prose and remove validation."
       },
       {
         "id": "C",
-        "body": "Keep the final assistant prefill but request plain JSON in the system prompt too"
+        "body": "Switch to a larger context window."
       },
       {
         "id": "D",
-        "body": "Send the final assistant prefill as a complete assistant message containing only an opening brace"
+        "body": "Keep forcing the opening characters and retry until they work."
       }
     ],
     "correctAnswers": [
       "A"
     ],
-    "explanation": "Claude 4.6 and later do not support final-turn assistant prefills. Use structured outputs for a schema-based JSON requirement instead.",
+    "explanation": "When the application needs a hard machine-readable contract, use the supported structured output interface rather than relying on brittle answer-prefill tricks.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices"
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1035,32 +1037,32 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-030",
     "domain": "prompt-context-engineering",
     "objective": "D6.3",
-    "conceptKey": "output-refusal-http-success",
+    "conceptKey": "completion-refusal-error-state-parsing",
     "type": "single",
     "selectCount": 1,
-    "body": "A structured-output request receives HTTP 200 with `stop_reason: \"refusal\"` and text that is not the requested JSON object. Which interpretation should drive the handler?",
+    "body": "A structured-output request returns a response that did not complete normally. The downstream service expects the schema object. What should the handler do?",
     "options": [
       {
         "id": "A",
-        "body": "A 200 status proves that parsing as the requested schema must succeed"
+        "body": "Fill any missing schema fields with application defaults and treat the response as normally completed."
       },
       {
         "id": "B",
-        "body": "Classify every 200 response as an application report, and treat non-JSON refusal text as an API outage"
+        "body": "Forward the raw response body directly to the downstream service."
       },
       {
         "id": "C",
-        "body": "A safety refusal can return 200 and take precedence over the output schema; handle that path explicitly"
+        "body": "Assume every HTTP-success response contains the requested object."
       },
       {
         "id": "D",
-        "body": "Retry forever because refusals are ordinary transport failures"
+        "body": "Check completion/refusal/error state before parsing or forwarding the structured payload."
       }
     ],
     "correctAnswers": [
-      "C"
+      "D"
     ],
-    "explanation": "HTTP success does not guarantee the requested structured payload when the model refuses. The refusal stop reason identifies a documented exception to schema-shaped output.",
+    "explanation": "Structured output is still part of a model response lifecycle. The application must handle refusal, truncation, or failure states before trusting the expected schema-shaped data.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
     ],
@@ -1070,32 +1072,32 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-031",
     "domain": "prompt-context-engineering",
     "objective": "D6.3",
-    "conceptKey": "output-enum-capitalization-limitation",
+    "conceptKey": "unambiguous-stable-category-values-validate",
     "type": "single",
     "selectCount": 1,
-    "body": "A structured-output schema uses two category strings that differ only by capitalization. Current documented enum casing behavior must be respected. Which redesign avoids relying on an unsupported distinction?",
+    "body": "A classification schema uses category strings that are visually very similar, and downstream code treats them as distinct business states. The team sees repeated human confusion during review. What redesign is strongest?",
     "options": [
       {
         "id": "A",
-        "body": "Keep the categories and treat normal completion as proof of exact capitalization"
+        "body": "Ask reviewers to infer the intended state from the explanation."
       },
       {
         "id": "B",
-        "body": "Preserve the case-only distinction but retry until the response happens to use one desired capitalization"
+        "body": "Replace categories with free-form prose."
       },
       {
         "id": "C",
-        "body": "Use the same case-only categories as strict tool arguments instead"
+        "body": "Keep confusing values and rely on capitalization alone to communicate meaning."
       },
       {
         "id": "D",
-        "body": "Give the categories values that differ beyond capitalization and validate the returned category"
+        "body": "Use unambiguous stable category values and validate them at the application boundary."
       }
     ],
     "correctAnswers": [
       "D"
     ],
-    "explanation": "Current structured-output documentation does not guarantee enum/const capitalization. Distinct category values should not depend solely on case.",
+    "explanation": "Machine-readable outputs should use clear, stable values that make invalid or ambiguous states difficult to confuse. The goal is a robust contract, not exploitation of a decoder edge case.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
     ],
@@ -1105,34 +1107,35 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-032",
     "domain": "prompt-context-engineering",
     "objective": "D6.3",
-    "conceptKey": "output-citation-exclusive-page-end",
+    "conceptKey": "test-end-to-end-mapping-citation-metadata",
     "type": "single",
     "selectCount": 1,
-    "body": "A citation renderer receives a PDF `page_location` with `start_page_number: 4` and `end_page_number: 5`. It highlights both pages 4 and 5. Which correction matches the documented citation coordinates?",
+    "body": "A document UI receives source-location metadata from Claude. Reviewers complain that clicking a citation highlights the wrong passage. What should the team test?",
     "options": [
       {
         "id": "A",
-        "body": "Treat both values as zero-based inclusive indices"
+        "body": "Only the model's confidence score."
       },
       {
         "id": "B",
-        "body": "Ignore the start value and highlight only page 5"
+        "body": "Only whether the answer contains bracket characters."
       },
       {
         "id": "C",
-        "body": "Interpret the range as one-based with an exclusive end, so this citation covers page 4"
+        "body": "Test the end-to-end mapping from citation metadata to rendered source locations."
       },
       {
         "id": "D",
-        "body": "Subtract one from the start but keep the end inclusive"
+        "body": "Whether a longer prompt produces more citations."
       }
     ],
     "correctAnswers": [
       "C"
     ],
-    "explanation": "PDF citation page numbers are one-based and the end page number is exclusive. The range 4 to 5 therefore covers only page 4.",
+    "explanation": "Citation correctness is an integration contract between model output and UI rendering. Test the end-to-end mapping rather than memorizing one coordinate convention.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/citations"
+      "https://platform.claude.com/docs/en/build-with-claude/pdf-support",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1140,39 +1143,35 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-033",
     "domain": "prompt-context-engineering",
     "objective": "D6.3",
-    "conceptKey": "output-combined-schema-complexity",
-    "type": "multiple",
-    "selectCount": 2,
-    "body": "Each tool schema compiles when tested alone, but combining many strict tools and an output schema produces `Schema is too complex for compilation`. Select TWO responses consistent with the documented cause.",
+    "conceptKey": "task-relevant-tools-output-structures-split",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A request exposes many strict tools and a very large structured final-output schema even though each task uses only a small subset. The integration becomes fragile and expensive to maintain. What design should the team evaluate?",
     "options": [
       {
         "id": "A",
-        "body": "Assume independent compilation proves the combined request must be valid"
+        "body": "Remove all schemas and rely on prose parsing."
       },
       {
         "id": "B",
-        "body": "Reduce unnecessary optional or deeply nested structure in the combined schemas"
+        "body": "Expose only task-relevant tools and output structures, or split the workflow."
       },
       {
         "id": "C",
-        "body": "Keep all schemas unchanged and retry with a higher output-token limit"
+        "body": "Increase temperature so the model handles the complexity."
       },
       {
         "id": "D",
-        "body": "Split the work into requests with smaller relevant schema sets"
-      },
-      {
-        "id": "E",
-        "body": "Validate each schema separately and bypass combined-request error handling"
+        "body": "Keep every possible schema and tool loaded because a larger capability surface avoids routing decisions."
       }
     ],
     "correctAnswers": [
-      "B",
-      "D"
+      "B"
     ],
-    "explanation": "Schema complexity is evaluated across the request and interacting features can make combined grammars expensive. Simplify structures or divide the schema set across requests.",
+    "explanation": "Tool and output surfaces should match the task. Narrower contracts reduce irrelevant context and complexity while keeping deterministic validation where it matters.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1180,32 +1179,32 @@ export const promptContextEngineering: BankQuestion[] = [
     "id": "PC-034",
     "domain": "prompt-context-engineering",
     "objective": "D6.3",
-    "conceptKey": "output-unsupported-regex-raw-schema",
+    "conceptKey": "supported-schema-representational-structure-enforce",
     "type": "single",
     "selectCount": 1,
-    "body": "A developer sends a raw structured-output schema whose string pattern uses lookbehind. The API rejects the schema before generation. What should the developer change?",
+    "body": "A business rule cannot be expressed by the structured-output constraints the application is using. What is the correct fallback?",
     "options": [
       {
         "id": "A",
-        "body": "Add a longer prose example but send the same schema"
+        "body": "Retry invalid business values until one happens to be acceptable without checking them."
       },
       {
         "id": "B",
-        "body": "Retry the same schema with more output tokens"
+        "body": "Remove the business rule."
       },
       {
         "id": "C",
-        "body": "Express a supported pattern and enforce any remaining condition in application validation"
+        "body": "Keep the supported schema for representational structure and enforce the remaining rule deterministically after parsing."
       },
       {
         "id": "D",
-        "body": "Move the unsupported pattern into another required property unchanged"
+        "body": "Assume a schema description is always a hard validator."
       }
     ],
     "correctAnswers": [
       "C"
     ],
-    "explanation": "Structured outputs support only a subset of regex features, excluding lookbehind. Use supported constraints and validate any remaining requirement separately.",
+    "explanation": "Structured decoding does not eliminate application validation. Rules that are outside the supported schema contract still need deterministic enforcement.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
     ],

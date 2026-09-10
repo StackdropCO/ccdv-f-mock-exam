@@ -40,32 +40,32 @@ export const claudeCode: BankQuestion[] = [
     "id": "CC-002",
     "domain": "claude-code",
     "objective": "D3.1",
-    "conceptKey": "claude-code-auto-memory-versus-authored-instructions",
+    "conceptKey": "repository-wide-conventions-apply-consistently-everyone",
     "type": "single",
     "selectCount": 1,
-    "body": "A developer disables Claude Code auto memory for a project to stop it accumulating its own notes. The repository still contains CLAUDE.md. What should they expect about that authored file?",
+    "body": "A repository has coding conventions that every engineer and CI session should follow. One developer has useful personal notes learned from previous sessions. Which information belongs in the shared project context?",
     "options": [
       {
         "id": "A",
-        "body": "It is deleted when auto memory is disabled"
+        "body": "The repository-wide conventions that should apply consistently to everyone."
       },
       {
         "id": "B",
-        "body": "It remains a separate source of authored instructions and can still load"
+        "body": "Every personal note from one developer's prior sessions."
       },
       {
         "id": "C",
-        "body": "It is converted into tool permissions automatically"
+        "body": "API secrets required by local tools."
       },
       {
         "id": "D",
-        "body": "It is ignored unless auto memory is enabled again"
+        "body": "Nothing; Claude Code cannot load durable project instructions."
       }
     ],
     "correctAnswers": [
-      "B"
+      "A"
     ],
-    "explanation": "Auto memory and authored CLAUDE.md instructions are separate mechanisms. Disabling automatic note-taking does not disable the instruction file.",
+    "explanation": "Shared project guidance belongs in versioned project context such as CLAUDE.md or scoped rules. Personal memory and secrets have different scopes and should not be promoted into shared instructions automatically.",
     "sourceRefs": [
       "https://code.claude.com/docs/en/memory"
     ],
@@ -145,34 +145,34 @@ export const claudeCode: BankQuestion[] = [
     "id": "CC-005",
     "domain": "claude-code",
     "objective": "D3.1",
-    "conceptKey": "claude-code-partial-output-streaming",
+    "conceptKey": "non-interactive-execution-path-plus-explicit",
     "type": "single",
     "selectCount": 1,
-    "body": "A monitoring process launches Claude Code in print mode and must consume incremental token events as JSON lines, not wait for one final JSON document. Which option combination matches the documented streaming example?",
+    "body": "A CI pipeline needs Claude Code to perform an analysis non-interactively and return machine-consumable output. No human will be present to answer permission prompts. What must the automation design establish?",
     "options": [
       {
         "id": "A",
-        "body": "`--output-format json` alone"
+        "body": "A non-interactive execution path plus explicit permissions for the tools the job may use."
       },
       {
         "id": "B",
-        "body": "`--output-format text --verbose`"
+        "body": "That every CI run opens the interactive terminal UI."
       },
       {
         "id": "C",
-        "body": "`--output-format json --continue`"
+        "body": "Run with the same broad permissions used on a developer machine because CI has no interactive user."
       },
       {
         "id": "D",
-        "body": "`--output-format stream-json --verbose --include-partial-messages`"
+        "body": "That prompts are converted into Message Batches before Claude Code can run."
       }
     ],
     "correctAnswers": [
-      "D"
+      "A"
     ],
-    "explanation": "`stream-json` yields event objects as JSON lines, and the partial-message option includes incremental generation events. A final JSON response does not provide that token-event stream.",
+    "explanation": "Automation requires both a non-interactive invocation and a permission design suitable for unattended execution. Headless operation should not depend on a person being available to approve unexpected actions.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/headless"
+      "https://code.claude.com/docs/en/permissions"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -180,32 +180,32 @@ export const claudeCode: BankQuestion[] = [
     "id": "CC-006",
     "domain": "claude-code",
     "objective": "D3.1",
-    "conceptKey": "claude-code-init-existing-instructions",
+    "conceptKey": "claude-inspect-repository-review-keep",
     "type": "single",
     "selectCount": 1,
-    "body": "A repository already contains a carefully edited CLAUDE.md. A developer wants Claude Code to inspect the repository and suggest improvements to that file through the built-in initialization workflow. Which statement is correct?",
+    "body": "A new engineer opens a large unfamiliar repository with Claude Code. They want a useful project instruction file, but they do not yet know the repository's build and test conventions. What is the best way to create it?",
     "options": [
       {
         "id": "A",
-        "body": "`/init` ignores an existing CLAUDE.md and offers no improvements"
+        "body": "Have Claude inspect the repository, then review and keep concise instructions grounded in the actual project."
       },
       {
         "id": "B",
-        "body": "`/init` can suggest improvements when CLAUDE.md already exists"
+        "body": "Paste a generic CLAUDE.md from an unrelated repository unchanged."
       },
       {
         "id": "C",
-        "body": "`/init` updates settings.json only, never project instructions"
+        "body": "Put every source file into CLAUDE.md."
       },
       {
         "id": "D",
-        "body": "The existing file must be deleted before initialization can run"
+        "body": "Store the project's secrets in CLAUDE.md so tools can use them."
       }
     ],
     "correctAnswers": [
-      "B"
+      "A"
     ],
-    "explanation": "The initialization workflow can generate starting instructions or suggest improvements to existing ones. Deleting approved guidance first is unnecessary.",
+    "explanation": "Durable project guidance should reflect the real repository and remain focused on useful conventions. Generic or oversized instructions create noise and can encode incorrect assumptions.",
     "sourceRefs": [
       "https://code.claude.com/docs/en/memory"
     ],
@@ -215,34 +215,34 @@ export const claudeCode: BankQuestion[] = [
     "id": "CC-007",
     "domain": "claude-code",
     "objective": "D3.1",
-    "conceptKey": "claude-code-directory-reference-not-recursive-content",
+    "conceptKey": "explore-relevant-code-constraints-form",
     "type": "single",
     "selectCount": 1,
-    "body": "A user types `Explain @src/components` in Claude Code and assumes every component’s full source was automatically included. What should they understand about directory references?",
+    "body": "Claude Code is asked to change a subsystem the developer has never worked with. The change is risky and the developer wants to understand the implementation before edits begin. Which working pattern fits best?",
     "options": [
       {
         "id": "A",
-        "body": "They provide a directory listing; full file contents require file references or subsequent reads"
+        "body": "Enable unrestricted permissions and edit immediately."
       },
       {
         "id": "B",
-        "body": "They recursively include every file’s complete contents"
+        "body": "Explore the relevant code and constraints, form a plan, then implement after the plan is reviewed."
       },
       {
         "id": "C",
-        "body": "They include the full contents of tracked files but omit untracked files"
+        "body": "Make the changes first and only then decide what the requirements were."
       },
       {
         "id": "D",
-        "body": "They include only the directory’s README contents, without a listing"
+        "body": "Skip repository inspection because the model can infer the architecture from the task name."
       }
     ],
     "correctAnswers": [
-      "A"
+      "B"
     ],
-    "explanation": "A directory reference supplies a listing rather than recursively loading all source. Reference specific files or let Claude read them when their contents are needed.",
+    "explanation": "The explore-plan-code loop separates understanding from mutation. This is especially useful when the repository is unfamiliar or the cost of a wrong change is high.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/common-workflows"
+      "https://code.claude.com/docs/en/permissions"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -250,34 +250,34 @@ export const claudeCode: BankQuestion[] = [
     "id": "CC-008",
     "domain": "claude-code",
     "objective": "D3.1",
-    "conceptKey": "claude-code-background-id-not-completion",
+    "conceptKey": "eventual-test-outcome-merely-evidence",
     "type": "single",
     "selectCount": 1,
-    "body": "Claude Code starts a long test command in the background and immediately returns a task ID. A teammate interprets that ID as proof the tests passed. What must happen before reporting success?",
+    "body": "Claude Code starts a long-running test command and continues with other work. Before telling the developer the task is finished, what evidence is needed?",
     "options": [
       {
         "id": "A",
-        "body": "Treat any task ID as a zero exit status"
+        "body": "A second identical command launch."
       },
       {
         "id": "B",
-        "body": "Ignore the task because background commands cannot produce output"
+        "body": "The eventual test outcome, not merely evidence that the command started."
       },
       {
         "id": "C",
-        "body": "Check the task’s eventual completion and recorded output rather than equating launch with success"
+        "body": "Only Claude's prediction that the tests should pass."
       },
       {
         "id": "D",
-        "body": "Start the same command again until two IDs match"
+        "body": "Only the command's process identifier."
       }
     ],
     "correctAnswers": [
-      "C"
+      "B"
     ],
-    "explanation": "A background task ID identifies work still running asynchronously. Its output and final outcome provide the evidence of success or failure.",
+    "explanation": "Launching work is not the same as verifying it. Claude-assisted development should base completion claims on observable results from the relevant checks.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/interactive-mode"
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -285,32 +285,32 @@ export const claudeCode: BankQuestion[] = [
     "id": "CC-009",
     "domain": "claude-code",
     "objective": "D3.1",
-    "conceptKey": "claude-code-mcp-config-versus-health",
+    "conceptKey": "whether-server-actually-connected-authenticated",
     "type": "single",
     "selectCount": 1,
-    "body": "`claude mcp add` prints that a server was added, but Claude cannot use its tools. The developer assumes the add message proves a live connection. Which next check directly tests that assumption?",
+    "body": "A project has an MCP server configured, but Claude Code cannot use the expected tools. Before rewriting prompts, what should the developer investigate?",
     "options": [
       {
         "id": "A",
-        "body": "Edit the system prompt to insist on the tool before checking the server"
+        "body": "Whether the server is actually connected/authenticated and exposing the expected capabilities."
       },
       {
         "id": "B",
-        "body": "Re-add the same configuration repeatedly until an add message changes"
+        "body": "Whether the system prompt contains the tool name at least ten times."
       },
       {
         "id": "C",
-        "body": "Move tool descriptions into the user prompt"
+        "body": "Whether the selected model has a larger context window."
       },
       {
         "id": "D",
-        "body": "Inspect connection status with `/mcp` or the documented MCP status commands"
+        "body": "Whether the repository has more than one branch."
       }
     ],
     "correctAnswers": [
-      "D"
+      "A"
     ],
-    "explanation": "The add message confirms configuration was written. Connection status can still reveal authentication or connectivity failures.",
+    "explanation": "Configuration presence does not prove a live, authorized MCP connection. Connection and capability health should be checked before treating a tool-availability problem as prompt failure.",
     "sourceRefs": [
       "https://code.claude.com/docs/en/mcp"
     ],
@@ -320,32 +320,32 @@ export const claudeCode: BankQuestion[] = [
     "id": "CC-010",
     "domain": "claude-code",
     "objective": "D3.1",
-    "conceptKey": "claude-code-legacy-commands-skills-compatibility",
+    "conceptKey": "evolve-workflow-skill-package-structure",
     "type": "single",
     "selectCount": 1,
-    "body": "A project already has `.claude/commands/check.md`, invoked as `/check`. A developer adopts the newer skill-directory format for other workflows. Must the existing command be deleted immediately?",
+    "body": "A team has a reusable `/review-release` workflow that began as a short custom command. It now needs supporting reference files, scripts, and clearer reusable documentation. What packaging direction best fits?",
     "options": [
       {
         "id": "A",
-        "body": "Yes; command Markdown files are rejected whenever any skill exists"
+        "body": "Put it in managed permissions because permissions are workflow instructions."
       },
       {
         "id": "B",
-        "body": "No; existing command files still work, while skill directories add capabilities such as supporting files"
+        "body": "Move or evolve the workflow into a Skill/package structure designed to carry reusable instructions and supporting assets."
       },
       {
         "id": "C",
-        "body": "Yes; custom commands can coexist only if every command becomes an MCP tool"
+        "body": "Turn the workflow into an MCP server even though no new external capability is needed."
       },
       {
         "id": "D",
-        "body": "No; because command files support every future skill frontmatter field identically"
+        "body": "Copy the full workflow into every user's prompt."
       }
     ],
     "correctAnswers": [
       "B"
     ],
-    "explanation": "Custom commands have been unified with skills, and the older command-file format remains supported. Migration can be driven by needed skill features.",
+    "explanation": "Skills are designed for reusable task expertise and can include supporting material. MCP is for external capabilities, while permissions enforce authority rather than describe a workflow.",
     "sourceRefs": [
       "https://code.claude.com/docs/en/skills"
     ],
@@ -355,34 +355,40 @@ export const claudeCode: BankQuestion[] = [
     "id": "CC-011",
     "domain": "claude-code",
     "objective": "D3.1",
-    "conceptKey": "claude-code-safe-mode-customization-isolation",
-    "type": "single",
-    "selectCount": 1,
-    "body": "Claude Code behaves unexpectedly after several customizations were installed. The developer wants a troubleshooting session with customizations disabled while normal authentication, built-in tools, and permissions still work. Which documented startup option serves that purpose?",
+    "conceptKey": "reproduce-task-clean-deliberately-reduced",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "Claude Code starts behaving unexpectedly after several hooks, Skills, and plugins were added. Which TWO troubleshooting steps best isolate whether customization is the cause? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "`--safe-mode`"
+        "body": "Reproduce the task with a clean or deliberately reduced customization set."
       },
       {
         "id": "B",
-        "body": "`--dangerously-skip-permissions`"
+        "body": "Add more customizations before reproducing the failure."
       },
       {
         "id": "C",
-        "body": "`--continue`"
+        "body": "Change the model and every prompt at the same time."
       },
       {
         "id": "D",
-        "body": "`--output-format json`"
+        "body": "Re-enable components incrementally to identify which one changes behavior."
+      },
+      {
+        "id": "E",
+        "body": "Assume the newest plugin is responsible without testing."
       }
     ],
     "correctAnswers": [
-      "A"
+      "A",
+      "D"
     ],
-    "explanation": "Safe mode disables customizations for diagnosis while keeping core operation and permissions. Bypassing permission prompts would not isolate configuration problems.",
+    "explanation": "Configuration problems are easier to diagnose by controlling variables. A clean comparison followed by incremental reintroduction isolates the component responsible without relying on a particular CLI flag.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/cli-reference"
+      "https://code.claude.com/docs/en/plugins",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -390,34 +396,35 @@ export const claudeCode: BankQuestion[] = [
     "id": "CC-012",
     "domain": "claude-code",
     "objective": "D3.1",
-    "conceptKey": "claude-code-check-loaded-instructions",
+    "conceptKey": "whether-intended-instruction-configuration-source",
     "type": "single",
     "selectCount": 1,
-    "body": "A developer suspects the intended CLAUDE.md file did not load. They want to inspect the session’s loaded memory files before changing any instruction text. Which documented action provides that evidence?",
+    "body": "A developer suspects that Claude Code is not following a repository rule. Before editing the rule itself, what should they establish?",
     "options": [
       {
         "id": "A",
-        "body": "Use `/mcp` to list connected servers"
+        "body": "Rewrite the rule immediately and assume its current text must be the problem."
       },
       {
         "id": "B",
-        "body": "Inspect only the files present on disk without examining session context"
+        "body": "Whether a different engineer's personal settings contain the same text."
       },
       {
         "id": "C",
-        "body": "Run `/context` and inspect the Memory files listing"
+        "body": "Whether the answer can be made longer."
       },
       {
         "id": "D",
-        "body": "Check only the selected model and token limit"
+        "body": "Whether the intended instruction/configuration source is actually being loaded for the current work."
       }
     ],
     "correctAnswers": [
-      "C"
+      "D"
     ],
-    "explanation": "The context view lists loaded memory files. Checking that list isolates loading problems before changing the content itself.",
+    "explanation": "First distinguish a loading/scope problem from an instruction-quality problem. Editing text cannot fix guidance the active session never received.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/memory"
+      "https://code.claude.com/docs/en/memory",
+      "https://code.claude.com/docs/en/settings"
     ],
     "qualityStatus": "APPROVED"
   }
