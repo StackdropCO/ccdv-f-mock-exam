@@ -1,0 +1,21 @@
+# Content license
+
+This file covers the question-bank *content* (question stems, options, answer keys, and explanations). The application source code is separately licensed under the [MIT License](LICENSE).
+
+## Covered under CC BY 4.0
+
+The 318-question expanded question bank — everything in `src/data/questions/new/` — is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+
+This content was written for this project: each item was authored against public, first-party technical documentation (see `sourceRefs` on each question, and [docs/question-bank-methodology.md](docs/question-bank-methodology.md)), reviewed for accuracy and non-duplication, and is not copied or adapted from any certification exam, question bank, or other third-party practice material.
+
+If you reuse this content, attribute it to the **ccdv-f-mock-exam project** and link back to this repository.
+
+## Not covered — provenance unresolved
+
+The 53 original questions (`src/data/questions.ts` and `CCDV-F_Final_Mock_Exam.md`) predate this project's sourced-authoring process. They were supplied as an input to this project rather than written under the contract described in the methodology doc, and this repository does not have a record establishing their original authorship or chain of ownership.
+
+**These 53 questions are explicitly excluded from the CC BY 4.0 grant above.** No license is granted for their reuse, redistribution, or adaptation until their provenance is established. They remain in the app for continuity, checked for technical accuracy (see `research/LEGACY_QUESTION_AUDIT.md`), but their rights status is a separate, unresolved question from the content this project authored itself.
+
+## Everything else
+
+Documentation, research notes, and other non-question-bank written content in this repository follow the same CC BY 4.0 terms as the expanded question bank unless stated otherwise, except where it discusses the 53 original questions above.

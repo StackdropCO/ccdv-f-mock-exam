@@ -1,0 +1,39 @@
+name: Question / content correction
+description: A question, answer, or explanation looks wrong, outdated, or ambiguous.
+labels: ["content"]
+body:
+  - type: input
+    id: question-id
+    attributes:
+      label: Question ID
+      description: The stable ID shown in review mode or found in src/data/ (e.g. AI-042, LEGACY-017). If you don't know it, describe the question's stem instead.
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: What's wrong?
+      description: Inaccurate, outdated, ambiguous, duplicate, etc.
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Proposed correction
+      description: What should the question/answer/explanation say instead?
+    validations:
+      required: false
+  - type: input
+    id: source
+    attributes:
+      label: Authoritative source URL
+      description: A first-party source (Anthropic/Claude docs, the MCP spec, or primary language/protocol docs) supporting your correction.
+    validations:
+      required: true
+  - type: textarea
+    id: reasoning
+    attributes:
+      label: Reasoning
+      description: Why does the source support this correction?
+    validations:
+      required: true
