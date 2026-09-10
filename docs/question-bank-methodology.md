@@ -4,14 +4,14 @@ This describes how the 371-question bank is organized, sourced, and maintained, 
 
 ## Two parts of the bank
 
-- **53 original questions** (`src/data/questions.ts`, IDs `LEGACY-001`…`LEGACY-053`) were generated with ChatGPT at the maintainer's direction as the project's initial practice set, establishing its original format and style — not sourced from an actual certification exam, course, or third-party question bank. They were subsequently independently audited for technical accuracy against current first-party documentation (see `research/LEGACY_QUESTION_AUDIT.md`), and six received precision corrections as a result. They predate the sourced-authoring process below and don't carry `sourceRefs`. Their content is frozen: `tests/legacy-hashes.json` pins them byte-for-byte, so any change to them is caught immediately by `npm test`.
+- **53 original questions** (`src/data/questions.ts`, IDs `LEGACY-001`…`LEGACY-053`) were generated with ChatGPT at the maintainer's direction as the project's initial practice set, establishing its original format and style — not sourced from an actual certification exam, course, or third-party question bank. They were subsequently independently audited for technical accuracy against current first-party documentation (see [audits/legacy-question-audit.md](audits/legacy-question-audit.md)), and six received precision corrections as a result. They predate the sourced-authoring process below and don't carry `sourceRefs`. Their content is frozen: `tests/legacy-hashes.json` pins them byte-for-byte, so any change to them is caught immediately by `npm test`.
 - **318 expanded-bank questions** (`src/data/questions/new/*.ts`, one file per domain, IDs like `AW-013`, `AI-094`, `TM-034`) were authored separately, against the sourced-review process below, each independently reviewed at least once, and have since had 179 items replaced and 7 narrowly corrected in a later independent audit pass (see `tests/bank-change-baseline.json`, which pins the reviewed content of every changed item).
 
 Both parts are validated the same way at test time (`src/data/validateBank.ts`), and both feed the same rotation and grading logic.
 
 ## Domain and objective mapping
 
-`src/data/blueprint.ts` defines the eight exam domains and their objectives (`D1.1`, `D2.3`, …), sourced from the official CCDV-F Exam Guide's published domain/skill weights (see `research/EXAM_BLUEPRINT.md` for the provenance trail). Every question declares a `domain` and `objective`; the bank's tests assert the counts in each match the blueprint exactly, so the eight-domain weighting can't silently drift as questions are added or changed.
+`src/data/blueprint.ts` defines the eight exam domains and their objectives (`D1.1`, `D2.3`, …), sourced from the official CCDV-F Exam Guide's published domain/skill weights (see [audits/exam-blueprint-provenance.md](audits/exam-blueprint-provenance.md) for the provenance trail). Every question declares a `domain` and `objective`; the bank's tests assert the counts in each match the blueprint exactly, so the eight-domain weighting can't silently drift as questions are added or changed.
 
 ## Sourcing and review
 

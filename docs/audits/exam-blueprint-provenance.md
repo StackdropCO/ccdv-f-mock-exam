@@ -1,6 +1,6 @@
 # CCDV-F blueprint — research baseline
 
-*Historical research record from 2026-09-08, documenting the source evidence behind `src/data/blueprint.ts`'s domain/skill weights and quotas. For the current, maintained summary of how the bank is organized, see [../docs/question-bank-methodology.md](../docs/question-bank-methodology.md).*
+*Historical research record from 2026-09-08, documenting the source evidence behind `src/data/blueprint.ts`'s domain/skill weights and quotas. For the current, maintained summary of how the bank is organized, see [../question-bank-methodology.md](../question-bank-methodology.md).*
 
 Date accessed: 2026-09-08.
 

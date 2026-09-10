@@ -1,6 +1,6 @@
 # Legacy question audit
 
-*Historical audit record. This is a bounded source-and-answer accuracy check on the 53 original questions — see [../docs/question-bank-methodology.md](../docs/question-bank-methodology.md) for how these 53 relate to the rest of the bank, including their provenance.*
+*Historical audit record. This is a bounded source-and-answer accuracy check on the 53 original questions — see [../question-bank-methodology.md](../question-bank-methodology.md) for how these 53 relate to the rest of the bank, including their provenance.*
 
 Audit date: 2026-09-08. All 53 original items were read against the verified blueprint and current primary documentation. This replaces the earlier preliminary research-access checkpoint; inaccessible Skilljar is not a generation blocker.
 
