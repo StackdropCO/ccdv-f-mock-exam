@@ -33,7 +33,7 @@ export function createInitialState(): ExamState {
 export type ExamAction =
   | { type: "START_EXAM"; mode: ExamMode; startTimestamp: number }
   | { type: "SELECT_SINGLE"; questionId: number; optionId: string }
-  | { type: "TOGGLE_MULTI"; questionId: number; optionId: string }
+  | { type: "TOGGLE_MULTI"; questionId: number; optionId: string; selectCount: number }
   | { type: "GOTO_QUESTION"; id: number }
   | { type: "NEXT" }
   | { type: "PREV" }
@@ -61,10 +61,14 @@ export function examReducer(state: ExamState, action: ExamAction): ExamState {
 
     case "TOGGLE_MULTI": {
       const current = state.answers[action.questionId] ?? [];
-      const next = current.includes(action.optionId)
-        ? current.filter((o) => o !== action.optionId)
-        : [...current, action.optionId];
-      return { ...state, answers: { ...state.answers, [action.questionId]: next } };
+      if (current.includes(action.optionId)) {
+        const next = current.filter((o) => o !== action.optionId);
+        return { ...state, answers: { ...state.answers, [action.questionId]: next } };
+      }
+      // A question's selectCount is the maximum number of options it accepts; once reached,
+      // further clicks on other options are no-ops until one of the selected options is cleared.
+      if (current.length >= action.selectCount) return state;
+      return { ...state, answers: { ...state.answers, [action.questionId]: [...current, action.optionId] } };
     }
 
     case "GOTO_QUESTION":
