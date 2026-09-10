@@ -1,21 +1,19 @@
 # Question bank summary
 
-Live reference for the maintained question bank. Provenance and methodology are in
-[EXAM_BLUEPRINT.md](EXAM_BLUEPRINT.md); disclosed legacy concerns are in
-[LEGACY_QUESTION_AUDIT.md](LEGACY_QUESTION_AUDIT.md). The detailed drafting, peer-review, and
-independent-review trail behind this bank is not kept in the working tree — it is preserved in
-Git history and in the pull request that introduced the 318-item expansion and its corrections.
+*For the current, maintained description of how the bank is organized, sourced, and contributed to, see [../docs/question-bank-methodology.md](../docs/question-bank-methodology.md). This file is a historical snapshot of the bank's construction and its first independent review pass; it is not re-updated on every content change.*
 
-## Counts
+Provenance and methodology are in [EXAM_BLUEPRINT.md](EXAM_BLUEPRINT.md); disclosed legacy concerns are in [LEGACY_QUESTION_AUDIT.md](LEGACY_QUESTION_AUDIT.md). The detailed drafting, peer-review, and independent-review trail behind this bank is not kept in the working tree — it is preserved in Git history and in the pull requests that introduced the 318-item expansion, its first corrections, and its later replacement pass.
 
-53 original questions, preserved unchanged in `src/data/questions.ts` and
-`CCDV-F_Final_Mock_Exam.md`. 318 new questions, grouped by domain in `src/data/questions/new/`.
+## Counts (current, verified against the live bank)
+
+53 original questions, preserved unchanged in `src/data/questions.ts`.
+318 new questions, grouped by domain in `src/data/questions/new/`.
 371 total, supporting **seven fully disjoint 53-question mocks per rotation cycle** (verified by
-a 1,400-form / 200-cycle simulation in `tests/questionBank.test.ts`).
+a large multi-cycle simulation in `tests/questionBank.test.ts`).
 
-New: 270 single-answer, 48 Select TWO, 0 Select THREE.
+New: 275 single-answer, 43 Select TWO, 0 Select THREE.
 Existing: 40 single-answer, 12 Select TWO, 1 Select THREE.
-Combined: 310 single-answer, 60 Select TWO, 1 Select THREE.
+Combined: 315 single-answer, 55 Select TWO, 1 Select THREE.
 
 ## Domain allocation
 
@@ -36,13 +34,13 @@ bank's own item counts, not official figures. Full skill-level (D#.#) breakdown 
 `src/data/blueprint.ts`, which is the single source of truth for both the runtime selector and
 this document's numbers.
 
-## Independent review (2026-09-09)
+## First independent review (historical, 2026-09-09)
 
 All 318 new items were independently re-verified against live, current Anthropic/MCP
 documentation (not just the original authoring citations), split by domain and cross-checked
-against every legacy item for semantic duplication. Findings and corrections:
+against every legacy item for semantic duplication. Findings and corrections at the time:
 
-- **Two items rested on an MCP protocol mechanism removed in the current (2026-07-28) spec
+- **Two items rested on an MCP protocol mechanism removed in the then-current spec
   revision** (a session-ID-based authentication premise in the Security and Safety domain) —
   rewritten against the current "state handle" terminology and guidance.
 - **Four items were near-duplicates of an existing legacy question** (same discriminator tested
@@ -50,21 +48,33 @@ against every legacy item for semantic duplication. Findings and corrections:
   within its objective.
 - A small number of items had a correct, defensible answer but a citation that didn't fully
   support the specific claim attributed to it; the content was kept (the underlying practice is
-  sound and appropriate for a hands-on Developer Foundations audience) and is noted here rather
-  than silently presented as more tightly sourced than it is.
-- Several **domain-wide balance observations** were raised and are worth watching in future
+  sound and appropriate for a hands-on Developer Foundations audience) and was noted rather
+  than silently presented as more tightly sourced than it was.
+- Several **domain-wide balance observations** were raised as worth watching in future
   authoring passes rather than requiring an immediate fix: some skills (SDK reference mechanics
   in Model Selection, MCP-OAuth session/protocol trivia in Security, beta-feature parameters in
   Context Engineering) lean toward implementation-detail depth relative to their "Foundations"
-  framing. No item was rejected outright — every one of the 318 has exactly one defensible
-  correct answer after this review.
+  framing. No item was rejected outright at this stage.
 
-**Update (2026-09-09, Approved Change 4):** the four legacy precision caveats (Q1, Q7, Q9, Q40)
-and two legacy content concerns (Q31, Q42) disclosed above were resolved with explicit
-user-approved wording corrections to their `body`/affected `options`/`explanation`. `id`, `type`,
-`selectCount`, `correctAnswers`, and domain/objective mapping are unchanged for all six, and the
-other 47 legacy items remain unchanged. See
-[LEGACY_QUESTION_AUDIT.md](LEGACY_QUESTION_AUDIT.md) for the resolved before/after record.
+A first wording-correction pass on the same date resolved four legacy precision caveats
+(Q1, Q7, Q9, Q40) and two legacy content concerns (Q31, Q42) disclosed above, with corrected
+`body`/affected `options`/`explanation`. `id`, `type`, `selectCount`, `correctAnswers`, and
+domain/objective mapping were unchanged for all six, and the other 47 legacy items were
+unaffected. See [LEGACY_QUESTION_AUDIT.md](LEGACY_QUESTION_AUDIT.md) for the resolved
+before/after record.
+
+## Second independent review and replacement pass (later)
+
+A subsequent, separate audit of the 318-item expanded bank replaced 179 items outright (new
+stem/options/answer/explanation, same production `id`, `domain`, and `objective`) and applied 7
+further narrow wording corrections to remove unnecessary exact-recall trivia from otherwise-sound
+items. See `tests/bank-change-baseline.json` for the exact set of changed IDs and content-hash
+pins, and [docs/question-bank-methodology.md](../docs/question-bank-methodology.md) for how
+replacements and corrections are defined and validated going forward. The counts and domain
+allocation table above already reflect the bank *after* this pass; the counts don't change
+(a replacement swaps content within the same domain/objective slot), but a meaningful share of
+the 318 expanded-bank questions carry different content than what the first review pass above
+describes.
 
 ## Maintaining the bank
 

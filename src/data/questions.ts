@@ -1,9 +1,7 @@
 import type { Question } from "./types";
 
-// Transcribed verbatim (content, order, options) from CCDV-F_Final_Mock_Exam.md.
-// correctAnswers reflect the canonical answer key supplied separately by the
-// user (Section 7 of the prompt), not the informal inline checkbox marks in
-// the source Markdown. Explanations reflect the canonical rationale (Section 8).
+// The 53 original practice questions. This file is the maintained production
+// source for them; see research/LEGACY_QUESTION_AUDIT.md for their audit history.
 
 export const QUESTIONS: Question[] = [
   {

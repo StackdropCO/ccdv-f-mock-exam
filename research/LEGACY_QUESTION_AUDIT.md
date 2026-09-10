@@ -1,13 +1,15 @@
 # Legacy question audit
 
+*Historical audit record. This is a bounded source-and-answer accuracy check on the 53 original questions — see [../docs/question-bank-methodology.md](../docs/question-bank-methodology.md) for how these 53 relate to the rest of the bank, including their provenance.*
+
 Audit date: 2026-09-08. All 53 original items were read against the verified blueprint and current primary documentation. This replaces the earlier preliminary research-access checkpoint; inaccessible Skilljar is not a generation blocker.
 
-**Update, 2026-09-09 (Approved Change 4):** the six items below (Q1, Q7, Q9, Q31, Q40, Q42) were
-independently re-confirmed against current documentation, then corrected with user-approved
+**Update, 2026-09-09:** the six items below (Q1, Q7, Q9, Q31, Q40, Q42) were
+independently re-confirmed against current documentation, then given corrected
 replacement wording for `body`/affected `options`/`explanation`. See "Corrections" below for the
 resolved before/after record. The other 47 items are still unchanged from the original content.
 
-This is a bounded source-and-answer audit, not an assertion that preserved legacy items passed the new-item authoring contract. Status totals as of the original 2026-09-08 audit: **47 supported, 4 precision caveats, 2 content concerns**; all 6 precision caveats/content concerns were resolved on 2026-09-09 per Approved Change 4. No legacy item is labeled APPROVED. The original answer key is recorded for traceability, not derived from third-party practice material.
+This is a bounded source-and-answer audit, not an assertion that preserved legacy items passed the new-item authoring contract. Status totals as of the original 2026-09-08 audit: **47 supported, 4 precision caveats, 2 content concerns**; all 6 precision caveats/content concerns were resolved on 2026-09-09. No legacy item is labeled APPROVED. The original answer key is recorded for traceability, not derived from third-party practice material.
 
 ## Per-item evidence
 
@@ -69,10 +71,10 @@ Domain/objective/concept-key mapping for each original item is in `src/data/lega
 | Q52 | D6.2 | A, D | supported | Several in-prompt demonstrations are few-shot conditioning and do not modify model weights. [prompt](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices) |
 | Q53 | D2.6 | C | supported | Versioned marketplace sources and reproducible configuration support consistent team installs; exact dependency policy remains a deployment design choice. [plugins](https://code.claude.com/docs/en/plugin-marketplaces) |
 
-## Corrections — resolved 2026-09-09 (Approved Change 4)
+## Corrections — resolved 2026-09-09
 
-All six corrections proposed below were explicitly approved by the user and applied verbatim to
-both `src/data/questions.ts` and `CCDV-F_Final_Mock_Exam.md`. Each entry below is the historical
+All six corrections proposed below were reviewed and applied verbatim to
+`src/data/questions.ts`. Each entry below is the historical
 finding as originally recorded, followed by what was actually applied. `id`, `type`,
 `selectCount`, `correctAnswers`, and domain/objective/concept mapping are unchanged for all six.
 
@@ -130,4 +132,4 @@ Sources: [working-with-messages](https://platform.claude.com/docs/en/build-with-
 - Q9/Q51 both touch evaluated model rollout but have distinct immediate constraints; Q15/Q32/Q37 distinguish discarded outputs, context curation and durable persistence.
 - Q33 explicitly supplies scenario measurements; they are not claims about current model performance or pricing. Q17 refers to currently documented Managed Agents behavior, which is beta and warrants maintenance review.
 - Several legacy distractors are easier to reject than the new authoring contract prefers. Supported status means the keyed technical distinction has current evidence, not that every distractor is exam-calibrated.
-- All six wording concerns above (Q1, Q7, Q9, Q31, Q40, Q42) were resolved on 2026-09-09 per Approved Change 4, with explicit user approval and verbatim replacement text. This audit's remaining "supported" findings, and the duplication/scope observations above (Q8/Q50, Q4/Q41, Q9/Q51, Q15/Q32/Q37, Q17's beta status), are unaffected and still stand as recorded.
+- All six wording concerns above (Q1, Q7, Q9, Q31, Q40, Q42) were resolved on 2026-09-09 with verbatim replacement text. This audit's remaining "supported" findings, and the duplication/scope observations above (Q8/Q50, Q4/Q41, Q9/Q51, Q15/Q32/Q37, Q17's beta status), are unaffected and still stand as recorded.

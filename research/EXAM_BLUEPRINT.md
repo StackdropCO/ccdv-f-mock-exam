@@ -1,6 +1,8 @@
-# CCDV-F blueprint — frozen research baseline
+# CCDV-F blueprint — research baseline
 
-Date accessed: 2026-09-08. Research gate PASSED under the user's corrected methodology. This supersedes the earlier access-only blockage while preserving that checkpoint in Git history.
+*Historical research record from 2026-09-08, documenting the source evidence behind `src/data/blueprint.ts`'s domain/skill weights and quotas. For the current, maintained summary of how the bank is organized, see [../docs/question-bank-methodology.md](../docs/question-bank-methodology.md).*
+
+Date accessed: 2026-09-08.
 
 ## Evidence and provenance
 
