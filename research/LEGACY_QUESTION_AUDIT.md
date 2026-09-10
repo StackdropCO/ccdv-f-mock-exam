@@ -74,7 +74,7 @@ Domain/objective/concept-key mapping for each original item is in `src/data/lega
 ## Corrections — resolved 2026-09-09
 
 All six corrections proposed below were reviewed and applied verbatim to
-both `src/data/questions.ts` and `CCDV-F_Final_Mock_Exam.md`. Each entry below is the historical
+`src/data/questions.ts`. Each entry below is the historical
 finding as originally recorded, followed by what was actually applied. `id`, `type`,
 `selectCount`, `correctAnswers`, and domain/objective/concept mapping are unchanged for all six.
 

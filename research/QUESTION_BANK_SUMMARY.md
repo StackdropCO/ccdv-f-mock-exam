@@ -6,8 +6,8 @@ Provenance and methodology are in [EXAM_BLUEPRINT.md](EXAM_BLUEPRINT.md); disclo
 
 ## Counts (current, verified against the live bank)
 
-53 original questions, preserved unchanged in `src/data/questions.ts` and
-`CCDV-F_Final_Mock_Exam.md`. 318 new questions, grouped by domain in `src/data/questions/new/`.
+53 original questions, preserved unchanged in `src/data/questions.ts`.
+318 new questions, grouped by domain in `src/data/questions/new/`.
 371 total, supporting **seven fully disjoint 53-question mocks per rotation cycle** (verified by
 a large multi-cycle simulation in `tests/questionBank.test.ts`).
 
