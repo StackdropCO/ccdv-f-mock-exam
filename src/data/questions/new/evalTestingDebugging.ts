@@ -115,34 +115,34 @@ export const evalTestingDebugging: BankQuestion[] = [
     "id": "ET-004",
     "domain": "eval-testing-debugging",
     "objective": "D4.1",
-    "conceptKey": "forward-compatible-enumeration",
+    "conceptKey": "evaluate-agent-tool-use-trace-well",
     "type": "single",
     "selectCount": 1,
-    "body": "An API error response adds a new error.type value. Your adapter uses an exhaustive lookup with no fallback and crashes before showing a recoverable failure to the user. Which change addresses the integration defect?",
+    "body": "An agent answers a research task correctly, but production traces show that it sometimes calls an expensive search tool several times when the supplied documents already contain the answer.\n\nThe existing evaluation checks only whether the final answer is correct. The product also has strict cost and latency requirements.\n\nWhat is the most useful improvement to the evaluation?",
     "options": [
       {
         "id": "A",
-        "body": "Map every unfamiliar type to an authentication error and retry credentials"
+        "body": "Require the final answer to use exactly the same wording on every run"
       },
       {
         "id": "B",
-        "body": "Assume the existing type enumeration is closed and keep the exhaustive lookup unchanged"
+        "body": "Evaluate the agent’s tool-use trace as well as the final answer, including whether unnecessary calls were made"
       },
       {
         "id": "C",
-        "body": "Preserve the unknown type and message in a generic error path instead of crashing"
+        "body": "Increase the model’s reasoning effort so the existing final-answer evaluation becomes sufficient"
       },
       {
         "id": "D",
-        "body": "Drop the error object and process the response as a successful completion"
+        "body": "Mark the run successful whenever every tool call returned HTTP 200"
       }
     ],
     "correctAnswers": [
-      "C"
+      "B"
     ],
-    "explanation": "The API’s error type values may expand over time. An integration should handle an unknown category through a safe generic error path while preserving its diagnostic information.",
+    "explanation": "Final-answer quality alone does not show whether the agent reached that answer efficiently. If tool selection, latency, and cost are part of the production requirements, evaluations should inspect the relevant execution trace as well as the outcome.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/api/errors"
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },

@@ -435,34 +435,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-013",
     "domain": "applications-integration",
     "objective": "D2.2",
-    "conceptKey": "lifecycle-provider-retirement-scope",
+    "conceptKey": "track-availability-migration-dates-actual",
     "type": "single",
     "selectCount": 1,
-    "body": "A company invokes Claude through both the direct Claude API and a partner-operated cloud platform. It sees a retirement date on Anthropic’s model-deprecations page. What must its maintenance plan account for?",
+    "body": "A production application runs the same Claude model through two deployment platforms. One platform announces that the model version will become unavailable sooner than the other. What should the lifecycle plan do?",
     "options": [
       {
         "id": "A",
-        "body": "That partner-operated platforms can have separate retirement schedules"
+        "body": "Track availability and migration dates for each actual deployment path rather than assuming one universal schedule."
       },
       {
         "id": "B",
-        "body": "That the direct API retirement date is automatically binding on every provider"
+        "body": "Wait until both platforms start returning errors before testing a replacement."
       },
       {
         "id": "C",
-        "body": "That a currently successful partner request proves indefinite future availability"
+        "body": "Assume the model family name guarantees identical lifecycle dates everywhere."
       },
       {
         "id": "D",
-        "body": "That keeping the same model display name guarantees identical lifecycle dates"
+        "body": "Change only the prompt because provider availability is unrelated to deployment."
       }
     ],
     "correctAnswers": [
       "A"
     ],
-    "explanation": "Anthropic distinguishes its operated-platform retirement dates from partner-operated schedules. A multi-provider maintenance plan must check the relevant provider dates rather than assume one universal deadline.",
+    "explanation": "Lifecycle planning must follow the concrete environment in which the model is invoked. Platform-specific availability can differ, so each production path needs its own migration evidence and deadline.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/about-claude/model-deprecations"
+      "https://platform.claude.com/docs/en/about-claude/models/choosing-a-model"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -470,34 +470,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-014",
     "domain": "applications-integration",
     "objective": "D2.2",
-    "conceptKey": "lifecycle-inventory-deprecated-usage",
+    "conceptKey": "evidence-backed-inventory-current-callers-deployed",
     "type": "single",
     "selectCount": 1,
-    "body": "A deprecated model must be removed before retirement, but the team has several API keys and cannot identify all callers. Which documented evidence most directly helps scope the migration?",
+    "body": "A team must retire an old model from a large application estate. It knows the model appears in several services but has no reliable inventory of which production workloads still call it. What should it establish first?",
     "options": [
       {
         "id": "A",
-        "body": "Search only the source code of the team’s most recently deployed service"
+        "body": "A rule that any service not reporting errors is assumed migrated."
       },
       {
         "id": "B",
-        "body": "An export of API usage broken down by key and model"
+        "body": "A plan to change every model in the organization at once."
       },
       {
         "id": "C",
-        "body": "Inspect only the application currently producing the most tokens"
+        "body": "An evidence-backed inventory of current callers and deployed model configuration."
       },
       {
         "id": "D",
-        "body": "Read the deprecation notice again without identifying actual callers"
+        "body": "A new prompt for the replacement model before identifying the affected systems."
       }
     ],
     "correctAnswers": [
-      "B"
+      "C"
     ],
-    "explanation": "The model-deprecation guide describes exporting usage by API key and model to locate remaining usage. That inventory identifies migration scope across callers.",
+    "explanation": "A controlled migration starts by knowing where the dependency is actually used. Usage telemetry and versioned deployment configuration are stronger evidence than assumptions based on source code or lack of errors.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/about-claude/model-deprecations"
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests",
+      "https://platform.claude.com/docs/en/about-claude/models/choosing-a-model"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -685,34 +686,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-020",
     "domain": "applications-integration",
     "objective": "D2.2",
-    "conceptKey": "lifecycle-artifact-retention",
+    "conceptKey": "relevant-versioned-inputs-configuration-evaluation",
     "type": "single",
     "selectCount": 1,
-    "body": "A batch-analysis application needs to retain its generated results for six months. Its current implementation stores only Message Batch IDs and expects to download results whenever an auditor asks. What must change?",
+    "body": "A compliance workflow must reproduce why a Claude-generated decision was accepted six months later. The team currently retains only the final text. Which lifecycle improvement is most important?",
     "options": [
       {
         "id": "A",
-        "body": "Persist the needed results in application-controlled storage while they are available"
+        "body": "Retain the relevant versioned inputs/configuration and evaluation or approval evidence needed to reproduce the decision."
       },
       {
         "id": "B",
-        "body": "Store only the batch ID and rely on indefinitely repeatable downloads"
+        "body": "Keep only the current prompt because old configuration no longer matters."
       },
       {
         "id": "C",
-        "body": "Delay all result retrieval until the six-month audit date"
+        "body": "Rely on the model to remember how it reached the earlier decision."
       },
       {
         "id": "D",
-        "body": "Treat the retained batch status record as a substitute for the generated result content"
+        "body": "Increase the final answer length so it contains more narrative."
       }
     ],
     "correctAnswers": [
       "A"
     ],
-    "explanation": "Batch result downloads have a limited retention period. Six-month application retention therefore requires storing the needed result artifacts outside that temporary download window.",
+    "explanation": "Reproducibility over time requires knowing what inputs, prompt/model/configuration, and gates produced the accepted result. A final string alone cannot establish the historical execution context.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -760,32 +761,32 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-022",
     "domain": "applications-integration",
     "objective": "D2.3",
-    "conceptKey": "batch-dual-cap-partitioning",
+    "conceptKey": "message-batches-asynchronous-independent-requests",
     "type": "single",
     "selectCount": 1,
-    "body": "A batch-building service has two candidate payloads: one exceeds the documented request-count cap but fits the byte-size cap; the other fits the count cap but exceeds the byte-size cap. Which submission policy is valid?",
+    "body": "A nightly job summarizes 60,000 independent records. Users never wait for individual results, and the team can process failures after the job finishes. Which API pattern best matches the workload?",
     "options": [
       {
         "id": "A",
-        "body": "Submit the entire batch because only request count is limited"
+        "body": "A user-facing WebSocket connection for every record."
       },
       {
         "id": "B",
-        "body": "Submit the entire batch because only byte size is limited"
+        "body": "Message Batches for asynchronous independent requests."
       },
       {
         "id": "C",
-        "body": "Split it into batches satisfying both the request-count cap and byte-size cap"
+        "body": "A stateful conversation that sends records one by one so later records depend on earlier ones."
       },
       {
         "id": "D",
-        "body": "Enable streaming on the batch so neither limit applies"
+        "body": "One permanent streaming request containing all 60,000 records."
       }
     ],
     "correctAnswers": [
-      "C"
+      "B"
     ],
-    "explanation": "Message Batches are limited by both request count and payload size, whichever is reached first. A submission must satisfy both limits; meeting just one does not make it valid.",
+    "explanation": "Message Batches are designed for large sets of independent requests that do not need immediate responses. Streaming improves perceived latency for interactive calls rather than turning bulk work into a batch.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
     ],
@@ -795,37 +796,37 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-023",
     "domain": "applications-integration",
     "objective": "D2.3",
-    "conceptKey": "batch-cancel-partial-success",
+    "conceptKey": "correlate-preserve-successful-results-inspect",
     "type": "multiple",
     "selectCount": 2,
-    "body": "An operator cancels a Message Batch after some requests have already completed. Which TWO statements should guide reconciliation? Select TWO.",
+    "body": "A Message Batch finishes with a mixture of successful and failed items. Which TWO application behaviors are appropriate? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "After cancellation finishes, inspect the per-item results for completed answers"
+        "body": "Assume batch completion means every request succeeded."
       },
       {
         "id": "B",
-        "body": "Treat every originally submitted request as canceled"
+        "body": "Correlate and preserve the successful results."
       },
       {
         "id": "C",
-        "body": "Expect completed requests to be undone by cancellation"
+        "body": "Resubmit the entire batch unchanged regardless of failure cause."
       },
       {
         "id": "D",
-        "body": "The batch can end with a mixture of succeeded and canceled item outcomes"
+        "body": "Inspect failed items individually and decide whether they should be corrected or retried."
       },
       {
         "id": "E",
-        "body": "Expect canceling to be the permanent terminal status"
+        "body": "Discard every success because one item failed."
       }
     ],
     "correctAnswers": [
-      "A",
+      "B",
       "D"
     ],
-    "explanation": "Cancellation passes through canceling to ended and can leave partial successful results. Inspecting per-request outcomes preserves completed answers.",
+    "explanation": "Batch processing is per request: one item can succeed while another fails. Robust consumers reconcile individual outcomes rather than treating the batch as all-or-nothing.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
     ],
@@ -835,34 +836,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-024",
     "domain": "applications-integration",
     "objective": "D2.3",
-    "conceptKey": "batch-results-availability-timing",
+    "conceptKey": "they-chose-asynchronous-workload-api",
     "type": "single",
     "selectCount": 1,
-    "body": "A team submits a Message Batch and immediately begins polling every few seconds, expecting partial results to stream back as each request finishes. After polling repeatedly with no results, they conclude the API is broken. What is the actual documented behavior?",
+    "body": "A product team moves an interactive 'generate now' button from the Messages API to Message Batches and then complains that users no longer receive an immediate answer. What design mistake did they make?",
     "options": [
       {
         "id": "A",
-        "body": "Results become retrievable once every request in the batch has completed, or after 24 hours, whichever comes first"
+        "body": "They should enable token streaming inside each batch item."
       },
       {
         "id": "B",
-        "body": "Each request's result streams back individually the moment that one request finishes"
+        "body": "They should reuse the same conversation ID for every user."
       },
       {
         "id": "C",
-        "body": "The whole batch silently fails if any single request in it errors"
+        "body": "They forgot that batches require the smallest model."
       },
       {
         "id": "D",
-        "body": "Results are available immediately after submission, before any processing occurs"
+        "body": "They chose an asynchronous workload API for a request whose defining requirement is immediate user feedback."
       }
     ],
     "correctAnswers": [
-      "A"
+      "D"
     ],
-    "explanation": "The Message Batches API makes results available once every request in the batch has completed, or after the batch's 24-hour processing window elapses, whichever happens first — not as each individual request finishes.",
+    "explanation": "Batch processing trades immediate delivery for asynchronous throughput/cost benefits. Interactive latency requirements should drive the API pattern choice.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -870,39 +872,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-025",
     "domain": "applications-integration",
     "objective": "D2.3",
-    "conceptKey": "batch-parameter-validation-timing",
-    "type": "multiple",
-    "selectCount": 2,
-    "body": "Batch creation succeeds, but later entries report invalid_request_error for their Messages params. Which TWO conclusions or actions follow from the documented interface? Select TWO.",
+    "conceptKey": "validate-representative-requests-first-through",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A team is about to submit a new request shape across tens of thousands of batch items. The prompt and schema have never been exercised through the ordinary Messages API. What is the safest preparation?",
     "options": [
       {
         "id": "A",
-        "body": "Successful batch creation proves every item’s Messages params are valid"
+        "body": "Submit the full batch first because batch creation proves each item is valid."
       },
       {
         "id": "B",
-        "body": "Per-item params may be validated asynchronously after creation"
+        "body": "Remove validation from the request so fewer items can fail."
       },
       {
         "id": "C",
-        "body": "Test representative params with the realtime Messages API before a large batch submission"
+        "body": "Validate representative requests first through the normal API and existing tests, then scale the known-good shape into the batch."
       },
       {
         "id": "D",
-        "body": "Treat every invalid_request_error as a successful classification label"
-      },
-      {
-        "id": "E",
-        "body": "Resubmit the same invalid params indefinitely without correction"
+        "body": "Use a different model in the batch to make schema errors less likely."
       }
     ],
     "correctAnswers": [
-      "B",
       "C"
     ],
-    "explanation": "Per-item Messages parameter validation occurs asynchronously. Testing request shapes with the Messages API and inspecting item results is necessary even after batch creation succeeds.",
+    "explanation": "Bulk execution amplifies mistakes. Testing representative request shapes before scaling catches malformed inputs and semantic problems cheaply while retaining per-item result checks in the batch.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1015,33 +1013,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-029",
     "domain": "applications-integration",
     "objective": "D2.3",
-    "conceptKey": "stream-cumulative-usage",
+    "conceptKey": "usage-information-reported-api-completed",
     "type": "single",
     "selectCount": 1,
-    "body": "A stream sends message_delta usage output_tokens values of 10, then 18, then 25. An accounting function sums them and records 53 tokens. What is wrong?",
+    "body": "A service estimates the cost of a streamed response from the number of characters displayed in the browser. The estimate is consistently wrong. What should it use instead?",
     "options": [
       {
         "id": "A",
-        "body": "Count only changes in the number of message_delta events"
+        "body": "A fixed characters-per-token constant for every language and input type."
       },
       {
         "id": "B",
-        "body": "Those token counts are cumulative; the latest total is 25, not their sum"
+        "body": "Usage information reported by the API for the completed request, together with the model's applicable pricing."
       },
       {
         "id": "C",
-        "body": "Use the first total because later updates are duplicates"
+        "body": "Only the elapsed time between the first and last token."
       },
       {
         "id": "D",
-        "body": "Average the three values to estimate final usage"
+        "body": "Only the number of streamed events."
       }
     ],
     "correctAnswers": [
       "B"
     ],
-    "explanation": "Usage token counts in message_delta events are cumulative. Summing successive totals double-counts earlier tokens.",
+    "explanation": "Billing is based on token usage and pricing, not browser character counts or event counts. Applications should use provider usage metadata and the actual model configuration for accounting.",
     "sourceRefs": [
+      "https://platform.claude.com/docs/en/about-claude/models/optimizing-for-cost-and-intelligence",
       "https://platform.claude.com/docs/en/build-with-claude/streaming"
     ],
     "qualityStatus": "APPROVED"
@@ -1085,39 +1084,40 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-031",
     "domain": "applications-integration",
     "objective": "D2.3",
-    "conceptKey": "forward-compatible-enumeration",
+    "conceptKey": "preserve-distinction-partial-output-successfully",
     "type": "multiple",
     "selectCount": 2,
-    "body": "A parser supports all required documented SSE events but encounters a newly added informational event. Which TWO statements align with Anthropic’s compatibility guidance? Select TWO.",
+    "body": "A streamed response is interrupted after several text fragments have reached the user. The application cannot prove the message completed. Which TWO behaviors are appropriate? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "Continue processing known event types after gracefully handling the unknown informational type"
+        "body": "Ignore the interruption whenever at least one content fragment arrived."
       },
       {
         "id": "B",
-        "body": "Assume pinning anthropic-version prevents all new event types"
+        "body": "Preserve the distinction between partial output and a successfully completed response."
       },
       {
         "id": "C",
-        "body": "Document that additive event types may appear within a supported API version"
+        "body": "Mark the partial text as complete because HTTP streaming had already started."
       },
       {
         "id": "D",
-        "body": "Interpret any unknown event as answer text"
+        "body": "Apply the application's recovery policy, such as retrying safely or explaining that the answer was interrupted."
       },
       {
         "id": "E",
-        "body": "Abort every response whose event list differs from a stored fixture"
+        "body": "Invent the missing ending locally."
       }
     ],
     "correctAnswers": [
-      "A",
-      "C"
+      "B",
+      "D"
     ],
-    "explanation": "Anthropic may add event types within a version and recommends handling unknown types gracefully. An informational extension should not be mistaken for text or a tool call.",
+    "explanation": "Streaming can fail after partial output. A production client should track completion explicitly and recover according to the failure policy instead of silently presenting an incomplete response as final.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/streaming"
+      "https://platform.claude.com/docs/en/build-with-claude/streaming",
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1125,32 +1125,32 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-032",
     "domain": "applications-integration",
     "objective": "D2.3",
-    "conceptKey": "stream-ping-not-answer",
+    "conceptKey": "render-content-payloads-intended-answer",
     "type": "single",
     "selectCount": 1,
-    "body": "During a long response, the SSE consumer receives ping events between content deltas. The product should show only Claude’s answer text. Which treatment is correct?",
+    "body": "A browser UI receives Claude output incrementally from the backend. Some transport events contain control metadata rather than answer text. What should the client renderer do?",
     "options": [
       {
         "id": "A",
-        "body": "Append every ping payload to the answer buffer"
+        "body": "Treat the first control event as the final response."
       },
       {
         "id": "B",
-        "body": "Treat ping as the terminal event and close the stream"
+        "body": "Append every received event verbatim to the user's answer."
       },
       {
         "id": "C",
-        "body": "Restart the content-block index whenever ping arrives"
+        "body": "Treat every transport event payload as displayable content without parsing its event type."
       },
       {
         "id": "D",
-        "body": "Handle ping as a keepalive and continue processing content events"
+        "body": "Render only the content payloads intended for the answer and handle transport/control events separately."
       }
     ],
     "correctAnswers": [
       "D"
     ],
-    "explanation": "Ping events can appear throughout a stream and do not represent answer content. They should not erase or be appended to the generated text.",
+    "explanation": "Streaming protocols contain more than visible answer text. The client should parse event types and keep transport/control information separate from the user-facing content.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/streaming"
     ],
@@ -1160,34 +1160,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-033",
     "domain": "applications-integration",
     "objective": "D2.3",
-    "conceptKey": "messages-synthetic-history",
+    "conceptKey": "supply-retrieve-relevant-earlier-conversation",
     "type": "single",
     "selectCount": 1,
-    "body": "A test harness constructs a multi-turn Messages request containing a user turn, a manually written assistant turn, and another user turn. The assistant turn is historical context, not a final prefill. Is that necessarily invalid?",
+    "body": "A stateless API integration needs Claude to answer 'What did I decide earlier?' on the fourth turn. What must the application do?",
     "options": [
       {
         "id": "A",
-        "body": "Yes; historical assistant turns must carry evidence that the same SDK client generated them"
+        "body": "Reuse the same SDK object and omit earlier messages."
       },
       {
         "id": "B",
-        "body": "No; historical assistant messages may be supplied synthetically as context"
+        "body": "Send only the phrase 'remember our conversation'."
       },
       {
         "id": "C",
-        "body": "Yes; any assistant role anywhere in input is a forbidden response prefill"
+        "body": "Supply or retrieve the relevant earlier conversation state in the current request."
       },
       {
         "id": "D",
-        "body": "No; synthetic historical turns cause permanent fine-tuning of the model"
+        "body": "Enable streaming because streaming persists history automatically."
       }
     ],
     "correctAnswers": [
-      "B"
+      "C"
     ],
-    "explanation": "Historical assistant messages can be synthetic. Including one supplies context; it does not create automatic server-side conversation memory.",
+    "explanation": "Messages API requests do not gain durable conversation memory from a client object or streaming. Relevant history must be supplied or retrieved into the current request.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/working-with-messages"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1230,34 +1230,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-035",
     "domain": "applications-integration",
     "objective": "D2.3",
-    "conceptKey": "typed-image-source",
+    "conceptKey": "image-through-supported-content-block",
     "type": "single",
     "selectCount": 1,
-    "body": "An application has a publicly fetchable JPEG URL and wants to provide that image to Claude without downloading and base64-encoding it locally. Which supported representation meets the requirement?",
+    "body": "An application wants Claude to inspect a chart image. It currently places the image URL inside ordinary user text and assumes that automatically sends the image pixels. What should the integration do?",
     "options": [
       {
         "id": "A",
-        "body": "An image content block with source type url and the image URL"
+        "body": "Provide the image through a supported image content block or supported file reference."
       },
       {
         "id": "B",
-        "body": "A text block containing only the JPEG URL, relying on automatic attachment conversion"
+        "body": "Pass the public image URL as ordinary text and rely on Claude to fetch the image automatically."
       },
       {
         "id": "C",
-        "body": "An image block with source type base64 but raw URL text in data"
+        "body": "Increase max_tokens so the text URL is decoded as pixels."
       },
       {
         "id": "D",
-        "body": "A tool_result block containing the URL without a matching tool call"
+        "body": "Put the URL in the system prompt."
       }
     ],
     "correctAnswers": [
       "A"
     ],
-    "explanation": "The Messages vision interface accepts a URL source for an image block. This supplies the image directly without a local base64 conversion step.",
+    "explanation": "Vision input must be represented through the API's supported image/file input mechanism. A textual URL is just text unless the application or an enabled tool actually retrieves the image.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/working-with-messages"
+      "https://platform.claude.com/docs/en/build-with-claude/vision"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1265,34 +1265,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-036",
     "domain": "applications-integration",
     "objective": "D2.3",
-    "conceptKey": "stop-sequence-identification",
+    "conceptKey": "response-completion-stop-condition-transport",
     "type": "single",
     "selectCount": 1,
-    "body": "An integration configures two custom stop sequences. A response has stop_reason `stop_sequence`, and the application must identify which configured sequence matched using the dedicated response metadata. Which field contains that value?",
+    "body": "A long generation stops because it reaches the configured output limit. The application nevertheless labels the answer 'complete' because the HTTP request succeeded. What should it check before doing so?",
     "options": [
       {
         "id": "A",
-        "body": "stop_reason"
+        "body": "Only whether the first content block contains text."
       },
       {
         "id": "B",
-        "body": "content"
+        "body": "The response completion/stop condition, not just transport success."
       },
       {
         "id": "C",
-        "body": "usage"
+        "body": "Only whether the model returned a request ID."
       },
       {
         "id": "D",
-        "body": "stop_sequence"
+        "body": "Whether the user message was shorter than the output limit."
       }
     ],
     "correctAnswers": [
-      "D"
+      "B"
     ],
-    "explanation": "For stop_reason stop_sequence, the response’s stop_sequence field identifies the matched sequence. Other metadata fields do not encode that match.",
+    "explanation": "A successful HTTP response can still represent an incomplete generation. Completion logic should inspect the model's stop/completion metadata before treating the content as final.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/handling-stop-reasons"
+      "https://platform.claude.com/docs/en/build-with-claude/streaming",
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1335,34 +1336,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-038",
     "domain": "applications-integration",
     "objective": "D2.3",
-    "conceptKey": "forward-compatible-enumeration",
+    "conceptKey": "construct-documented-http-request-including",
     "type": "single",
     "selectCount": 1,
-    "body": "A service pins the supported anthropic-version header and validates that every response has exactly the set of fields seen in one fixture. A newly added optional output field breaks it. Which assumption was invalid?",
+    "body": "A team replaces an official SDK call with its own raw HTTPS client. The model and prompt stay the same, but requests now fail before inference. What responsibility did the custom client take on?",
     "options": [
       {
         "id": "A",
-        "body": "Pinning anthropic-version pins the exact number of response properties"
+        "body": "Converting every request into a Message Batch."
       },
       {
         "id": "B",
-        "body": "A new optional response field always requires a new model ID"
+        "body": "Creating server-side conversation memory."
       },
       {
         "id": "C",
-        "body": "The versioning policy allows additive output information within the same version"
+        "body": "Construct the documented HTTP request, including required authentication and protocol headers."
       },
       {
         "id": "D",
-        "body": "Only streaming responses may receive additive information"
+        "body": "Rely on the model identifier and prompt body while omitting transport-specific API requirements."
       }
     ],
     "correctAnswers": [
       "C"
     ],
-    "explanation": "The API versioning policy preserves existing parameters but permits additional output values and optional inputs. A consumer should not mistake an additive response field for a protocol-breaking change.",
+    "explanation": "An SDK handles transport details for the developer. A raw REST integration must supply the documented endpoint, headers, authentication, serialization, and request fields itself.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/api/versioning"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1405,34 +1406,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-040",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "sdk-retry-layer-multiplication",
+    "conceptKey": "define-bounded-retry-policy-account",
     "type": "single",
     "selectCount": 1,
-    "body": "An outer retry loop invokes a Python SDK call up to three times. The SDK is explicitly configured with max_retries=2. Every HTTP attempt receives a retryable 500 and no cancellation occurs. What is the maximum number of HTTP attempts?",
+    "body": "A Claude service has automatic retries in both its SDK layer and an outer job runner. During an outage, one user request creates far more attempts than the team expected. What is the best engineering response?",
     "options": [
       {
         "id": "A",
-        "body": "3"
+        "body": "Apply the same retry policy independently at every layer because each component handles only its own failures."
       },
       {
         "id": "B",
-        "body": "5"
+        "body": "Define one bounded retry policy and account for every layer that can retry."
       },
       {
         "id": "C",
-        "body": "6"
+        "body": "Add another retry loop so failures recover faster."
       },
       {
         "id": "D",
-        "body": "9"
+        "body": "Increase max_tokens because output length controls HTTP retries."
       }
     ],
     "correctAnswers": [
-      "D"
+      "B"
     ],
-    "explanation": "Each SDK invocation can make one initial attempt plus two retries. Three outer invocations can therefore produce nine HTTP attempts, so retry layers must be accounted for together.",
+    "explanation": "Nested retry mechanisms multiply attempts, latency, and load. Production code should make retry ownership explicit and bound the total behavior.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1440,34 +1441,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-041",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "sdk-single-owner-retries",
+    "conceptKey": "disable-duplicate-lower-layer-retries-central",
     "type": "single",
     "selectCount": 1,
-    "body": "An application already has a central retry controller with a measured backoff policy. It requires each invocation of the Python SDK to make exactly one HTTP attempt so the controller owns retries. Which SDK setting meets this requirement?",
+    "body": "A central reliability layer already owns retry decisions for Claude calls. The SDK is also retrying transient errors automatically, which makes attempt counts and latency unpredictable. What design change best restores control?",
     "options": [
       {
         "id": "A",
-        "body": "max_retries=1"
+        "body": "Keep both layers and hide their attempt counts from monitoring."
       },
       {
         "id": "B",
-        "body": "max_retries=0"
+        "body": "Move retry instructions into the user prompt."
       },
       {
         "id": "C",
-        "body": "A longer request timeout while retaining retries"
+        "body": "Treat every failed attempt as a successful response."
       },
       {
         "id": "D",
-        "body": "An outer loop limited to one SDK invocation while retaining SDK retries"
+        "body": "Disable duplicate lower-layer retries so the central reliability layer remains the owner."
       }
     ],
     "correctAnswers": [
-      "B"
+      "D"
     ],
-    "explanation": "Setting max_retries=0 disables the SDK’s automatic retries. A value of one permits an additional attempt, while timeout and output length do not establish retry ownership.",
+    "explanation": "When one component is intentionally responsible for retry policy, hidden retries elsewhere undermine deadlines and observability. The implementation should avoid duplicated retry ownership.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1475,34 +1476,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-042",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "sdk-per-request-retry-isolation",
+    "conceptKey": "retry-policy-explicit-per-workload",
     "type": "single",
     "selectCount": 1,
-    "body": "A shared Python SDK client serves interactive calls and a one-off background request. Only the background request needs max_retries=5. Which approach applies that change without replacing the shared client’s default retry policy?",
+    "body": "A background workload can tolerate more retries than an interactive endpoint, but both share the same Claude client. Which design is best?",
     "options": [
       {
         "id": "A",
-        "body": "Use client.with_options(max_retries=5) for the background call"
+        "body": "Encode the retry count in the prompt for Claude to enforce."
       },
       {
         "id": "B",
-        "body": "Mutate a private retry attribute on the shared client before calling it"
+        "body": "Use the same retry count for every workload regardless of latency requirements."
       },
       {
         "id": "C",
-        "body": "Add max_retries to the user prompt"
+        "body": "Change the shared policy back and forth while requests are in flight."
       },
       {
         "id": "D",
-        "body": "Change the global client default while interactive requests are running"
+        "body": "Make retry policy explicit per workload or request without mutating shared global behavior for concurrent calls."
       }
     ],
     "correctAnswers": [
-      "A"
+      "D"
     ],
-    "explanation": "The Python SDK supports per-request overrides through with_options. That gives the background request its policy without changing the shared default used by other calls.",
+    "explanation": "Operational policies should follow workload requirements and remain safe under concurrency. Per-workload configuration avoids global mutable state while making behavior testable.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1580,34 +1581,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-045",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "json-duplicate-member-interoperability",
+    "conceptKey": "represent-request-structured-application-data",
     "type": "single",
     "selectCount": 1,
-    "body": "A configuration generator emits `{ \"max_tokens\": 100, \"max_tokens\": 900 }`. Different consumers disagree about the value. What change is required for interoperable interpretation?",
+    "body": "A service constructs a Claude request by manually concatenating JSON fragments from several fields. Small changes repeatedly produce malformed payloads. What is the strongest engineering fix?",
     "options": [
       {
         "id": "A",
-        "body": "Keep only one max_tokens member with the intended value"
+        "body": "Represent the request as structured application data and serialize it with a standard JSON library."
       },
       {
         "id": "B",
-        "body": "Always assume the first occurrence wins in every JSON parser"
+        "body": "Keep concatenating strings but add more escaping rules by hand."
       },
       {
         "id": "C",
-        "body": "Always assume the last occurrence wins in every JSON parser"
+        "body": "Remove quotation marks from user input."
       },
       {
         "id": "D",
-        "body": "Sort the duplicate members alphabetically"
+        "body": "Ask Claude to repair the JSON after the HTTP request fails."
       }
     ],
     "correctAnswers": [
       "A"
     ],
-    "explanation": "JSON object names should be unique for interoperable interpretation. Duplicate-name handling differs among parsers, so neither first-wins nor last-wins is a universal rule.",
+    "explanation": "Structured serialization is safer and more maintainable than manual JSON string construction. This tests an integration engineering practice rather than obscure JSON grammar.",
     "sourceRefs": [
-      "https://www.rfc-editor.org/rfc/rfc8259"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1655,34 +1656,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-047",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "json-literal-versus-string",
+    "conceptKey": "validate-parsed-data-downstream-contract",
     "type": "single",
     "selectCount": 1,
-    "body": "A downstream contract expects a JSON boolean field approved. Which payload has the correct JSON type?",
+    "body": "A downstream service expects `approved` to be a boolean, but the Claude-facing adapter sometimes forwards strings such as `\"yes\"`. The model's output schema already requires a boolean. What should the application still do at the integration boundary?",
     "options": [
       {
         "id": "A",
-        "body": "{\"approved\": \"true\"}"
+        "body": "Convert every unexpected value to true."
       },
       {
         "id": "B",
-        "body": "{\"approved\": true}"
+        "body": "Accept any truthy-looking string because the model probably meant true."
       },
       {
         "id": "C",
-        "body": "{\"approved\": 1}"
+        "body": "Remove the downstream type contract."
       },
       {
         "id": "D",
-        "body": "{\"approved\": \"yes\"}"
+        "body": "Validate the parsed data against the downstream contract before forwarding it."
       }
     ],
     "correctAnswers": [
-      "B"
+      "D"
     ],
-    "explanation": "The JSON literal true is a boolean; quoted values are strings and 1 is a number. Type-sensitive consumers must receive the type the contract requires.",
+    "explanation": "Typed or structured model output reduces formatting risk but does not justify bypassing the application's own integration contract. Validate data before crossing system boundaries.",
     "sourceRefs": [
-      "https://www.rfc-editor.org/rfc/rfc8259"
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1690,34 +1691,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-048",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "json-nan-wire-format",
+    "conceptKey": "define-explicit-validation-fallback-policy",
     "type": "single",
     "selectCount": 1,
-    "body": "A preprocessing calculation produces NaN. The service must send standards-compliant JSON to an external integration. What must it do before serialization?",
+    "body": "A preprocessing step can produce a value that the downstream JSON contract cannot represent. The team is deciding whether to silently substitute a plausible value. What is the safer design?",
     "options": [
       {
         "id": "A",
-        "body": "Serialize bare NaN and assume every standard JSON consumer accepts it"
+        "body": "Skip validation whenever the HTTP request would otherwise be valid."
       },
       {
         "id": "B",
-        "body": "Replace NaN with bare Infinity"
+        "body": "Always substitute zero because JSON accepts numbers."
       },
       {
         "id": "C",
-        "body": "Map or reject the value under an explicit application policy because NaN is not a JSON number"
+        "body": "Define an explicit validation or fallback policy for unrepresentable values rather than silently inventing data."
       },
       {
         "id": "D",
-        "body": "Silently replace NaN with numeric zero even when the application contract distinguishes missing calculations from zero"
+        "body": "Substitute a default value whenever serialization would otherwise fail, without surfacing that substitution."
       }
     ],
     "correctAnswers": [
       "C"
     ],
-    "explanation": "NaN and Infinity are not permitted by the standard JSON number grammar. The application needs an explicit valid representation or rejection policy for non-finite calculation results.",
+    "explanation": "Integration code should make invalid or missing-data behavior explicit. Silent substitution can turn a technical edge case into incorrect business data.",
     "sourceRefs": [
-      "https://www.rfc-editor.org/rfc/rfc8259"
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1725,34 +1726,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-049",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "json-numeric-identifier-loss",
+    "conceptKey": "identifiers-strings-throughout-integration",
     "type": "single",
     "selectCount": 1,
-    "body": "An integration sends identifiers larger than the exact integer range of its JavaScript Number consumer. The contract can be updated, and identifiers require no arithmetic. Which representation best preserves every digit across that boundary?",
+    "body": "An external system uses account identifiers that may contain leading zeros and are never used for arithmetic. The Claude application currently converts them to numbers before sending them between services. Some identifiers change. What is the better contract?",
     "options": [
       {
         "id": "A",
-        "body": "Round identifiers to the closest representable Number"
+        "body": "Treat identifiers as strings throughout the integration."
       },
       {
         "id": "B",
-        "body": "Convert identifiers to exponent notation but still parse as Number"
+        "body": "Round the identifiers before sending them."
       },
       {
         "id": "C",
-        "body": "Split the identifier into multiple JSON numeric fields without updating the receiving contract"
+        "body": "Use floating-point numbers because they are more flexible."
       },
       {
         "id": "D",
-        "body": "Represent identifiers as decimal strings and update the contract accordingly"
+        "body": "Ask Claude to restore any lost zeros."
       }
     ],
     "correctAnswers": [
-      "D"
+      "A"
     ],
-    "explanation": "JSON numeric precision is limited by consumer implementations. A decimal string preserves an identifier’s digits when the receiving numeric type cannot represent them exactly.",
+    "explanation": "Identifiers are labels, not quantities. Preserving them as strings avoids accidental numeric coercion and keeps the integration contract faithful to the source system.",
     "sourceRefs": [
-      "https://www.rfc-editor.org/rfc/rfc8259"
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1760,34 +1761,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-050",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "execution-data-dependency",
+    "conceptKey": "second-operation-data-dependency-cannot",
     "type": "single",
     "selectCount": 1,
-    "body": "An async application first extracts a document ID with Claude and then calls a lookup coroutine requiring that ID. A proposed refactor schedules both at once before the ID exists. Which dependency must remain?",
+    "body": "A workflow first asks Claude to extract a customer ID and then calls an internal service that requires that ID. An optimization proposal launches both operations simultaneously. What should the reviewer conclude?",
     "options": [
       {
         "id": "A",
-        "body": "Await extraction before constructing the lookup call that uses its result"
+        "body": "Streaming the first response removes the dependency."
       },
       {
         "id": "B",
-        "body": "Schedule lookup with a placeholder ID and use the first completed response"
+        "body": "The second operation has a data dependency and cannot start correctly until the ID exists."
       },
       {
         "id": "C",
-        "body": "Pass the extraction coroutine object to lookup as the document ID"
+        "body": "All asynchronous work should always start at the same time."
       },
       {
         "id": "D",
-        "body": "Start both in gather and assume argument order delays the second until the first finishes"
+        "body": "The internal service can infer the missing ID from the model name."
       }
     ],
     "correctAnswers": [
-      "A"
+      "B"
     ],
-    "explanation": "Awaiting a coroutine provides its result for the dependent operation. Concurrency does not remove a data dependency or turn a coroutine object into its resolved value.",
+    "explanation": "Concurrency is useful only for independent work. A downstream operation that requires an upstream result must preserve that dependency.",
     "sourceRefs": [
-      "https://docs.python.org/3/library/asyncio-task.html"
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1795,34 +1796,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-051",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "async-independent-result-order",
+    "conceptKey": "carry-stable-application-correlation-key",
     "type": "single",
     "selectCount": 1,
-    "body": "A Python service runs `results = await asyncio.gather(classify(a), classify(b))`. Both succeed, but b finishes first. In what order are the returned results?",
+    "body": "A service sends ten independent Claude classifications concurrently. Results complete in an unpredictable order, but each must be written back to the correct source record. What design is required?",
     "options": [
       {
         "id": "A",
-        "body": "Completion order: b, then a"
+        "body": "Carry a stable application correlation key for each request rather than relying on completion order."
       },
       {
         "id": "B",
-        "body": "Random order determined by the model"
+        "body": "Assume the fastest result belongs to the first record."
       },
       {
         "id": "C",
-        "body": "Argument order: a, then b"
+        "body": "Sort responses alphabetically and match them to inputs."
       },
       {
         "id": "D",
-        "body": "Sorted by the contents of the generated answers"
+        "body": "Force the model to finish requests in submission order."
       }
     ],
     "correctAnswers": [
-      "C"
+      "A"
     ],
-    "explanation": "asyncio.gather returns successful results in the order of its input awaitables. Completion timing does not reorder that result list.",
+    "explanation": "Concurrent operations may complete out of order. The application must preserve explicit correlation between a request and its business record.",
     "sourceRefs": [
-      "https://docs.python.org/3/library/asyncio-task.html"
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1830,34 +1831,40 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-052",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "async-gather-per-item-errors",
-    "type": "single",
-    "selectCount": 1,
-    "body": "A Python evaluation runner needs every independent call to finish and needs to inspect failures alongside successes. It uses asyncio.gather. Which configuration supports collecting exceptions in its result list?",
+    "conceptKey": "isolate-per-item-failures-error-erase",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A batch of independent API calls runs concurrently. One call fails, but the product wants successful results from the others and a clear record of the failure. Which TWO behaviors fit? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "return_exceptions=False and ignore the first exception"
+        "body": "Isolate per-item failures so one error does not erase unrelated successes."
       },
       {
         "id": "B",
-        "body": "return_exceptions=True, followed by explicit inspection of each result"
+        "body": "Hide which request failed."
       },
       {
         "id": "C",
-        "body": "Call gather without awaiting it and count scheduled tasks as successes"
+        "body": "Wrap every exception in the same successful result type so the aggregation layer remains simple."
       },
       {
         "id": "D",
-        "body": "Treat every exception object as a successful model answer"
+        "body": "Cancel and discard all completed successes whenever any one call fails."
+      },
+      {
+        "id": "E",
+        "body": "Record each outcome with enough context to retry or investigate the failed item."
       }
     ],
     "correctAnswers": [
-      "B"
+      "A",
+      "E"
     ],
-    "explanation": "With return_exceptions=True, gather aggregates exceptions alongside returned values. The application must inspect those entries and distinguish failures from successful answers.",
+    "explanation": "Independent work should have independent outcomes when the product allows it. Failure isolation and correlation preserve useful successes while making recovery explicit.",
     "sourceRefs": [
-      "https://docs.python.org/3/library/asyncio-task.html"
+      "https://platform.claude.com/docs/en/api/errors",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1865,34 +1872,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-053",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "async-taskgroup-fail-fast",
+    "conceptKey": "structured-cancellation-orchestration-dependent-remaining",
     "type": "single",
     "selectCount": 1,
-    "body": "A Python 3.11+ workflow runs several related coroutines. If one raises a normal exception, the requirement is to cancel the remaining work and wait for cleanup before leaving the group. Which primitive supplies that behavior?",
+    "body": "Several concurrent steps belong to one transaction-like workflow. If a critical step fails, continuing the remaining expensive steps would create inconsistent work. What concurrency design best fits?",
     "options": [
       {
         "id": "A",
-        "body": "asyncio.gather with return_exceptions=True"
+        "body": "Use structured cancellation or orchestration so dependent remaining work is stopped and cleanup completes."
       },
       {
         "id": "B",
-        "body": "asyncio.gather with default exception behavior"
+        "body": "Ignore the error until the user reports inconsistent results."
       },
       {
         "id": "C",
-        "body": "Independent create_task calls without group cancellation logic"
+        "body": "Let every task continue regardless of the failed dependency."
       },
       {
         "id": "D",
-        "body": "asyncio.TaskGroup"
+        "body": "Increase the model temperature so failures become less correlated."
       }
     ],
     "correctAnswers": [
-      "D"
+      "A"
     ],
-    "explanation": "TaskGroup cancels remaining tasks when a member fails with a non-cancellation exception and waits for tasks on exit. That matches the stated structured failure behavior.",
+    "explanation": "Related concurrent work needs failure semantics, not just parallelism. If later work is invalid after a critical failure, the orchestration should stop it and perform required cleanup.",
     "sourceRefs": [
-      "https://docs.python.org/3/library/asyncio-task.html"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1900,34 +1907,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-054",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "async-cancellation-cleanup-propagation",
+    "conceptKey": "unnecessary-work-perform-required-cleanup",
     "type": "single",
     "selectCount": 1,
-    "body": "An async Claude workflow catches CancelledError while cleaning up a temporary artifact. Its caller relies on cancellation to stop the workflow. What should it normally do after cleanup?",
+    "body": "A user cancels a long-running Claude request while the application is writing temporary files and holding resources. What behavior should the implementation aim for?",
     "options": [
       {
         "id": "A",
-        "body": "Propagate CancelledError rather than report an ordinary successful result"
+        "body": "Stop displaying output but let the backend continue normally and report whatever result eventually arrives."
       },
       {
         "id": "B",
-        "body": "Return a cached empty answer and mark the task successful"
+        "body": "Leave temporary resources open until the process is restarted."
       },
       {
         "id": "C",
-        "body": "Treat cancellation like a transient API failure and immediately retry the operation"
+        "body": "Immediately start an identical replacement request without user intent."
       },
       {
         "id": "D",
-        "body": "Suppress the exception so the parent cannot observe an incomplete result"
+        "body": "Stop unnecessary work, perform required cleanup, and propagate a canceled/incomplete outcome rather than reporting success."
       }
     ],
     "correctAnswers": [
-      "A"
+      "D"
     ],
-    "explanation": "Python recommends cleanup in try/finally and generally propagating CancelledError after cleanup. Swallowing cancellation can interfere with structured concurrency and the caller’s stop request.",
+    "explanation": "Cancellation is an application state that should be handled explicitly. Cleanup protects resources, and the caller should not receive a false success for work it canceled.",
     "sourceRefs": [
-      "https://docs.python.org/3/library/asyncio-task.html"
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1935,39 +1942,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-055",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "async-bounded-concurrency",
-    "type": "multiple",
-    "selectCount": 2,
-    "body": "An asyncio service may have at most four outbound Claude calls in flight. Which TWO implementation choices enforce this bound and preserve capacity after failures? Select TWO.",
+    "conceptKey": "bounded-concurrency-backpressure-outbound-work",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A web service can accept thousands of user requests, but its Claude account and downstream tools can safely handle only a limited number concurrently. What architecture prevents overload?",
     "options": [
       {
         "id": "A",
-        "body": "Limit input processing to four requests per second without limiting call duration"
+        "body": "Use bounded concurrency or backpressure at the outbound work boundary."
       },
       {
         "id": "B",
-        "body": "Use a shared asyncio.Semaphore(4) around outbound call execution"
+        "body": "Increase output length so calls finish more predictably."
       },
       {
         "id": "C",
-        "body": "Release the acquired semaphore permit in cleanup so failure does not permanently consume capacity"
+        "body": "Create a separate API key for every in-flight request."
       },
       {
         "id": "D",
-        "body": "Create a new independent Semaphore(4) inside every task"
-      },
-      {
-        "id": "E",
-        "body": "Acquire the permit only after the HTTP call finishes"
+        "body": "Launch every request immediately and rely on rate-limit errors as the queue."
       }
     ],
     "correctAnswers": [
-      "B",
-      "C"
+      "A"
     ],
-    "explanation": "A shared semaphore limits concurrent entries to the outbound-call region. Releasing each acquired permit in cleanup, commonly with async with, ensures failures do not permanently reduce capacity.",
+    "explanation": "Application concurrency should be bounded according to service and downstream capacity. Backpressure avoids self-inflicted overload and excessive rate-limit/retry cascades.",
     "sourceRefs": [
-      "https://docs.python.org/3/library/asyncio-sync.html"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2010,34 +2012,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-057",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "http-accepted-not-completed",
+    "conceptKey": "application-observes-service-documented-completion",
     "type": "single",
     "selectCount": 1,
-    "body": "A tool’s internal REST service returns HTTP 202 for a queued export. The assistant must tell the user only what that status establishes. Which statement is justified?",
+    "body": "A tool call submits a long-running export to an internal service. The service acknowledges that the job was accepted but provides a separate status endpoint for completion. When may the agent truthfully tell the user the export is finished?",
     "options": [
       {
         "id": "A",
-        "body": "The export has finished successfully."
+        "body": "As soon as Claude predicts the export will probably succeed."
       },
       {
         "id": "B",
-        "body": "The service rejected the job before processing."
+        "body": "Whenever the submission call took longer than one second."
       },
       {
         "id": "C",
-        "body": "The response must contain the completed export file."
+        "body": "Immediately after the submission request is accepted."
       },
       {
         "id": "D",
-        "body": "The service accepted the job, but completion is not established."
+        "body": "Only after the application observes the service's documented completion condition."
       }
     ],
     "correctAnswers": [
       "D"
     ],
-    "explanation": "HTTP 202 means processing has been accepted but is not complete. The application needs the service’s completion mechanism before claiming the export succeeded.",
+    "explanation": "Accepted work and completed work are different states. Integration code must map the external service's actual completion contract into what the agent reports.",
     "sourceRefs": [
-      "https://httpwg.org/specs/rfc9110.html"
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2045,34 +2047,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-058",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "http-no-content-response-parser",
+    "conceptKey": "honor-tool-bodyless-success-contract-retry",
     "type": "single",
     "selectCount": 1,
-    "body": "A documented internal DELETE tool endpoint succeeds with HTTP 204 and no content. The adapter always parses successful response bodies as JSON and throws. What correction matches the endpoint contract?",
+    "body": "An internal tool operation succeeds but its documented contract returns no body. The adapter treats an empty successful response as malformed model output and retries the operation. What should change?",
     "options": [
       {
         "id": "A",
-        "body": "Treat the valid 204 as success without requiring a JSON body"
+        "body": "Honor the tool's bodyless-success contract and do not retry a completed side effect."
       },
       {
         "id": "B",
-        "body": "Classify the empty response as truncated JSON and retry automatically"
+        "body": "Retry until a body appears even if the operation already succeeded."
       },
       {
         "id": "C",
-        "body": "Wait for response content to arrive after the 204 headers"
+        "body": "Require every successful external operation to return generated prose."
       },
       {
         "id": "D",
-        "body": "Require the endpoint to return a model-generated JSON acknowledgement before accepting its documented success"
+        "body": "Treat all bodyless responses as authentication failures."
       }
     ],
     "correctAnswers": [
       "A"
     ],
-    "explanation": "HTTP 204 indicates successful fulfillment with no response content. A body parser must respect that status instead of requiring JSON where the contract provides none.",
+    "explanation": "Adapters should honor the external API contract. Misclassifying a valid empty success can duplicate side effects and creates a reliability problem unrelated to Claude generation.",
     "sourceRefs": [
-      "https://httpwg.org/specs/rfc9110.html"
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2080,34 +2082,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-059",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "git-revert-shared-history",
+    "conceptKey": "new-versioned-change-restores-prior",
     "type": "single",
     "selectCount": 1,
-    "body": "A faulty non-merge commit changed a Claude application’s request adapter. It is already shared, later unrelated commits must remain, and the team forbids rewriting branch history. Assuming a clean working tree, which operation records an inverse change?",
+    "body": "A production prompt change causes a regression after deployment. The team wants to undo only that change while preserving unrelated later work and keeping an auditable history. Which practice best fits?",
     "options": [
       {
         "id": "A",
-        "body": "Force-reset the branch to before the faulty commit"
+        "body": "Edit the deployed prompt manually without recording the correction."
       },
       {
         "id": "B",
-        "body": "Delete the repository’s history and recommit the files"
+        "body": "Change the model and prompt simultaneously to hide the regression."
       },
       {
         "id": "C",
-        "body": "git revert of the faulty commit, resolving any conflicts and verifying the result"
+        "body": "Create a new versioned change that restores the prior prompt behavior and verify it with the regression suite."
       },
       {
         "id": "D",
-        "body": "Amend the faulty commit and force-push"
+        "body": "Rewrite shared history so nobody can see the faulty change."
       }
     ],
     "correctAnswers": [
       "C"
     ],
-    "explanation": "git revert records a new commit reversing an earlier patch. It preserves the existing history, unlike rewriting the branch to remove or amend the published commit.",
+    "explanation": "Production recovery should be versioned and auditable. Reverting behavior through a recorded change plus regression verification preserves history and isolates the fix.",
     "sourceRefs": [
-      "https://git-scm.com/docs/git-revert"
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2115,34 +2117,39 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-060",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "git-staged-diff-review",
-    "type": "single",
-    "selectCount": 1,
-    "body": "A developer staged the intended request-parser fix, then made additional unstaged experiments. Before committing only the staged fix, which command shows exactly the staged changes relative to HEAD?",
+    "conceptKey": "review-exact-change-submitted-rather",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "A developer has one intended Claude-integration fix mixed with unrelated experiments in the same working tree. Before review, which TWO practices improve change quality? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "git diff"
+        "body": "Include unrelated experiments so reviewers see more context."
       },
       {
         "id": "B",
-        "body": "git diff --cached"
+        "body": "Skip tests because the diff is small."
       },
       {
         "id": "C",
-        "body": "git diff HEAD"
+        "body": "Review the exact change that will be submitted rather than relying on memory."
       },
       {
         "id": "D",
-        "body": "git status --short"
+        "body": "Separate the intended fix into a focused change."
+      },
+      {
+        "id": "E",
+        "body": "Change the model version at the same time even though the fix does not require it."
       }
     ],
     "correctAnswers": [
-      "B"
+      "C",
+      "D"
     ],
-    "explanation": "git diff --cached compares the index with HEAD by default. Plain git diff shows unstaged changes, while git diff HEAD includes working-tree changes beyond the staged patch.",
+    "explanation": "Focused, reviewable changes make regressions easier to understand and reverse. Review should inspect the actual submitted delta, not an informal recollection of what changed.",
     "sourceRefs": [
-      "https://git-scm.com/docs/git-diff"
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2150,34 +2157,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-061",
     "domain": "applications-integration",
     "objective": "D2.4",
-    "conceptKey": "git-review-branch-delta",
+    "conceptKey": "evaluate-feature-current-integration-state",
     "type": "single",
     "selectCount": 1,
-    "body": "A feature branch for a Claude integration diverged from main, and main has since advanced independently. Reviewers want changes on the feature branch since the common ancestor. Which diff form directly expresses that comparison?",
+    "body": "A feature branch for a Claude integration has been open for weeks while the base application changed. Before merging, what is the most important engineering goal?",
     "options": [
       {
         "id": "A",
-        "body": "git diff main feature"
+        "body": "Assume tests from the day the branch was created are sufficient."
       },
       {
         "id": "B",
-        "body": "git diff --cached"
+        "body": "Merge solely because the branch has fewer commits."
       },
       {
         "id": "C",
-        "body": "git diff feature main"
+        "body": "Discard the current base behavior and preserve the old branch environment instead."
       },
       {
         "id": "D",
-        "body": "git diff main...feature"
+        "body": "Evaluate the feature against the current integration state and resolve conflicts or regressions with evidence."
       }
     ],
     "correctAnswers": [
       "D"
     ],
-    "explanation": "The three-dot diff compares the merge base of the branches with the feature tip. That isolates the feature’s changes since divergence instead of comparing two independently advanced tips.",
+    "explanation": "Long-lived work must be validated against the system it will actually join. Current tests and review matter more than memorizing a particular version-control command.",
     "sourceRefs": [
-      "https://git-scm.com/docs/git-diff"
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2395,32 +2402,32 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-068",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "files-original-download-contract",
+    "conceptKey": "files-api-model-facing-reuse-keep",
     "type": "single",
     "selectCount": 1,
-    "body": "A product promises that customers can download their original uploaded documents later. A developer plans to use the Files API as the only copy. Which design correction is required by the documented download behavior?",
+    "body": "A product lets users upload policy documents for analysis and promises that the original files can be downloaded months later. The team also uses Claude's Files API to avoid repeatedly uploading the same content for inference. What is the safest architecture?",
     "options": [
       {
         "id": "A",
-        "body": "Use retrieve_metadata to obtain and return the original file bytes"
+        "body": "Discard the original as soon as the first Claude request succeeds."
       },
       {
         "id": "B",
-        "body": "Call the content-download endpoint for any uploaded file_id after checking that upload succeeded"
+        "body": "Store only the model's summary because it is equivalent to the original file."
       },
       {
         "id": "C",
-        "body": "Remove file expiration so original uploads become downloadable"
+        "body": "Assume a model file reference is the product's permanent document archive."
       },
       {
         "id": "D",
-        "body": "Retain originals in application-controlled storage; Files API downloads are for generated downloadable files"
+        "body": "Use the Files API for model-facing reuse but keep product-required originals in application-controlled durable storage."
       }
     ],
     "correctAnswers": [
       "D"
     ],
-    "explanation": "Files uploaded by the application are not downloadable through the Files API. Preserve originals separately if the product must return them later.",
+    "explanation": "Files used for inference and files retained as part of the product have different lifecycle requirements. Product durability should be owned explicitly by the application rather than inferred from a model-input convenience layer.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/files"
     ],
@@ -2430,34 +2437,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-069",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "file-id-application-user-binding",
+    "conceptKey": "authorize-current-tenant-allowed-referenced",
     "type": "single",
     "selectCount": 1,
-    "body": "Two customers share an application workspace. The UI sends arbitrary file_id values supplied by the browser to the Claude API. What is the direct design flaw?",
+    "body": "A multi-tenant application stores Claude file references. A browser may request analysis by submitting an arbitrary stored file identifier. What check belongs before the identifier is sent to Claude?",
     "options": [
       {
         "id": "A",
-        "body": "Workspace file access does not enforce the application’s customer ownership; resolve file IDs through an authorized server-side mapping"
+        "body": "Assume possession of any valid identifier proves ownership."
       },
       {
         "id": "B",
-        "body": "The API automatically restricts each file to the browser session that first referenced it"
+        "body": "Ask the model whether the file probably belongs to the user."
       },
       {
         "id": "C",
-        "body": "A valid file_id is sufficient evidence that the current customer owns that file"
+        "body": "Authorize that the current tenant is allowed to use the referenced file."
       },
       {
         "id": "D",
-        "body": "Changing the conversation ID creates an API-enforced ownership boundary for files"
+        "body": "Put all file identifiers in the system prompt so Claude can choose the owner."
       }
     ],
     "correctAnswers": [
-      "A"
+      "C"
     ],
-    "explanation": "Files are accessible across the API workspace rather than scoped to an application user or conversation. Treat IDs as server-side references and enforce the user-to-file mapping.",
+    "explanation": "Application-level authorization must protect object references before they cross into downstream services. A valid technical identifier is not itself an authorization decision.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/files"
+      "https://platform.claude.com/docs/en/build-with-claude/files",
+      "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2465,34 +2473,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-070",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "citation-scanned-text-limitation",
+    "conceptKey": "verified-text-representation-retrieval-citation",
     "type": "single",
     "selectCount": 1,
-    "body": "A scan-only PDF has no extractable text. Claude can visually discuss it, but the product requires native citations to its passages. Which change addresses the documented limitation?",
+    "body": "A document assistant must answer questions from scanned contracts and show reviewers the evidence supporting each answer. OCR quality varies. What design is strongest?",
     "options": [
       {
         "id": "A",
-        "body": "Request page-number references in prose and treat them as native text citations"
+        "body": "Treat any OCR output as unquestionably correct and discard the scan."
       },
       {
         "id": "B",
-        "body": "Provide a verified text-bearing representation of the scan for text citations"
+        "body": "Create a verified text representation for retrieval/citation and retain the original scan for visual inspection when needed."
       },
       {
         "id": "C",
-        "body": "Enable native citations on the unchanged scan and assume visual OCR makes it citable"
+        "body": "Ask Claude to invent exact quotations when OCR is missing."
       },
       {
         "id": "D",
-        "body": "Convert the scan to an image block and request native image-region citations"
+        "body": "Use only page images and claim every generated statement has a precise text citation."
       }
     ],
     "correctAnswers": [
       "B"
     ],
-    "explanation": "Native citations currently reference text, and scan-only PDFs without extractable text are not citable. A verified text representation supplies citable content.",
+    "explanation": "For scan-heavy workflows, text extraction and visual evidence serve different purposes. Verified text supports searchable/citable evidence, while the original image remains useful for checking OCR-sensitive details.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/citations"
+      "https://platform.claude.com/docs/en/build-with-claude/pdf-support"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2500,34 +2508,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-071",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "citations-json-output-incompatibility",
+    "conceptKey": "split-workflow-requirement-output-mechanism",
     "type": "single",
     "selectCount": 1,
-    "body": "A single API request enables citations on supplied documents and also sets output_config.format to a JSON schema. Both features work separately. What explains the request failure?",
+    "body": "A product needs both a machine-readable decision object and a human-facing answer with source citations. One API feature combination cannot satisfy both cleanly in a single response. What is the best application-design response?",
     "options": [
       {
         "id": "A",
-        "body": "Each feature requires a separate API key, even when the model supports both"
+        "body": "Split the workflow so each requirement uses an output mechanism suited to it."
       },
       {
         "id": "B",
-        "body": "Citations are unsupported whenever input contains multiple documents"
+        "body": "Drop validation because citations make the answer trustworthy."
       },
       {
         "id": "C",
-        "body": "Native citations and structured JSON outputs cannot be enabled together in that request"
+        "body": "Drop source attribution because structured data is more important."
       },
       {
         "id": "D",
-        "body": "The combination is rejected only on streaming requests and will work unchanged synchronously"
+        "body": "Force both requirements through prompt wording alone."
       }
     ],
     "correctAnswers": [
-      "C"
+      "A"
     ],
-    "explanation": "Citations interleave citation information with text output and are incompatible with structured output formatting in the same request. The documented result is a 400 error.",
+    "explanation": "Application design can compose multiple model calls or processing stages when one response surface cannot cleanly satisfy independent contracts. The important principle is preserving both requirements rather than weakening one.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/citations"
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2535,34 +2543,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-072",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "rag-native-source-attribution",
+    "conceptKey": "passage-text-together-stable-source",
     "type": "single",
     "selectCount": 1,
-    "body": "An internal retrieval service already returns approved passages and stable article identifiers. The UI needs native citations carrying those identifiers. Which content design directly supports that requirement?",
+    "body": "An internal RAG service retrieves passages from approved policy articles. The final answer must show which article supports each claim. What should the application preserve when passing retrieved evidence to Claude?",
     "options": [
       {
         "id": "A",
-        "body": "Append an unlabeled bibliography after concatenating all retrieved passages"
+        "body": "Only article titles without the relevant passages."
       },
       {
         "id": "B",
-        "body": "Keep passage identifiers only in the database and send Claude the passage text without attribution"
+        "body": "Only the passage text after removing all source identity."
       },
       {
         "id": "C",
-        "body": "Ask Claude to infer each passage’s internal article identifier from its wording"
+        "body": "The passage text together with stable source metadata that can be carried into attribution."
       },
       {
         "id": "D",
-        "body": "Supply search_result blocks with source, title, text content, and citations enabled"
+        "body": "Strip source identifiers before prompting, then reconstruct attribution from semantic similarity afterward."
       }
     ],
     "correctAnswers": [
-      "D"
+      "C"
     ],
-    "explanation": "Search-result blocks let an application provide its own retrieved content with source and title metadata for native citations.",
+    "explanation": "Source-aware retrieval should preserve both evidence and provenance. That allows the answer layer to attribute claims to the actual retrieved source instead of reconstructing provenance afterward.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/search-results"
+      "https://platform.claude.com/docs/en/build-with-claude/pdf-support"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2570,34 +2578,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-073",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "citation-block-granularity",
+    "conceptKey": "retrieve-smaller-coherent-sections-preserve",
     "type": "single",
     "selectCount": 1,
-    "body": "A search result contains a whole manual as one text block. Every native citation returns an unhelpfully large passage. How can the application obtain finer citation boundaries without changing the manual’s words?",
+    "body": "A RAG system retrieves entire 80-page manuals as single chunks. Answers are often correct, but citations and context are broad and noisy. What change should the team evaluate first?",
     "options": [
       {
         "id": "A",
-        "body": "Split the content into smaller, focused text blocks"
+        "body": "Concatenate more full manuals into every request."
       },
       {
         "id": "B",
-        "body": "Ask for shorter citation text while leaving the manual as a single block"
+        "body": "Remove retrieval metadata and let Claude rely on memory."
       },
       {
         "id": "C",
-        "body": "Shorten the result title and source identifier"
+        "body": "Retrieve smaller coherent sections that preserve enough context while narrowing the evidence supplied."
       },
       {
         "id": "D",
-        "body": "Keep one content block but add paragraph labels inside its text"
+        "body": "Increase answer length so broad evidence is easier to explain."
       }
     ],
     "correctAnswers": [
-      "A"
+      "C"
     ],
-    "explanation": "Search-result citations reference whole content blocks. Splitting the same text into focused blocks gives the model finer citation boundaries.",
+    "explanation": "Retrieval granularity should match the information need. Coherent smaller sections can reduce irrelevant context and improve evidence localization without requiring arbitrary tiny fragments.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/search-results"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2605,34 +2613,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-074",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "search-result-container-homogeneity",
+    "conceptKey": "normalize-tool-results-stable-application-owned",
     "type": "single",
     "selectCount": 1,
-    "body": "A custom retrieval tool returns a tool_result whose content array contains two search_result blocks and one plain text summary. The request is rejected. What is the valid way to retain the summary alongside these results?",
+    "body": "A retrieval tool returns results from three backends in inconsistent shapes. The agent prompt contains extensive special cases for interpreting each format and frequently breaks when a backend changes. What architectural improvement is best?",
     "options": [
       {
         "id": "A",
-        "body": "Keep the mixed array but disable citations on its search results"
+        "body": "Add more prompt branches for every backend-specific field."
       },
       {
         "id": "B",
-        "body": "Put the summary text inside a search_result content array"
+        "body": "Remove result validation so all shapes are accepted."
       },
       {
         "id": "C",
-        "body": "Move the plain summary before the search_result blocks in the same content array"
+        "body": "Normalize tool results into a stable application-owned contract before giving them to the agent."
       },
       {
         "id": "D",
-        "body": "Change the summary’s type to search_result without adding the required source/title/content fields"
+        "body": "Ask Claude to infer the schema from failures in production."
       }
     ],
     "correctAnswers": [
-      "B"
+      "C"
     ],
-    "explanation": "If a tool_result contains search_result blocks, all its top-level content blocks must be search_result. Supporting text can be placed inside one result’s text content array.",
+    "explanation": "Adapters should shield the model-facing contract from backend-specific representation changes. A stable result shape reduces prompt complexity and improves testability.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/search-results"
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2640,34 +2649,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-075",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "schema-external-reference-resolution",
+    "conceptKey": "version-effective-schema-application-artifact",
     "type": "single",
     "selectCount": 1,
-    "body": "A team reuses a JSON output schema that references a definition at an external HTTPS URL. It wants constrained JSON output from the API. What must change?",
+    "body": "A team uses Structured Outputs for a downstream API contract. The schema is assembled dynamically from several remote definitions and occasionally changes without review. What is the strongest design improvement?",
     "options": [
       {
         "id": "A",
-        "body": "Include the external URL in a schema description while retaining the unsupported external reference"
+        "body": "Remove schema validation so remote changes cannot cause errors."
       },
       {
         "id": "B",
-        "body": "Make the schema URL public and allow unauthenticated HTTPS access"
+        "body": "Resolve and version the effective schema as an application artifact that can be tested before deployment."
       },
       {
         "id": "C",
-        "body": "Resolve the external definition into a supported self-contained schema before submission"
+        "body": "Ask Claude to choose which schema version seems appropriate."
       },
       {
         "id": "D",
-        "body": "Configure a longer HTTP timeout for remote definition fetching"
+        "body": "Resolve remote schema definitions at request time and accept changes without versioning the effective contract."
       }
     ],
     "correctAnswers": [
-      "C"
+      "B"
     ],
-    "explanation": "Structured outputs do not support external schema references. Resolve external definitions into a supported schema before sending it.",
+    "explanation": "An output schema is part of the production interface and should be reproducible. Resolving and versioning the effective contract makes changes reviewable and testable.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
+      "https://platform.claude.com/docs/en/build-with-claude/structured-outputs",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2675,32 +2685,32 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-076",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "schema-unsupported-numeric-constraints",
+    "conceptKey": "enforce-business-authorization-rule-independently",
     "type": "single",
     "selectCount": 1,
-    "body": "A Python parsing helper transforms a Pydantic field with minimum: 100 into a simpler schema for the API. The application still requires that minimum. Which account of enforcement is correct?",
+    "body": "A structured output requires a numeric `refund_amount`. Company policy also says values above €500 need separate approval. Which responsibility belongs to the application even when schema-constrained output is used?",
     "options": [
       {
         "id": "A",
-        "body": "Only constrained decoding enforces the minimum, so downstream validation can be removed"
+        "body": "Encode the policy only in a free-form example and remove downstream checks."
       },
       {
         "id": "B",
-        "body": "The description makes minimum a hard decoder constraint equivalent to the original keyword"
+        "body": "Enforce the business authorization rule independently of the output shape."
       },
       {
         "id": "C",
-        "body": "Validation against the simplified transmitted schema alone preserves the original minimum"
+        "body": "Assume a valid number is automatically an authorized refund."
       },
       {
         "id": "D",
-        "body": "The helper validates the response against the original schema, so application-side validation still enforces the constraint"
+        "body": "Use a larger model instead of an authorization control."
       }
     ],
     "correctAnswers": [
-      "D"
+      "B"
     ],
-    "explanation": "The SDK can remove unsupported constraints from the transmitted schema while retaining their descriptions, then validate responses against the original schema. That validation preserves the application’s numeric requirement.",
+    "explanation": "Structured Outputs constrain representation, not all business semantics. Application policy must still validate and authorize consequential values.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
     ],
@@ -2710,34 +2720,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-077",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "sdk-preset-additive-instructions",
+    "conceptKey": "maintain-versioned-shared-base-explicit",
     "type": "single",
     "selectCount": 1,
-    "body": "A TypeScript Agent SDK application uses the Claude Code preset. One request needs an additional review focus while retaining the preset instructions. Which systemPrompt configuration is designed for this?",
+    "body": "Several services share a carefully tested system policy, while each product adds a small task-specific instruction. Engineers currently copy and edit the full policy in every service. What design reduces drift?",
     "options": [
       {
         "id": "A",
-        "body": "The claude_code preset object with an append string"
+        "body": "Keep unrelated hand-edited copies in every service."
       },
       {
         "id": "B",
-        "body": "Set systemPrompt to a custom string containing only the additional review focus"
+        "body": "Move the entire policy into user-provided text."
       },
       {
         "id": "C",
-        "body": "Set systemPrompt to the claude_code preset without an append field"
+        "body": "Maintain a versioned shared base with explicit task-specific additions."
       },
       {
         "id": "D",
-        "body": "Set systemPrompt to a custom string containing only the project’s CLAUDE.md contents"
+        "body": "Ask Claude to reconstruct the shared policy from the product name."
       }
     ],
     "correctAnswers": [
-      "A"
+      "C"
     ],
-    "explanation": "The preset object’s append field adds instructions while preserving the Claude Code preset. A standalone custom string replaces the preset prompt.",
+    "explanation": "Shared behavior is easier to evaluate and update when it has one maintained source and controlled extensions. Copy-pasted prompt variants create configuration drift.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/modifying-system-prompts"
+      "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/claude-prompting-best-practices",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2745,34 +2756,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-078",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "sdk-filesystem-config-opt-out-boundary",
+    "conceptKey": "configuration-sources-loaded-hosted-runtime",
     "type": "single",
     "selectCount": 1,
-    "body": "A hosted SDK service sets settingSources: [] and assumes it has disabled every host-provided input. Which statement correctly limits that assumption?",
+    "body": "A hosted agent behaves differently from local development because it unexpectedly inherits machine-specific Claude Code configuration. The production service should use only explicitly approved project inputs. What should the design do?",
     "options": [
       {
         "id": "A",
-        "body": "It disables project files but always keeps user and local settings enabled"
+        "body": "Copy the developer's entire home directory into production."
       },
       {
         "id": "B",
-        "body": "It excludes user/project/local settings, but managed policy and global configuration are still read"
+        "body": "Increase reasoning effort so hidden configuration no longer matters."
       },
       {
         "id": "C",
-        "body": "It disables managed policy whenever user settings are disabled"
+        "body": "Assume every machine has identical user configuration."
       },
       {
         "id": "D",
-        "body": "It prevents host auto memory and global configuration from being read"
+        "body": "Make the configuration sources loaded by the hosted runtime explicit and test them in the deployment environment."
       }
     ],
     "correctAnswers": [
-      "B"
+      "D"
     ],
-    "explanation": "An empty settingSources list excludes user, project, and local settings. It does not disable managed policy or global configuration and is not filesystem isolation.",
+    "explanation": "Hosted agent behavior depends on its effective configuration. Production should deliberately control and verify configuration sources rather than inheriting developer-machine state by accident.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/claude-code-features"
+      "https://code.claude.com/docs/en/settings",
+      "https://code.claude.com/docs/en/agent-sdk/overview"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2780,34 +2792,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-079",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "sdk-plugin-local-materialization",
+    "conceptKey": "plugin-deployment-dependency-materialize-install",
     "type": "single",
     "selectCount": 1,
-    "body": "A deployment receives a plugin’s Git repository URL and passes it directly as a plugins entry with type: git. The current Agent SDK accepts only local plugin entries. What is the supported deployment arrangement?",
+    "body": "A production agent depends on a reusable plugin stored in another repository. Deployments occasionally start without it because the runtime assumes the plugin will somehow be present. What should change?",
     "options": [
       {
         "id": "A",
-        "body": "Pass the repository URL as a local path and rely on the SDK to clone it"
+        "body": "Mention the plugin name in the prompt and assume that installs it."
       },
       {
         "id": "B",
-        "body": "Pass a marketplace identifier as the plugin type and omit the local directory"
+        "body": "Use the newest version found on the internet at runtime without testing."
       },
       {
         "id": "C",
-        "body": "Materialize the plugin on disk and pass its root path with type: local"
+        "body": "Remove readiness checks so deployment can continue."
       },
       {
         "id": "D",
-        "body": "Put the repository URL in settingSources so filesystem discovery downloads the plugin"
+        "body": "Treat the plugin as a deployment dependency: materialize/install a known version and verify it is available before serving traffic."
       }
     ],
     "correctAnswers": [
-      "C"
+      "D"
     ],
-    "explanation": "The Agent SDK’s plugin option accepts local directories. Download or check out remotely distributed plugins first, then provide the plugin root path.",
+    "explanation": "Reusable agent extensions are dependencies. Their version and presence should be reproducible and verified just like other application dependencies.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/plugins"
+      "https://code.claude.com/docs/en/plugins"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2850,34 +2862,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-081",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "plugin-namespaced-skill-disambiguation",
+    "conceptKey": "clear-package-action-identities-intended",
     "type": "single",
     "selectCount": 1,
-    "body": "Two loaded plugins both define a review skill. The application must explicitly invoke the one from billing-audit. What should it send?",
+    "body": "Two installed workflow packages expose similarly named review actions. Operators sometimes invoke the wrong one. What packaging/design change best reduces this ambiguity?",
     "options": [
       {
         "id": "A",
-        "body": "/billing-audit:review"
+        "body": "Rely on installation order to decide which action wins."
       },
       {
         "id": "B",
-        "body": "/review, relying on the most recently installed plugin"
+        "body": "Use clear package and action identities so the intended workflow is selected explicitly."
       },
       {
         "id": "C",
-        "body": "/billing-audit/review"
+        "body": "Ask users to memorize which copy loaded last."
       },
       {
         "id": "D",
-        "body": "/review:billing-audit"
+        "body": "Rename both actions to the same shorter name."
       }
     ],
     "correctAnswers": [
-      "A"
+      "B"
     ],
-    "explanation": "Plugin skills use the plugin-name:skill-name namespace. Explicitly invoking /billing-audit:review disambiguates the intended skill.",
+    "explanation": "Reusable extensions should have clear, distinguishable identities. Explicit selection is safer than accidental resolution through load order or ambiguous names.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/plugins"
+      "https://code.claude.com/docs/en/plugins",
+      "https://code.claude.com/docs/en/skills"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2885,34 +2898,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-082",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "plugin-cache-root-path-portability",
+    "conceptKey": "bundled-assets-relative-installed-package",
     "type": "single",
     "selectCount": 1,
-    "body": "A copied marketplace plugin works in its author’s checkout but its hook script cannot be found after installation elsewhere. The script is bundled in the plugin. Which path design is appropriate?",
+    "body": "A reusable plugin contains scripts and reference files. It works only on the author's laptop because its instructions use absolute paths from that machine. What is the portability fix?",
     "options": [
       {
         "id": "A",
-        "body": "Resolve the script relative to the author’s development checkout recorded at build time"
+        "body": "Copy the absolute paths into CLAUDE.md."
       },
       {
         "id": "B",
-        "body": "Resolve the script from CLAUDE_PLUGIN_ROOT"
+        "body": "Resolve bundled assets relative to the installed package/plugin location or another documented portable base."
       },
       {
         "id": "C",
-        "body": "Resolve the script relative to the consuming application’s working directory"
+        "body": "Require every developer to create the author's home-directory path."
       },
       {
         "id": "D",
-        "body": "Resolve bundled script paths from CLAUDE_PLUGIN_DATA alone"
+        "body": "Search several likely installation directories at runtime and use the first matching file."
       }
     ],
     "correctAnswers": [
       "B"
     ],
-    "explanation": "Installed plugins run from their installed location. CLAUDE_PLUGIN_ROOT provides the plugin root so bundled resources can be referenced portably.",
+    "explanation": "Reusable packages should not depend on machine-specific absolute paths. Bundled resources need paths that resolve from the deployed artifact or another explicit environment configuration.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/plugins-reference"
+      "https://code.claude.com/docs/en/plugins"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -2920,32 +2933,32 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-083",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "pdf-encryption-supported-input-boundary",
+    "conceptKey": "convert-supported-representation-validate-required",
     "type": "single",
     "selectCount": 1,
-    "body": "A document-processing service receives a password-protected PDF. The customer has authorized processing, and the service can unlock it using the supplied password. The application must submit a supported PDF document input to the direct Claude API. Which preparation step is required?",
+    "body": "A document workflow receives a file format that the Claude document interface does not accept directly, but the application can legally transform it without losing the information needed for the task. What should it do?",
     "options": [
       {
         "id": "A",
-        "body": "Send the encrypted PDF unchanged and put its password in the user message"
+        "body": "Change only the filename extension and send the original bytes."
       },
       {
         "id": "B",
-        "body": "Upload the encrypted bytes through the Files API and assume file_id removes the encryption limitation"
+        "body": "Put the binary data into ordinary prompt text."
       },
       {
         "id": "C",
-        "body": "Unlock the document in authorized application processing and submit a standard unencrypted PDF"
+        "body": "Assume every file format is supported if its contents are readable on the developer's computer."
       },
       {
         "id": "D",
-        "body": "Base64-encode the encrypted file and treat encoding as decryption"
+        "body": "Convert it to a supported representation and validate that the required content survived the conversion."
       }
     ],
     "correctAnswers": [
-      "C"
+      "D"
     ],
-    "explanation": "PDF input must be a standard PDF without password protection or encryption. Unlock it through authorized preprocessing; a file reference, password in prose, or base64 encoding does not remove encryption.",
+    "explanation": "Input preprocessing is part of application design. Unsupported formats should be converted into a supported representation while preserving the task-relevant information.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/pdf-support"
     ],
@@ -3025,34 +3038,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-086",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "citation-render-source-passage-validation",
+    "conceptKey": "preserve-attribution-metadata-through-application",
     "type": "single",
     "selectCount": 1,
-    "body": "A document-answering UI discards all citation metadata and renders only response text. Reviewers need to inspect the source passages supporting individual claims. Which change directly enables this?",
+    "body": "A document-answering API returns source-attribution metadata, but the frontend discards it and shows only prose. Reviewers need to verify individual claims. What should change?",
     "options": [
       {
         "id": "A",
-        "body": "Show a bibliography of all input documents but discard claim-to-passage locations"
+        "body": "Replace citations with a single confidence percentage."
       },
       {
         "id": "B",
-        "body": "Preserve and render citation locations and cited text alongside the associated answer spans"
+        "body": "Ask users to trust the answer because the backend received documents."
       },
       {
         "id": "C",
-        "body": "Show only one citation for the entire answer, regardless of the API’s per-span attribution"
+        "body": "Preserve the attribution metadata through the application and render it with the relevant answer content."
       },
       {
         "id": "D",
-        "body": "Replace cited passages with a confidence badge for each sentence"
+        "body": "Show only a list of all possible documents with no claim association."
       }
     ],
     "correctAnswers": [
-      "B"
+      "C"
     ],
-    "explanation": "Citation metadata provides source locations and cited passages for checking an answer. The renderer must retain that association to support source inspection.",
+    "explanation": "Source attribution is useful only if the application preserves it across layers. Rendering the relationship between claims and evidence supports review and calibrated trust.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/citations"
+      "https://platform.claude.com/docs/en/build-with-claude/pdf-support"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -3060,34 +3073,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-087",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "sdk-context-sharing-cli-instructions",
+    "conceptKey": "shared-project-guidance-versioned-source",
     "type": "single",
     "selectCount": 1,
-    "body": "A team maintains project conventions in CLAUDE.md for interactive Claude Code. Its SDK service must use that same maintained file rather than a copied string. Which explicit configuration supports this?",
+    "body": "A team wants interactive Claude Code sessions and its hosted Agent SDK service to follow the same maintained repository conventions. What architecture best reduces duplicated instructions?",
     "options": [
       {
         "id": "A",
-        "body": "Set settingSources to user only and assume repository instructions are included"
+        "body": "Keep shared project guidance in a versioned project source that both environments are deliberately configured to load."
       },
       {
         "id": "B",
-        "body": "Set settingSources to an empty list while relying on automatic project discovery"
+        "body": "Copy the guidance into two unrelated strings and update whichever one someone remembers."
       },
       {
         "id": "C",
-        "body": "Include project in settingSources and run with the intended project cwd"
+        "body": "Rely on the selected model to infer repository conventions automatically."
       },
       {
         "id": "D",
-        "body": "Include project settings but point cwd at an unrelated directory without the maintained file in its hierarchy"
+        "body": "Store the guidance only in one engineer's personal settings."
       }
     ],
     "correctAnswers": [
-      "C"
+      "A"
     ],
-    "explanation": "Including project settings loads project CLAUDE.md context. The SDK’s cwd determines project-level discovery, allowing the CLI and SDK to share the maintained file.",
+    "explanation": "Shared project behavior should come from a maintained, versioned source that each relevant runtime intentionally loads. This improves consistency across interactive and hosted use.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/claude-code-features"
+      "https://code.claude.com/docs/en/memory",
+      "https://code.claude.com/docs/en/agent-sdk/overview"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -3130,32 +3144,32 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-089",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "files-expiration-versus-erasure",
+    "conceptKey": "design-explicit-data-lifecycle-meets",
     "type": "single",
     "selectCount": 1,
-    "body": "A product needs a precise promise that file bytes are permanently erased at an exact timestamp. An engineer proposes using Files API expires_at as proof. What is the correct assessment?",
+    "body": "A regulated product promises that customer artifacts are retained for exactly a defined period and then handled according to a documented deletion policy. Can the team satisfy that obligation merely by choosing whatever default retention behavior a model API happens to provide?",
     "options": [
       {
         "id": "A",
-        "body": "Expiration stops API content availability but is not a guaranteed permanent-erasure deadline"
+        "body": "Yes, provided the prompt mentions the retention period."
       },
       {
         "id": "B",
-        "body": "Expiration guarantees simultaneous erasure of both metadata and underlying bytes"
+        "body": "No, because Claude applications can never process regulated data."
       },
       {
         "id": "C",
-        "body": "Expiration provides a guaranteed permanent-erasure deadline once the file disappears from list results"
+        "body": "Yes. Treat the provider's current default retention as the product policy without adding application controls."
       },
       {
         "id": "D",
-        "body": "An expired file can still be supplied to new inference requests until metadata disappears"
+        "body": "Design an explicit data lifecycle that meets the product's retention and deletion commitments."
       }
     ],
     "correctAnswers": [
-      "A"
+      "D"
     ],
-    "explanation": "File expiration is a lifecycle control, not a guaranteed-deletion control. Content becomes unavailable through the API, while limited retention and metadata visibility can continue.",
+    "explanation": "Business data-lifecycle commitments must be designed and verified explicitly. Provider features can be components of that design, but defaults should not be assumed to satisfy a contractual policy.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/files"
     ],
@@ -3165,34 +3179,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-090",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "search-input-citation-consistency",
+    "conceptKey": "consistent-evidence-contract-preserves-source",
     "type": "single",
     "selectCount": 1,
-    "body": "A RAG request includes several search_result blocks. Some enable citations and others disable them. All passages are intended to be used as evidence. Which repair follows the API’s citation-control rule?",
+    "body": "A RAG application combines evidence from several retrieval sources. Some passages retain provenance while others are inserted as anonymous text. The product requires verifiable answers. What should the team standardize?",
     "options": [
       {
         "id": "A",
-        "body": "Enable citations on retrieved results but disable them on prefetched results in the same request"
+        "body": "A consistent evidence contract that preserves source identity for every passage eligible to support the answer."
       },
       {
         "id": "B",
-        "body": "Use the same citation-enabled setting on every search result in the request"
+        "body": "Provide source identity only for passages that support the expected answer."
       },
       {
         "id": "C",
-        "body": "Leave the settings mixed but place disabled results later in the message"
+        "body": "Let Claude invent missing source names from the text."
       },
       {
         "id": "D",
-        "body": "Leave the settings mixed and disable streaming"
+        "body": "Remove provenance from all passages so they are consistent."
       }
     ],
     "correctAnswers": [
-      "B"
+      "A"
     ],
-    "explanation": "Search-result citation settings must be consistent across a request. Enable citations on all results when the application wants them all available as cited evidence.",
+    "explanation": "Evidence should be handled consistently. If answers must be verifiable, every source that can support a claim should carry trustworthy provenance rather than a mix of attributable and anonymous text.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/search-results"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -3200,34 +3214,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-091",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "plugin-root-component-placement",
+    "conceptKey": "package-related-components-versioned-extension",
     "type": "single",
     "selectCount": 1,
-    "body": "An SDK deployment points its plugin path to .claude-plugin/, but the skills and hooks directories are siblings of that directory. Which path should the application provide?",
+    "body": "A reusable Claude Code extension bundles a Skill, hooks, and MCP configuration that are intended to ship and version together. What packaging decision best supports reuse?",
     "options": [
       {
         "id": "A",
-        "body": "The plugin.json manifest file path"
+        "body": "Distribute each file through unrelated chat messages."
       },
       {
         "id": "B",
-        "body": "The skills directory alone"
+        "body": "Package the related components as one versioned extension/plugin artifact with documented setup."
       },
       {
         "id": "C",
-        "body": "The plugin root directory containing .claude-plugin, skills, and hooks"
+        "body": "Install the pieces manually on one engineer's laptop and call that the release."
       },
       {
         "id": "D",
-        "body": "The directory above the actual plugin root"
+        "body": "Put all behavior in a single system prompt and omit the actual hook/MCP configuration."
       }
     ],
     "correctAnswers": [
-      "C"
+      "B"
     ],
-    "explanation": "The SDK plugin path points to the plugin root, the parent of the component directories and optional manifest directory.",
+    "explanation": "When multiple extension components form one reusable capability, a versioned package makes installation, review, and reproduction tractable across environments.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/plugins"
+      "https://code.claude.com/docs/en/plugins"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -3235,32 +3249,32 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-092",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "schema-unsupported-numeric-constraints",
+    "conceptKey": "supported-schema-shape-enforce-remaining",
     "type": "single",
     "selectCount": 1,
-    "body": "A service sends raw JSON-schema output configuration directly to the API, including minimum and maximum constraints. It does not use an SDK schema-transforming helper. The API returns an unsupported-schema error. Which change preserves the business checks?",
+    "body": "A schema can constrain the structure of Claude's final JSON, but an important business rule cannot be represented reliably in the supported schema subset. What should the application do?",
     "options": [
       {
         "id": "A",
-        "body": "Resubmit the same unsupported schema using a longer request timeout"
+        "body": "Use the supported schema for shape and enforce the remaining rule in application validation."
       },
       {
         "id": "B",
-        "body": "Keep the numerical keywords but set strict output formatting again at a second configuration location"
+        "body": "Assume natural-language prompt wording turns every rule into a hard decoder constraint."
       },
       {
         "id": "C",
-        "body": "Remove the numeric constraints everywhere and accept any schema-valid number"
+        "body": "Remove the business rule."
       },
       {
         "id": "D",
-        "body": "Send a supported schema and enforce the numeric bounds in application validation"
+        "body": "Accept any schema-shaped output as semantically valid."
       }
     ],
     "correctAnswers": [
-      "D"
+      "A"
     ],
-    "explanation": "Numerical constraints such as minimum and maximum are unsupported in the transmitted structured-output schema. A supported schema plus application validation preserves the business bounds.",
+    "explanation": "Structured output and application validation are complementary. Unsupported or domain-specific constraints still belong in deterministic application checks.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/structured-outputs"
     ],
@@ -3270,32 +3284,32 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-093",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "document-binary-office-conversion",
+    "conceptKey": "convert-supported-representation-preserves-layout",
     "type": "single",
     "selectCount": 1,
-    "body": "A service submits a binary .docx file as a document block because it contains text. It must preserve the document’s layout for analysis. Which preprocessing choice matches the supported document interface?",
+    "body": "A customer provides a rich office document whose page layout matters to the requested analysis. The API does not accept that binary format directly as a document input. What is the best preprocessing strategy?",
     "options": [
       {
         "id": "A",
-        "body": "Convert the document to a supported PDF representation"
+        "body": "Extract only plain text even though layout carries required information."
       },
       {
         "id": "B",
-        "body": "Change only its filename extension to .pdf"
+        "body": "Rename the file extension without converting the bytes."
       },
       {
         "id": "C",
-        "body": "Set media_type to text/plain while keeping the binary DOCX bytes"
+        "body": "Paste the binary bytes into a text message."
       },
       {
         "id": "D",
-        "body": "Send the binary bytes as an ordinary text string"
+        "body": "Convert to a supported representation that preserves the layout, then verify the conversion."
       }
     ],
     "correctAnswers": [
-      "A"
+      "D"
     ],
-    "explanation": "Binary .docx files are not supported directly in document blocks. Convert to a supported representation such as PDF; relabeling the same binary content is not conversion.",
+    "explanation": "Choose an input representation that the model supports and that preserves the evidence the task depends on. Conversion quality is part of the application's responsibility.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/pdf-support"
     ],
@@ -3305,39 +3319,40 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-094",
     "domain": "applications-integration",
     "objective": "D2.5",
-    "conceptKey": "sdk-plugin-load-verification",
+    "conceptKey": "small-capability-check-showing-required",
     "type": "multiple",
     "selectCount": 2,
-    "body": "A hosted SDK app must fail its own readiness check if a required plugin is absent. A nonexistent local plugin path may be skipped while the session continues. Which TWO checks directly establish readiness? Select TWO.",
+    "body": "A hosted agent requires a particular plugin before it can safely accept work. Which TWO readiness checks are appropriate? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "Treat successful session initialization alone as proof every requested plugin loaded"
+        "body": "Run a small capability check showing that the required extension is actually available to the agent."
       },
       {
         "id": "B",
-        "body": "Verify the deployed plugin directory exists and is readable"
+        "body": "Verify that the expected version is installed or materialized in the deployment."
       },
       {
         "id": "C",
-        "body": "Inspect the initialization message’s loaded plugins list for the required plugin"
+        "body": "Assume process startup proves every optional extension loaded."
       },
       {
         "id": "D",
-        "body": "Verify only that the plugin was installed on the developer’s machine"
+        "body": "Check only that the plugin exists on a developer laptop."
       },
       {
         "id": "E",
-        "body": "Check that the configured path string is nonempty without checking the directory or inventory"
+        "body": "Ignore missing-extension errors until a customer encounters one."
       }
     ],
     "correctAnswers": [
-      "B",
-      "C"
+      "A",
+      "B"
     ],
-    "explanation": "The SDK may skip a missing plugin path without ending the session. Verify the local path and the initialization message’s plugins inventory before declaring the required capability ready.",
+    "explanation": "Dependency presence and effective availability are separate concerns. A production readiness gate should verify both the artifact and the capability the runtime needs.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/plugins"
+      "https://code.claude.com/docs/en/plugins",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -3385,34 +3400,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-096",
     "domain": "applications-integration",
     "objective": "D2.6",
-    "conceptKey": "config-list-merge-not-scalar-override",
+    "conceptKey": "enforce-non-negotiable-restrictions-managed-policy",
     "type": "single",
     "selectCount": 1,
-    "body": "User settings allow one Bash command and project settings allow a different one. No deny rules apply. A maintainer assumes the project allow list replaces the user list. What does the documented merge rule say?",
+    "body": "A repository has team-wide Claude Code permissions plus a developer's personal preferences. The developer assumes a personal setting can always weaken a centrally enforced restriction. What principle should guide the configuration design?",
     "options": [
       {
         "id": "A",
-        "body": "The higher-precedence project list replaces the complete user list"
+        "body": "Enforce non-negotiable restrictions in managed policy; keep personal/project settings within that boundary."
       },
       {
         "id": "B",
-        "body": "Only commands appearing in both lists remain allowed by the combined allow configuration"
+        "body": "Let the model choose which configuration source to obey."
       },
       {
         "id": "C",
-        "body": "The user list replaces the project list because personal grants always override shared grants"
+        "body": "Put all enforcement rules only in natural-language instructions."
       },
       {
         "id": "D",
-        "body": "Permission allow lists combine across settings sources"
+        "body": "Any personal file should override every administrative restriction."
       }
     ],
     "correctAnswers": [
-      "D"
+      "A"
     ],
-    "explanation": "List settings such as permissions.allow are combined across sources rather than resolved like a single scalar value.",
+    "explanation": "Configuration layers serve different purposes. Centrally enforced policy is the right place for non-negotiable restrictions, while lower scopes handle user/project behavior within that boundary.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/settings"
+      "https://code.claude.com/docs/en/settings",
+      "https://code.claude.com/docs/en/permissions"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -3420,32 +3436,32 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-097",
     "domain": "applications-integration",
     "objective": "D2.6",
-    "conceptKey": "config-session-override-no-file-write",
+    "conceptKey": "explicit-temporary-session-scoped-override-record",
     "type": "single",
     "selectCount": 1,
-    "body": "A developer needs to test a supported non-managed setting in exactly one Claude Code session. Existing files must remain unchanged. Which option fits?",
+    "body": "An engineer needs to experiment with a temporary configuration change for one debugging session. The change must not silently become the team's new default. What practice best fits?",
     "options": [
       {
         "id": "A",
-        "body": "Start Claude Code with an appropriate --settings JSON override"
+        "body": "Edit the shared project configuration and forget to revert it."
       },
       {
         "id": "B",
-        "body": "Edit the global user settings file before launching and leave the override there"
+        "body": "Use an explicit temporary/session-scoped override and record the experiment separately from versioned defaults."
       },
       {
         "id": "C",
-        "body": "Commit the override into the project’s shared settings file"
+        "body": "Change the managed policy for the entire organization."
       },
       {
         "id": "D",
-        "body": "Use the project-local settings file and assume it is discarded when the session ends"
+        "body": "Hide the change in the user prompt."
       }
     ],
     "correctAnswers": [
-      "A"
+      "B"
     ],
-    "explanation": "The --settings option applies supported overrides for that session without changing saved settings files.",
+    "explanation": "Short-lived experiments should be scoped accordingly. Keeping them separate from shared versioned configuration reduces accidental drift.",
     "sourceRefs": [
       "https://code.claude.com/docs/en/settings"
     ],
@@ -3455,34 +3471,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-098",
     "domain": "applications-integration",
     "objective": "D2.6",
-    "conceptKey": "claudemd-import-relative-origin",
+    "conceptKey": "portable-project-relative-paths-documented-environment",
     "type": "single",
     "selectCount": 1,
-    "body": "A CLAUDE.md file imports @guides/testing.md. Claude Code is launched from a different directory. Where does the relative import resolve?",
+    "body": "A shared Claude configuration works only from one engineer's directory because it contains machine-specific absolute paths. What should a reusable configuration use instead?",
     "options": [
       {
         "id": "A",
-        "body": "Against the process’s current working directory regardless of the importer location"
+        "body": "A longer system prompt explaining the author's filesystem."
       },
       {
         "id": "B",
-        "body": "Against the directory containing the importing file"
+        "body": "Search the local filesystem at runtime and pick the first path with a matching filename."
       },
       {
         "id": "C",
-        "body": "Against the Git repository root regardless of which file imports it"
+        "body": "Portable project-relative paths or documented environment parameters where appropriate."
       },
       {
         "id": "D",
-        "body": "Against the user-level ~/.claude directory for every import"
+        "body": "The author's home-directory paths committed to Git."
       }
     ],
     "correctAnswers": [
-      "B"
+      "C"
     ],
-    "explanation": "Relative CLAUDE.md imports resolve relative to the file containing the import, not the process working directory.",
+    "explanation": "Team configuration should reproduce across environments. Portable paths and explicit environment-specific parameters separate reusable configuration from one machine's layout.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/memory"
+      "https://code.claude.com/docs/en/settings"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -3490,39 +3506,40 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-099",
     "domain": "applications-integration",
     "objective": "D2.6",
-    "conceptKey": "config-strict-json-syntax",
+    "conceptKey": "exercise-representative-behavior-depends-changed",
     "type": "multiple",
     "selectCount": 2,
-    "body": "A committed Claude Code settings file contains // comments and a trailing comma. The intended setting is supported. Which TWO changes/checks address the configuration failure? Select TWO.",
+    "body": "A configuration change will be rolled out to CI and developer machines. Which TWO checks should happen before treating it as ready? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "Treat the file as JSONC because its extension is .json"
+        "body": "Exercise a representative behavior that depends on the changed setting."
       },
       {
         "id": "B",
-        "body": "Restart repeatedly while leaving the invalid syntax unchanged"
+        "body": "Skip version control so the setting is easier to tweak."
       },
       {
         "id": "C",
-        "body": "Remove the comments and trailing comma to produce strict JSON"
+        "body": "Validate that the configuration is syntactically/loadable."
       },
       {
         "id": "D",
-        "body": "Verify which settings sources loaded after fixing the file"
+        "body": "Assume a code-review approval proves the runtime loaded it."
       },
       {
         "id": "E",
-        "body": "Change only the setting value while retaining the comment and trailing comma"
+        "body": "Change unrelated settings at the same time to save a deployment."
       }
     ],
     "correctAnswers": [
-      "C",
-      "D"
+      "A",
+      "C"
     ],
-    "explanation": "Claude Code settings files use strict JSON. Fix the syntax, then inspect settings-source status to confirm the repaired file loaded.",
+    "explanation": "Configuration is executable behavior. Validate both that the runtime accepts the file and that the intended behavior actually changes as expected.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/settings"
+      "https://code.claude.com/docs/en/settings",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -3530,34 +3547,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-100",
     "domain": "applications-integration",
     "objective": "D2.6",
-    "conceptKey": "claudemd-import-literal-path",
+    "conceptKey": "shared-guidance-concise-load-specialized",
     "type": "single",
     "selectCount": 1,
-    "body": "A maintainer wants CLAUDE.md to mention @legacy-notes.md literally, without importing that file into every session. Which edit matches the import parser?",
+    "body": "A root project instruction file has grown to include every rare troubleshooting procedure. Most sessions never need them, and the large file consumes context. What configuration pattern is better?",
     "options": [
       {
         "id": "A",
-        "body": "Move the reference under a Markdown heading without code formatting"
+        "body": "Duplicate the large file into every subdirectory."
       },
       {
         "id": "B",
-        "body": "Add the same reference to a bullet list without code formatting"
+        "body": "Delete the specialized procedures permanently."
       },
       {
         "id": "C",
-        "body": "Add a blank line before the unquoted reference"
+        "body": "Move all instructions into each user prompt."
       },
       {
         "id": "D",
-        "body": "Wrap the reference in a Markdown code span"
+        "body": "Keep shared guidance concise and load specialized procedures only when relevant."
       }
     ],
     "correctAnswers": [
       "D"
     ],
-    "explanation": "CLAUDE.md import parsing skips code spans and fenced code blocks. A code span preserves a literal @path mention without importing its content.",
+    "explanation": "Configuration should match scope. Persistent project context is best for broadly relevant guidance, while task- or path-specific mechanisms keep specialized content available without loading it everywhere.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/memory"
+      "https://code.claude.com/docs/en/memory",
+      "https://code.claude.com/docs/en/skills"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -3605,34 +3623,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-102",
     "domain": "applications-integration",
     "objective": "D2.6",
-    "conceptKey": "plugin-node-dependency-install-contract",
+    "conceptKey": "declare-dependency-through-reproducible-setup",
     "type": "single",
     "selectCount": 1,
-    "body": "A copied marketplace plugin has package.json and a matching package-lock.json. Its dependency needs a postinstall build. Under the documented automatic dependency-install process, which outcome must the maintainer account for?",
+    "body": "A plugin depends on a helper package and works on the author's machine because that dependency was installed manually. Fresh CI environments fail. What should the maintainer do?",
     "options": [
       {
         "id": "A",
-        "body": "The matching lockfile causes lifecycle build scripts to run automatically during this install"
+        "body": "Declare the dependency through a reproducible setup mechanism and test from a clean environment."
       },
       {
         "id": "B",
-        "body": "Dependencies install with lifecycle scripts disabled, so the build needs a separately supported setup path"
+        "body": "Document that CI should keep retrying until the dependency appears."
       },
       {
         "id": "C",
-        "body": "The installer resolves newer dependency versions instead of using the matching lockfile"
+        "body": "Assume a plugin manifest automatically contains every language dependency."
       },
       {
         "id": "D",
-        "body": "A successful dependency download proves native postinstall build artifacts were created"
+        "body": "Put the helper package name in the model prompt."
       }
     ],
     "correctAnswers": [
-      "B"
+      "A"
     ],
-    "explanation": "Automatic installation uses npm ci --ignore-scripts for this lockfile. Dependencies requiring lifecycle-script builds need a separate supported setup path.",
+    "explanation": "Reusable extensions need reproducible dependencies. Clean-environment testing catches hidden machine state before distribution.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/plugins-reference"
+      "https://code.claude.com/docs/en/plugins"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -3640,39 +3658,34 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-103",
     "domain": "applications-integration",
     "objective": "D2.6",
-    "conceptKey": "plugin-source-versus-runtime-state",
-    "type": "multiple",
-    "selectCount": 2,
-    "body": "A plugin writes durable user state into its installed version directory. Updates install another version directory. Which TWO design choices address this lifecycle? Select TWO.",
+    "conceptKey": "separate-durable-runtime-data-versioned",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A versioned plugin stores user-generated state inside the same directory as its installed code. An upgrade replaces that directory and the state disappears. What design is better?",
     "options": [
       {
         "id": "A",
-        "body": "Store required user state only alongside code in the version-specific installed directory"
+        "body": "Embed the state in the plugin's source code before each run."
       },
       {
         "id": "B",
-        "body": "Assume a plugin update copies every runtime-created state file from the old version directory"
+        "body": "Assume every package upgrade copies arbitrary runtime-created files."
       },
       {
         "id": "C",
-        "body": "Keep bundled code/resources relative to CLAUDE_PLUGIN_ROOT"
+        "body": "Separate durable runtime data from versioned package code and give the state an explicit persistence location."
       },
       {
         "id": "D",
-        "body": "Store durable plugin state in CLAUDE_PLUGIN_DATA"
-      },
-      {
-        "id": "E",
-        "body": "Treat CLAUDE_PLUGIN_ROOT as the same physical directory across all releases"
+        "body": "Store the state only in Claude's active context."
       }
     ],
     "correctAnswers": [
-      "C",
-      "D"
+      "C"
     ],
-    "explanation": "The installed plugin root is version-specific, whereas CLAUDE_PLUGIN_DATA is intended for persistent data that outlives a plugin version. Keep code and durable state in their appropriate locations.",
+    "explanation": "Versioned code artifacts and durable application state have different lifecycles. Separating them prevents an upgrade from accidentally becoming a data migration.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/plugins-reference"
+      "https://code.claude.com/docs/en/plugins"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -3715,34 +3728,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-105",
     "domain": "applications-integration",
     "objective": "D2.6",
-    "conceptKey": "plugin-cross-plugin-dependency-declaration",
+    "conceptKey": "explicit-compatible-dependency-version-requirement",
     "type": "single",
     "selectCount": 1,
-    "body": "A Claude Code plugin requires another plugin at a compatible version. The maintainer wants this relationship represented in plugin configuration. Which declaration is intended for that relationship?",
+    "body": "A reusable workflow package requires another extension with capabilities that changed across versions. What should the release process capture?",
     "options": [
       {
         "id": "A",
-        "body": "The plugin manifest’s dependencies entries, with supported version constraints"
+        "body": "An explicit compatible dependency/version requirement and a test that exercises the integration."
       },
       {
         "id": "B",
-        "body": "List the plugin only as an npm dependency in package.json"
+        "body": "Only the dependency's display name with no version expectation."
       },
       {
         "id": "C",
-        "body": "Document the dependency only in README installation prose"
+        "body": "An assumption that all future versions remain compatible."
       },
       {
         "id": "D",
-        "body": "Put the required plugin’s name only in the consuming plugin’s keywords"
+        "body": "A prompt telling Claude to adapt to whichever version appears."
       }
     ],
     "correctAnswers": [
       "A"
     ],
-    "explanation": "The plugin manifest supports dependencies on other plugins, including supported version constraints. This differs from a plugin’s own language-package dependencies.",
+    "explanation": "Extension dependencies should be treated like other software dependencies: explicit compatibility plus verification prevents silent behavior drift.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/plugins-reference"
+      "https://code.claude.com/docs/en/plugins",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -3750,34 +3764,35 @@ export const applicationsIntegration: BankQuestion[] = [
     "id": "AI-106",
     "domain": "applications-integration",
     "objective": "D2.6",
-    "conceptKey": "plugin-sensitive-option-storage",
+    "conceptKey": "inject-credential-through-appropriate-secret",
     "type": "single",
     "selectCount": 1,
-    "body": "A plugin asks users for an API token through userConfig. The author wants it treated as a sensitive configuration value rather than ordinary non-sensitive settings. Which field controls that treatment?",
+    "body": "A reusable extension needs an API credential that differs for each deployment. Where should that value live?",
     "options": [
       {
         "id": "A",
-        "body": "Set required: true on the token field"
+        "body": "As a hard-coded default in the plugin source."
       },
       {
         "id": "B",
-        "body": "Set sensitive: true on the userConfig field"
+        "body": "In the Skill instructions so Claude can read it."
       },
       {
         "id": "C",
-        "body": "Set type: string and omit the sensitive flag"
+        "body": "In a committed example configuration containing the real key."
       },
       {
         "id": "D",
-        "body": "Store the token as the userConfig default value"
+        "body": "Inject the credential through an appropriate secret mechanism outside version-controlled code and prompts."
       }
     ],
     "correctAnswers": [
-      "B"
+      "D"
     ],
-    "explanation": "A userConfig field marked sensitive masks entry and stores the value through the documented secure credential storage path rather than ordinary settings.json values.",
+    "explanation": "Environment-specific secrets should be injected securely rather than packaged with reusable code or model-visible instructions. This preserves both portability and secret hygiene.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/plugins-reference"
+      "https://support.claude.com/en/articles/9767949-api-key-best-practices-keeping-your-keys-safe-and-secure",
+      "https://code.claude.com/docs/en/settings"
     ],
     "qualityStatus": "APPROVED"
   }

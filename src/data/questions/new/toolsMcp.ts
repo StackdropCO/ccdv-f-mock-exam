@@ -40,32 +40,32 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-002",
     "domain": "tools-mcp",
     "objective": "D8.1",
-    "conceptKey": "tool-input-examples-schema-validity",
+    "conceptKey": "encode-required-input-type-clearly",
     "type": "single",
     "selectCount": 1,
-    "body": "A user-defined tool requires `account_id` in its input schema. A developer adds `input_examples` containing only `region`, and the request now fails with HTTP 400 before inference. Which repair preserves the required account identifier?",
+    "body": "A tool requires a `customer_id` string, but its description says only 'Look up customer information' and the schema does not mark the field as required. Claude often omits it. What should the developer improve?",
     "options": [
       {
         "id": "A",
-        "body": "Remove `account_id` from the schema’s required list"
+        "body": "Add unrelated examples to the system prompt while leaving the tool contract ambiguous."
       },
       {
         "id": "B",
-        "body": "Move the malformed example into the model’s previous answer"
+        "body": "Increase max_tokens."
       },
       {
         "id": "C",
-        "body": "Make every example conform to the existing input schema"
+        "body": "Encode the required input and type clearly in the tool schema and describe what the parameter means."
       },
       {
         "id": "D",
-        "body": "Retry the unchanged request until it succeeds"
+        "body": "Make the handler infer a missing customer from other request context instead of fixing the declared contract."
       }
     ],
     "correctAnswers": [
       "C"
     ],
-    "explanation": "Input examples must validate against the tool’s schema. Correct the examples rather than relaxing the application’s required field.",
+    "explanation": "Tool reliability starts with a clear contract: required fields, types, and descriptions should match what the handler actually needs. Prompt tricks should not compensate for an incomplete schema.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools"
     ],
@@ -75,32 +75,32 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-003",
     "domain": "tools-mcp",
     "objective": "D8.1",
-    "conceptKey": "tool-choice-enforcement",
+    "conceptKey": "enforce-no-tool-policy-through-application",
     "type": "single",
     "selectCount": 1,
-    "body": "A Messages request includes tool definitions for reuse, but this particular turn must produce no tool calls. The application will enforce this through the documented `tool_choice` setting. Which value fits?",
+    "body": "An application normally exposes several tools, but one compliance-sensitive turn must be answered without any tool execution. What should enforce that requirement?",
     "options": [
       {
         "id": "A",
-        "body": "`{\"type\":\"auto\"}`"
+        "body": "Increase temperature so tool selection becomes less likely."
       },
       {
         "id": "B",
-        "body": "`{\"type\":\"any\"}`"
+        "body": "Remove tool validation from the application."
       },
       {
         "id": "C",
-        "body": "`{\"type\":\"tool\",\"name\":\"lookup\"}`"
+        "body": "Leave all tools unrestricted and assume Claude will remember the compliance rule."
       },
       {
         "id": "D",
-        "body": "`{\"type\":\"none\"}`"
+        "body": "Enforce a no-tool policy through the application's tool controls for that turn."
       }
     ],
     "correctAnswers": [
       "D"
     ],
-    "explanation": "`none` disables tool use for that request. `auto` still permits calls, while the forced choices request calls on models that support them.",
+    "explanation": "When tool use itself is disallowed by policy, the application should enforce that constraint through the tool-control surface, not merely ask the model to comply.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools"
     ],
@@ -110,32 +110,37 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-004",
     "domain": "tools-mcp",
     "objective": "D8.1",
-    "conceptKey": "client-result-content-order",
-    "type": "single",
-    "selectCount": 1,
-    "body": "An assistant turn contains only client-tool calls. The next user message puts explanatory text first and valid `tool_result` blocks afterward. All call IDs match. The API rejects the history. What should change?",
+    "conceptKey": "result-remain-associated-specific-tool",
+    "type": "multiple",
+    "selectCount": 2,
+    "body": "Claude requests two client-side tools in one turn. The application executes them and one fails. Which TWO properties must the results preserve when they are sent back? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "Put all `tool_result` blocks before the explanatory text in that same user message"
+        "body": "The application should replace the failure with the most likely value."
       },
       {
         "id": "B",
-        "body": "Change the user role to `tool`"
+        "body": "Each result must remain associated with the specific tool call it answers."
       },
       {
         "id": "C",
-        "body": "Assign new IDs to the results"
+        "body": "The failed call should be deleted from history."
       },
       {
         "id": "D",
-        "body": "Insert a separate user explanation between the call and its results"
+        "body": "The failed call should be represented honestly as an error observation rather than fabricated success."
+      },
+      {
+        "id": "E",
+        "body": "Both results should be merged under a new invented call identifier."
       }
     ],
     "correctAnswers": [
-      "A"
+      "B",
+      "D"
     ],
-    "explanation": "Client results must precede text within the immediately following user message. Correct IDs do not waive this ordering requirement.",
+    "explanation": "A correct tool loop preserves correlation between calls and results and exposes failures as observations. That lets Claude reason about what actually happened.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/agents-and-tools/tool-use/handle-tool-calls"
     ],
@@ -250,33 +255,34 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-008",
     "domain": "tools-mcp",
     "objective": "D8.1",
-    "conceptKey": "tool-choice-enforcement",
+    "conceptKey": "validation-deterministic-workflow-step-claude",
     "type": "single",
     "selectCount": 1,
-    "body": "A Messages integration uses a model and configuration verified to support forced tool selection. Several tools are supplied, but this request must call `validate_manifest` specifically rather than any other tool. Which setting expresses that requirement?",
+    "body": "A payment workflow must run a deterministic validation check before Claude is allowed to propose a transfer. Several other tools are also available. What is the strongest design?",
     "options": [
       {
         "id": "A",
-        "body": "`tool_choice: {\"type\":\"auto\"}`"
+        "body": "Make validation a deterministic workflow step before Claude may propose the transfer."
       },
       {
         "id": "B",
-        "body": "`tool_choice: {\"type\":\"any\"}`"
+        "body": "Run the transfer first and validate afterward."
       },
       {
         "id": "C",
-        "body": "`tool_choice: {\"type\":\"tool\",\"name\":\"validate_manifest\"}`"
+        "body": "Describe the validator as 'important' and leave execution optional."
       },
       {
         "id": "D",
-        "body": "`tool_choice: {\"type\":\"none\"}`"
+        "body": "Increase reasoning effort so the tool is probably selected."
       }
     ],
     "correctAnswers": [
-      "C"
+      "A"
     ],
-    "explanation": "Named forced selection requires the specified tool. `any` requires a call but does not constrain it to this particular tool.",
+    "explanation": "Hard workflow requirements belong in deterministic orchestration. Tool choice is useful for model-directed work, but mandatory policy gates should not depend on probabilistic selection.",
     "sourceRefs": [
+      "https://www.anthropic.com/engineering/building-effective-agents",
       "https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools"
     ],
     "qualityStatus": "APPROVED"
@@ -470,34 +476,35 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-014",
     "domain": "tools-mcp",
     "objective": "D8.2",
-    "conceptKey": "mcp-initialization-readiness",
+    "conceptKey": "commit-shared-mcp-server-configuration",
     "type": "single",
     "selectCount": 1,
-    "body": "An MCP 2025-11-25 client has received a successful response to `initialize`. Before normal tool operations begin, what must the client send?",
+    "body": "A team builds an MCP connection to its internal issue tracker.\n\nEvery developer working on the repository should load the same server configuration, but each developer must authenticate with their own credentials. No credential may be committed to Git.\n\nWhich design best fits these requirements?",
     "options": [
       {
         "id": "A",
-        "body": "Another `initialize` with a new request ID"
+        "body": "Commit the shared MCP server configuration to the project, while keeping authentication credentials outside the repository"
       },
       {
         "id": "B",
-        "body": "`notifications/initialized`"
+        "body": "Commit one shared API token with the MCP configuration so every developer gets identical access"
       },
       {
         "id": "C",
-        "body": "A tool result containing the protocol version"
+        "body": "Configure the server separately in each developer’s personal global configuration and do not version the shared connection details"
       },
       {
         "id": "D",
-        "body": "A server capability notification on behalf of the server"
+        "body": "Put the API token in `CLAUDE.md` and instruct Claude not to reveal it"
       }
     ],
     "correctAnswers": [
-      "B"
+      "A"
     ],
-    "explanation": "The client signals readiness with `notifications/initialized` after successful initialization. Normal operations follow that handshake.",
+    "explanation": "The connection definition is team-shared configuration, while credentials are user- or environment-specific secrets. Sharing the server configuration without sharing the secret gives the team reproducibility without leaking credentials.",
     "sourceRefs": [
-      "https://modelcontextprotocol.io/specification/2025-11-25/basic/lifecycle"
+      "https://code.claude.com/docs/en/mcp",
+      "https://support.claude.com/en/articles/9767949-api-key-best-practices-keeping-your-keys-safe-and-secure"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -505,34 +512,34 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-015",
     "domain": "tools-mcp",
     "objective": "D8.2",
-    "conceptKey": "mcp-stdio-diagnostics-channel",
+    "conceptKey": "stdio-client-locally-spawned-server",
     "type": "single",
     "selectCount": 1,
-    "body": "A local MCP 2025-11-25 server intermittently causes JSON parsing failures at startup. It prints “Server ready” to stdout before its first JSON-RPC response. Which change preserves startup diagnostics and protocol compliance?",
+    "body": "A developer is building an MCP server used only as a child process by a local desktop client. Which transport is the natural fit?",
     "options": [
       {
         "id": "A",
-        "body": "Send diagnostics to stderr and reserve stdout for valid MCP messages"
+        "body": "stdio between the client and the locally spawned server."
       },
       {
         "id": "B",
-        "body": "Print the banner twice so the client can recognize it"
+        "body": "Use Streamable HTTP even though the server is always spawned and owned by the local client process."
       },
       {
         "id": "C",
-        "body": "Change the banner to a valid JSON string with no JSON-RPC envelope"
+        "body": "A model prompt that contains the server code."
       },
       {
         "id": "D",
-        "body": "Move JSON-RPC replies to stderr instead"
+        "body": "A public internet HTTP endpoint solely because MCP requires networking."
       }
     ],
     "correctAnswers": [
       "A"
     ],
-    "explanation": "Stdout carries protocol messages in the stdio transport. Diagnostic logging belongs on stderr.",
+    "explanation": "stdio is suited to a local process spawned and controlled by its client. Remote/shared deployments generally use a network transport instead.",
     "sourceRefs": [
-      "https://modelcontextprotocol.io/specification/2025-11-25/basic/transports"
+      "https://modelcontextprotocol.io/docs/learn/architecture"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -540,39 +547,34 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-016",
     "domain": "tools-mcp",
     "objective": "D8.2",
-    "conceptKey": "mcp-resource-content-update-versus-list",
-    "type": "multiple",
-    "selectCount": 2,
-    "body": "An MCP 2025-11-25 client reads a resource and wants notifications when that resource’s contents change. The server advertises `resources.subscribe: true`. Which TWO protocol elements provide that flow? Select TWO.",
+    "conceptKey": "resource-mcp-server-living",
+    "type": "single",
+    "selectCount": 1,
+    "body": "An MCP server exposes a living policy document that clients should read as context. Reading it has no side effect. Which MCP primitive best represents it?",
     "options": [
       {
         "id": "A",
-        "body": "`tools/call` with the resource URI as a tool name"
+        "body": "A destructive tool."
       },
       {
         "id": "B",
-        "body": "`notifications/resources/list_changed` alone for every content revision"
+        "body": "A resource."
       },
       {
         "id": "C",
-        "body": "`resources/subscribe` for that URI"
+        "body": "A permission mode."
       },
       {
         "id": "D",
-        "body": "`notifications/resources/updated` identifying the changed URI"
-      },
-      {
-        "id": "E",
-        "body": "Repeated `initialize` requests after every edit"
+        "body": "A transport."
       }
     ],
     "correctAnswers": [
-      "C",
-      "D"
+      "B"
     ],
-    "explanation": "Subscription addresses a particular resource’s changes. An updated notification identifies the resource; a list-change notification addresses the available-resource list.",
+    "explanation": "MCP resources expose retrievable data/context. Tools represent callable actions or computations, while prompts package reusable prompt templates.",
     "sourceRefs": [
-      "https://modelcontextprotocol.io/specification/2025-11-25/server/resources"
+      "https://modelcontextprotocol.io/docs/learn/architecture"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -580,34 +582,34 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-017",
     "domain": "tools-mcp",
     "objective": "D8.2",
-    "conceptKey": "mcp-prompt-list-versus-get",
+    "conceptKey": "prompt-mcp-server-offer",
     "type": "single",
     "selectCount": 1,
-    "body": "An MCP 2025-11-25 client lists a server’s review prompts. The user selects one with a `language` argument. Which request retrieves the actual messages with that argument supplied?",
+    "body": "An MCP server should offer a reusable 'review this incident' prompt template that accepts the service name as an argument. No external action occurs when the template is retrieved. Which primitive fits?",
     "options": [
       {
         "id": "A",
-        "body": "`resources/read` using the prompt’s name as a URI"
+        "body": "A prompt."
       },
       {
         "id": "B",
-        "body": "`tools/call` using the prompt’s description"
+        "body": "A server credential."
       },
       {
         "id": "C",
-        "body": "`prompts/list` with the desired language appended to its cursor"
+        "body": "A transport connection."
       },
       {
         "id": "D",
-        "body": "`prompts/get` with the prompt name and arguments"
+        "body": "A tool that deletes incidents."
       }
     ],
     "correctAnswers": [
-      "D"
+      "A"
     ],
-    "explanation": "Listing exposes prompt definitions. `prompts/get` retrieves the selected template’s messages using supplied arguments.",
+    "explanation": "MCP prompts are reusable prompt/instruction templates that clients can discover and retrieve with arguments. This is distinct from tools and resources.",
     "sourceRefs": [
-      "https://modelcontextprotocol.io/specification/2025-11-25/server/prompts"
+      "https://modelcontextprotocol.io/docs/learn/architecture"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -615,34 +617,35 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-018",
     "domain": "tools-mcp",
     "objective": "D8.2",
-    "conceptKey": "mcp-protocol-error-versus-business-error",
+    "conceptKey": "explicit-tool-level-error-enough-information",
     "type": "single",
     "selectCount": 1,
-    "body": "An MCP 2025-11-25 server receives a valid `tools/call` for an existing reservation tool. The requested date passes parsing but violates the tool’s booking window. How should this business-rule failure be represented?",
+    "body": "An MCP reservation tool receives a syntactically valid request, but the requested date violates the business's booking policy. How should the server expose the outcome to the agent?",
     "options": [
       {
         "id": "A",
-        "body": "As a successful reservation with an empty reference"
+        "body": "Return an explicit tool-level error with enough information to choose a valid next step."
       },
       {
         "id": "B",
-        "body": "As a tool result with `isError: true` and actionable booking-window feedback"
+        "body": "Pretend the reservation succeeded."
       },
       {
         "id": "C",
-        "body": "As an unknown-method error because the date was rejected"
+        "body": "Drop the connection so the client cannot distinguish the cause."
       },
       {
         "id": "D",
-        "body": "By dropping the response so the client retries indefinitely"
+        "body": "Report that the MCP protocol itself is unsupported."
       }
     ],
     "correctAnswers": [
-      "B"
+      "A"
     ],
-    "explanation": "The request reached a known tool and failed its business rule. MCP distinguishes such tool execution errors from protocol errors such as unknown tools or malformed requests.",
+    "explanation": "Expected business failures are useful tool observations. They should be represented explicitly and actionably rather than fabricated as success or confused with transport/protocol failure.",
     "sourceRefs": [
-      "https://modelcontextprotocol.io/specification/2025-11-25/server/tools"
+      "https://modelcontextprotocol.io/docs/learn/architecture",
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -650,34 +653,34 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-019",
     "domain": "tools-mcp",
     "objective": "D8.2",
-    "conceptKey": "mcp-output-schema-structured-result",
+    "conceptKey": "validate-successful-structured-results-conform",
     "type": "single",
     "selectCount": 1,
-    "body": "An MCP 2025-11-25 tool advertises an `outputSchema` requiring numeric `total`. Its successful result returns `structuredContent: {\"total\":\"twelve\"}`. Which assessment is correct?",
+    "body": "An MCP tool promises to return a structured object containing a numeric `total`, but one implementation path returns `\"twelve\"` as a string. What should the server do?",
     "options": [
       {
         "id": "A",
-        "body": "The server’s structured result violates its advertised output schema"
+        "body": "Validate that successful structured results conform to the tool's advertised output contract."
       },
       {
         "id": "B",
-        "body": "Output schemas constrain only tool arguments"
+        "body": "Ask Claude to rewrite the returned object after every call."
       },
       {
         "id": "C",
-        "body": "Any JSON object satisfies every output schema"
+        "body": "Assume clients will infer the intended type."
       },
       {
         "id": "D",
-        "body": "A text content block automatically exempts structuredContent from validation"
+        "body": "Remove all output contracts because only inputs matter."
       }
     ],
     "correctAnswers": [
       "A"
     ],
-    "explanation": "When an output schema is advertised, structured results must conform to it. A string does not satisfy the stated numeric field.",
+    "explanation": "Tool output contracts are useful only when the implementation honors them. Server-side validation catches representation drift before it becomes an agent or client failure.",
     "sourceRefs": [
-      "https://modelcontextprotocol.io/specification/2025-11-25/server/tools"
+      "https://modelcontextprotocol.io/docs/learn/architecture"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -720,34 +723,35 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-021",
     "domain": "tools-mcp",
     "objective": "D8.3",
-    "conceptKey": "sdk-in-process-custom-tool-deployment",
+    "conceptKey": "calculation-application-local-custom-tool-through",
     "type": "single",
     "selectCount": 1,
-    "body": "An Agent SDK application needs a domain calculation implemented as an existing Python function. Deployment policy forbids adding a listening service or subprocess. Which extension can expose the function without either?",
+    "body": "An Agent SDK application has a deterministic domain calculation already implemented inside its process. Claude needs to invoke it, but the organization does not want to expose a new public service. What architecture is appropriate?",
     "options": [
       {
         "id": "A",
-        "body": "A new remote HTTP MCP deployment"
+        "body": "Expose the calculation as an application-local custom tool through the agent's supported tool integration."
       },
       {
         "id": "B",
-        "body": "A stdio MCP subprocess"
+        "body": "Store the function name in a Skill without any executable handler."
       },
       {
         "id": "C",
-        "body": "A custom tool wrapped in the SDK’s in-process MCP server"
+        "body": "Publish the function source in the system prompt and ask Claude to simulate it."
       },
       {
         "id": "D",
-        "body": "A skill containing only the function’s name"
+        "body": "Create a public internet endpoint solely so Claude can call it."
       }
     ],
     "correctAnswers": [
-      "C"
+      "A"
     ],
-    "explanation": "The SDK supports custom handlers through an MCP server that runs inside the application process. It need not create an external service or subprocess.",
+    "explanation": "Existing deterministic application logic can be wrapped as a local/custom tool. The important distinction is executable capability versus instructional knowledge.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/custom-tools"
+      "https://code.claude.com/docs/en/agent-sdk/overview",
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -755,34 +759,35 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-022",
     "domain": "tools-mcp",
     "objective": "D8.3",
-    "conceptKey": "server-code-execution-no-outbound-network",
+    "conceptKey": "fetch-authorized-data-through-trusted",
     "type": "single",
     "selectCount": 1,
-    "body": "A Claude API workflow uses the documented code-execution sandbox to analyze a supplied CSV. A proposed next step is to fetch a fresh private API response directly from Python in that sandbox. Under the sandbox’s documented network restriction, which adjustment works?",
+    "body": "Claude can analyze a CSV in a sandboxed code-execution environment, but the data needed for the analysis must first be fetched from a private authenticated API. What design is safest?",
     "options": [
       {
         "id": "A",
-        "body": "Change the private API URL from HTTP to HTTPS but keep the call inside the sandbox"
+        "body": "Assume every sandbox can access private networks directly."
       },
       {
         "id": "B",
-        "body": "Install an HTTP library and retry the same direct request"
+        "body": "Let the sandbox call the private API directly and place the production credential in its environment."
       },
       {
         "id": "C",
-        "body": "Set a longer Python request timeout and retry inside the sandbox"
+        "body": "Fetch authorized data through trusted integration infrastructure, then provide it to the sandbox."
       },
       {
         "id": "D",
-        "body": "Fetch the authorized data through application code or a suitable client tool, then supply it for analysis"
+        "body": "Put the API credential inside the CSV."
       }
     ],
     "correctAnswers": [
-      "D"
+      "C"
     ],
-    "explanation": "The API code-execution sandbox has no outbound network access. Supplying data through the application or an appropriate external tool separates retrieval from sandbox analysis.",
+    "explanation": "Separate retrieval from computation according to each environment's permissions. Credentials and private network access should remain in the trusted integration layer, while the sandbox receives only the data it needs.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/code-execution-tool"
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+      "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -825,34 +830,35 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-024",
     "domain": "tools-mcp",
     "objective": "D8.3",
-    "conceptKey": "web-fetch-versus-browser-rendering",
+    "conceptKey": "reusable-authenticated-tool-mcp-integration",
     "type": "single",
     "selectCount": 1,
-    "body": "A workflow must read a page whose useful content appears only after JavaScript renders and a tab is clicked. The current Claude API web-fetch tool returns no useful content. What capability is missing?",
+    "body": "A research agent can search the public web, but a later step must create a ticket in the company's authenticated issue tracker. No existing tool can perform that action. What customization should the team add?",
     "options": [
       {
         "id": "A",
-        "body": "Retry the static fetch with a longer timeout"
+        "body": "A longer system prompt describing the issue tracker without connecting to it."
       },
       {
         "id": "B",
-        "body": "A browser-capable integration that renders JavaScript and can interact with the page"
+        "body": "A few-shot example showing what a completed ticket looks like, with no executable integration."
       },
       {
         "id": "C",
-        "body": "Parse the fetched HTML with a stricter JSON output format"
+        "body": "A reusable authenticated tool or MCP integration exposing the specific issue-creation capability with scoped permissions."
       },
       {
         "id": "D",
-        "body": "A second fetch of the same static content without browser interaction"
+        "body": "More web-search calls, because search results can create the ticket indirectly."
       }
     ],
     "correctAnswers": [
-      "B"
+      "C"
     ],
-    "explanation": "The web-fetch tool does not render JavaScript or perform page interactions. A browser-capable integration is needed for the stated page behavior.",
+    "explanation": "Search provides information, not access to an authenticated business action. The missing capability should be exposed through a scoped executable integration rather than simulated through prompting.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/web-fetch-tool"
+      "https://code.claude.com/docs/en/mcp",
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -860,39 +866,40 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-025",
     "domain": "tools-mcp",
     "objective": "D8.3",
-    "conceptKey": "bash-client-versus-server-filesystem",
+    "conceptKey": "assuming-environment-variables-secrets-present",
     "type": "multiple",
     "selectCount": 2,
-    "body": "A Claude API application exposes both `bash_20250124` and server-side code execution. A file exists only in the application’s local Bash environment. Which TWO statements are correct? Select TWO.",
+    "body": "An agent can use a local shell tool and a provider-hosted code-execution tool in the same workflow. Which TWO assumptions should the application avoid? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "The server sandbox automatically mounts the application’s local working directory"
+        "body": "Treating the two environments as separate unless data is deliberately transferred."
       },
       {
         "id": "B",
-        "body": "The Bash tool runs in a shell owned by the application"
+        "body": "Assuming environment variables or secrets present locally are automatically present in the hosted sandbox."
       },
       {
         "id": "C",
-        "body": "Both tools always share environment variables"
+        "body": "Documenting which environment owns each artifact."
       },
       {
         "id": "D",
-        "body": "The local file must be explicitly made available to the server sandbox if server code needs it"
+        "body": "Assuming both tools automatically share the same filesystem."
       },
       {
         "id": "E",
-        "body": "Reuse an identical filename in both environments to make it refer to the same bytes"
+        "body": "Explicitly passing required nonsensitive data between environments."
       }
     ],
     "correctAnswers": [
       "B",
       "D"
     ],
-    "explanation": "The client Bash session and Anthropic’s sandbox are separate execution environments. Data does not become shared merely because both tools appear in one request.",
+    "explanation": "Tools that run in different environments have separate state and trust boundaries. Data, files, and credentials should be transferred only through deliberate application mechanisms.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/bash-tool"
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+      "https://platform.claude.com/docs/en/test-and-evaluate/strengthen-guardrails/mitigate-jailbreaks"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -900,34 +907,35 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-026",
     "domain": "tools-mcp",
     "objective": "D8.3",
-    "conceptKey": "sdk-tool-registration-not-preapproval",
+    "conceptKey": "tool-availability-registration-separate-permission",
     "type": "single",
     "selectCount": 1,
-    "body": "A developer defines a custom Agent SDK tool and adds its qualified name to `allowedTools`, but never passes its server to `mcpServers`. Why is the tool absent?",
+    "body": "A developer adds a custom tool name to an allow list but never actually registers or connects the tool implementation. Claude cannot call it. What concept did they confuse?",
     "options": [
       {
         "id": "A",
-        "body": "The tool must be renamed to a built-in tool name before it can be registered"
+        "body": "Tool availability/registration is separate from permission to use the tool."
       },
       {
         "id": "B",
-        "body": "The tool must always be deployed on a public server"
+        "body": "Any Skill containing the tool name registers it."
       },
       {
         "id": "C",
-        "body": "Allowing a name does not register the tool; the SDK must receive its server configuration"
+        "body": "Tool names automatically create implementations."
       },
       {
         "id": "D",
-        "body": "Tool registration occurs only when its name appears in the prompt"
+        "body": "A permission rule downloads missing MCP servers."
       }
     ],
     "correctAnswers": [
-      "C"
+      "A"
     ],
-    "explanation": "Permission configuration and tool registration are separate. Pass the in-process server through `mcpServers` so the tool exists, then configure its allowed name as needed.",
+    "explanation": "Availability and authorization are separate layers. A tool must first be exposed/registered, then its use can be governed by permissions.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/agent-sdk/custom-tools"
+      "https://code.claude.com/docs/en/agent-sdk/overview",
+      "https://code.claude.com/docs/en/permissions"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -935,32 +943,32 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-027",
     "domain": "tools-mcp",
     "objective": "D8.3",
-    "conceptKey": "local-skill-dynamic-context-before-model",
+    "conceptKey": "skill-concise-load-supporting-reference",
     "type": "single",
     "selectCount": 1,
-    "body": "A filesystem-based Claude Code skill contains a documented dynamic-context placeholder that runs a local command to read the current Git diff. The command is permitted and succeeds. When is its output supplied to Claude?",
+    "body": "A reusable Skill has a short core procedure plus a 200-page reference manual needed only for rare cases. What is the best organization?",
     "options": [
       {
         "id": "A",
-        "body": "The command runs during skill preprocessing, and its output replaces the placeholder before Claude receives the skill content"
+        "body": "Move the manual into every user's system prompt."
       },
       {
         "id": "B",
-        "body": "Claude must first receive the literal placeholder and decide whether to implement it"
+        "body": "Keep the Skill concise and load supporting reference material only when needed."
       },
       {
         "id": "C",
-        "body": "The output is available only after Claude finishes its final response"
+        "body": "Paste the entire manual into the core Skill so every invocation loads it."
       },
       {
         "id": "D",
-        "body": "The command output is stored only as skill metadata and never enters the instructions"
+        "body": "Delete the manual and rely on model memory."
       }
     ],
     "correctAnswers": [
-      "A"
+      "B"
     ],
-    "explanation": "Local skill dynamic-context commands run before the rendered skill is sent to Claude. Their output becomes part of the provided context.",
+    "explanation": "Skills can package supporting resources while keeping always-loaded instructions focused. This improves context efficiency without losing access to detailed material.",
     "sourceRefs": [
       "https://code.claude.com/docs/en/skills"
     ],
@@ -970,32 +978,32 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-028",
     "domain": "tools-mcp",
     "objective": "D8.3",
-    "conceptKey": "skill-frontmatter-first-line",
+    "conceptKey": "describe-clearly-skill",
     "type": "single",
     "selectCount": 1,
-    "body": "A developer inserts a prose introduction before the opening `---` of a local SKILL.md. Settings that used to be parsed as frontmatter now appear as ordinary instruction text. Which repair restores the documented parsing?",
+    "body": "A Skill is technically valid but Claude rarely chooses it for the intended task because its description says only 'helper'. What should be improved?",
     "options": [
       {
         "id": "A",
-        "body": "Indent every YAML key beneath the prose introduction"
+        "body": "Make the directory name longer without changing the description."
       },
       {
         "id": "B",
-        "body": "Rename the skill directory but leave the file unchanged"
+        "body": "Describe clearly what the Skill does and when it should be used."
       },
       {
         "id": "C",
-        "body": "Put the YAML block after the final instruction paragraph"
+        "body": "Remove all task-specific guidance."
       },
       {
         "id": "D",
-        "body": "Move the opening `---` to the file’s first line and place introductory prose after the closing delimiter"
+        "body": "Add secrets to the Skill so it appears more capable."
       }
     ],
     "correctAnswers": [
-      "D"
+      "B"
     ],
-    "explanation": "Claude Code recognizes skill frontmatter when its opening delimiter is the first line. Otherwise the apparent metadata is treated as content.",
+    "explanation": "Discovery depends on useful descriptions. A Skill should communicate its purpose and trigger conditions so Claude can select it appropriately.",
     "sourceRefs": [
       "https://code.claude.com/docs/en/skills"
     ],
@@ -1005,34 +1013,35 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-029",
     "domain": "tools-mcp",
     "objective": "D8.3",
-    "conceptKey": "skill-user-only-invocation-control",
+    "conceptKey": "invocation-convenience-separate-authorization-gate",
     "type": "single",
     "selectCount": 1,
-    "body": "A Claude Code skill prepares a release checklist. The team wants it invocable by a user’s command but unavailable for Claude to invoke automatically. Which frontmatter setting expresses that invocation policy?",
+    "body": "A release Skill contains a step that can publish externally. The team wants users to invoke the Skill freely for preparation, but publishing must still require approval. What is the correct security design?",
     "options": [
       {
         "id": "A",
-        "body": "`user-invocable: false`"
+        "body": "Hide the publish capability from the user while allowing Claude to call it unrestricted."
       },
       {
         "id": "B",
-        "body": "`disable-model-invocation: true`"
+        "body": "Publish first and ask for approval afterward."
       },
       {
         "id": "C",
-        "body": "`description: always run automatically`"
+        "body": "Treat permission to invoke the Skill as blanket approval for every side effect it may trigger."
       },
       {
         "id": "D",
-        "body": "`context: fork`"
+        "body": "Keep invocation convenience separate from authorization and gate the concrete publish action before execution."
       }
     ],
     "correctAnswers": [
-      "B"
+      "D"
     ],
-    "explanation": "`disable-model-invocation: true` makes invocation user-controlled. It is an invocation setting, not an authorization boundary for every action the skill may describe.",
+    "explanation": "Skill invocation is not an authorization boundary for consequential tools. Side effects should retain their own least-privilege and approval controls.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/skills"
+      "https://code.claude.com/docs/en/skills",
+      "https://code.claude.com/docs/en/permissions"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1040,32 +1049,32 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-030",
     "domain": "tools-mcp",
     "objective": "D8.3",
-    "conceptKey": "skill-arguments-reusable-command",
+    "conceptKey": "changing-repository-tag-documented-inputs",
     "type": "single",
     "selectCount": 1,
-    "body": "A local Claude Code skill should inspect whichever release tag the user supplies, such as `/inspect-release v7.2`. Its instructions currently hard-code v7.1. Which change lets one skill serve different tags?",
+    "body": "A reusable release-review Skill is currently hard-coded to one repository and one release tag. What makes it genuinely reusable?",
     "options": [
       {
         "id": "A",
-        "body": "Create a separate hard-coded skill for each tag"
+        "body": "Ask Claude to infer the target from unrelated files."
       },
       {
         "id": "B",
-        "body": "Change the skill’s description to the latest tag each time"
+        "body": "Expose the changing repository/tag as documented inputs or invocation arguments while keeping the shared procedure stable."
       },
       {
         "id": "C",
-        "body": "Use `$ARGUMENTS` in the skill body where the tag is needed"
+        "body": "Maintain one copied Skill per repository and release tag instead of parameterizing the shared workflow."
       },
       {
         "id": "D",
-        "body": "Leave the hard-coded target and document new tags only in the skill name"
+        "body": "Edit the Skill source manually before each invocation."
       }
     ],
     "correctAnswers": [
-      "C"
+      "B"
     ],
-    "explanation": "Claude Code substitutes invocation arguments into the skill body. The procedure can be reused without hard-coding each target.",
+    "explanation": "Reusable workflows separate stable logic from engagement-specific parameters. This is a core accelerator/Skill design principle independent of one placeholder syntax.",
     "sourceRefs": [
       "https://code.claude.com/docs/en/skills"
     ],
@@ -1145,34 +1154,35 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-033",
     "domain": "tools-mcp",
     "objective": "D8.3",
-    "conceptKey": "api-mcp-connector-versus-full-client",
+    "conceptKey": "mcp-integration-path-supports-primitives",
     "type": "single",
     "selectCount": 1,
-    "body": "A developer wants to retrieve MCP resources and prompts, not tool calls, through the Messages API’s server-side MCP connector as documented in September 2026. What should they account for?",
+    "body": "A Messages API application needs MCP tools, resources, and prompts from the same enterprise server. A convenient connector supports only part of that capability set. What should the developer do?",
     "options": [
       {
         "id": "A",
-        "body": "The connector’s documented supported MCP feature is tool calls; resource/prompt retrieval needs a suitable client-side integration"
+        "body": "Assume any MCP-compatible label guarantees every primitive is available through every interface."
       },
       {
         "id": "B",
-        "body": "The full MCP specification guarantees every connector implements every primitive"
+        "body": "Copy all enterprise data into the system prompt."
       },
       {
         "id": "C",
-        "body": "Changing a resource URI into a prompt name makes the connector fetch it"
+        "body": "Use an MCP integration path that supports all primitives the application requires."
       },
       {
         "id": "D",
-        "body": "Every MCP resource is automatically copied into the system prompt when a server URL is supplied"
+        "body": "Rename resources as tools without changing their semantics."
       }
     ],
     "correctAnswers": [
-      "A"
+      "C"
     ],
-    "explanation": "The server-side connector supports a subset of MCP. Full protocol capability does not imply identical feature support in that connector; client-side integration can retrieve other primitives.",
+    "explanation": "MCP defines a protocol, while individual integration surfaces may expose subsets. Architecture should be chosen from the capabilities the application actually needs.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/agents-and-tools/mcp-connector"
+      "https://modelcontextprotocol.io/docs/learn/architecture",
+      "https://code.claude.com/docs/en/mcp"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1180,34 +1190,35 @@ export const toolsMcp: BankQuestion[] = [
     "id": "TM-034",
     "domain": "tools-mcp",
     "objective": "D8.3",
-    "conceptKey": "skill-allowed-tools-not-exclusive-set",
+    "conceptKey": "preapproving-tool-defining-complete-set",
     "type": "single",
     "selectCount": 1,
-    "body": "A Claude Code skill lists `Read` in `allowed-tools`. During its invocation, another tool remains available but asks for permission under the normal settings. The author expected every unlisted tool to disappear. Which explanation is correct?",
+    "body": "A Skill lists a tool as convenient to use without prompting. The author assumes this also removes every other tool from the agent. What distinction should they understand?",
     "options": [
       {
         "id": "A",
-        "body": "The skill file must be ignored whenever an unlisted tool appears"
+        "body": "Preapproving a tool and defining the complete set of available tools are separate controls."
       },
       {
         "id": "B",
-        "body": "`allowed-tools` preapproves listed tools; it does not itself define the exclusive available tool set"
+        "body": "Skills cannot influence tool permissions at all."
       },
       {
         "id": "C",
-        "body": "All unlisted tools are automatically approved by the same field"
+        "body": "Tool availability is determined only by the model's context window."
       },
       {
         "id": "D",
-        "body": "The field changes only the order of tool descriptions"
+        "body": "Any tool mentioned in a Skill automatically disables all others."
       }
     ],
     "correctAnswers": [
-      "B"
+      "A"
     ],
-    "explanation": "The allowed-tools field grants preapproval for the listed tools. Other tools remain governed by normal permissions unless separately restricted.",
+    "explanation": "Authorization shortcuts for selected tools should not be confused with capability restriction. Tool availability and permission policy need to be configured deliberately.",
     "sourceRefs": [
-      "https://code.claude.com/docs/en/skills"
+      "https://code.claude.com/docs/en/skills",
+      "https://code.claude.com/docs/en/permissions"
     ],
     "qualityStatus": "APPROVED"
   }

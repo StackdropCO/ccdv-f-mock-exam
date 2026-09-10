@@ -114,29 +114,29 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "conceptKey": "adaptive-optional-thinking-block",
     "type": "single",
     "selectCount": 1,
-    "body": "A parser for a model using adaptive thinking rejects a valid assistant turn because it contains a direct answer without a thinking block. The request used a supported configuration that allows the model to skip thinking. What should change?",
+    "body": "A parser for a model using adaptive reasoning rejects a valid assistant turn because it contains a direct answer with no reasoning section. The request used a supported configuration that allows the model to skip extended reasoning. What should change?",
     "options": [
       {
         "id": "A",
-        "body": "Allow valid turns with no thinking block and process the returned content types"
+        "body": "Accept valid turns that contain no reasoning section and process whichever content types are returned"
       },
       {
         "id": "B",
-        "body": "Treat all direct answers as provider transport errors"
+        "body": "Treat every direct answer as a provider transport error"
       },
       {
         "id": "C",
-        "body": "Insert a fabricated signed thinking block before the answer"
+        "body": "Insert a fabricated reasoning section ahead of the answer"
       },
       {
         "id": "D",
-        "body": "Retry every such answer until thinking appears"
+        "body": "Retry every such answer until a reasoning section appears"
       }
     ],
     "correctAnswers": [
       "A"
     ],
-    "explanation": "Adaptive thinking can skip deliberation on a turn. Application code must not assume every valid assistant turn begins with a thinking block.",
+    "explanation": "Adaptive reasoning lets the model skip visible deliberation on a given turn. Application code should handle whatever supported content a valid response contains rather than assuming every turn has the same internal shape.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost"
     ],
@@ -181,39 +181,35 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-006",
     "domain": "model-selection-optimization",
     "objective": "D5.1",
-    "conceptKey": "effort-beyond-thinking",
-    "type": "multiple",
-    "selectCount": 2,
-    "body": "A team disables thinking on a model/configuration that still supports effort. They assume changing effort can no longer affect token usage. Which TWO statements correctly challenge that assumption? Select TWO.",
+    "conceptKey": "complete-output-tool-behavior-supported",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A team disables extended thinking for a simple classification endpoint but still changes another supported reasoning/effort control. They assume the setting cannot affect cost or output because visible thinking is off. What should they do instead?",
     "options": [
       {
         "id": "A",
-        "body": "Effort can change the thoroughness and length of response text"
+        "body": "Assume reasoning controls affect only hidden text and never final output."
       },
       {
         "id": "B",
-        "body": "Effort can also affect tool calls and their arguments"
+        "body": "Ignore tool usage because only visible prose consumes resources."
       },
       {
         "id": "C",
-        "body": "Effort affects prose but cannot affect function-call arguments"
+        "body": "Treat every lower-effort configuration as guaranteed cheaper and equally accurate."
       },
       {
         "id": "D",
-        "body": "Effort applies only to hidden thinking tokens"
-      },
-      {
-        "id": "E",
-        "body": "Low effort guarantees that no tool will ever be called"
+        "body": "Measure the complete output and tool behavior under each supported configuration rather than equating 'no visible thinking' with identical execution."
       }
     ],
     "correctAnswers": [
-      "A",
-      "B"
+      "D"
     ],
-    "explanation": "Effort applies to output behavior beyond thinking, including response text and tool calls. Disabling thinking does not make the supported effort control irrelevant.",
+    "explanation": "Reasoning controls can influence the overall behavior and resource use of a request. Production choice should be empirical rather than inferred solely from whether a thinking block is visible.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/effort"
+      "https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -256,39 +252,35 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-008",
     "domain": "model-selection-optimization",
     "objective": "D5.1",
-    "conceptKey": "fast-inference-same-weights",
-    "type": "multiple",
-    "selectCount": 2,
-    "body": "A team has access to fast mode on a currently supported Claude model. It wants higher output speed while preserving that model's capabilities. Which TWO statements describe the documented tradeoff? Select TWO.",
+    "conceptKey": "variable-time-quality-latency-effects",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A product needs lower latency. Engineers propose changing both the Claude model tier and the reasoning configuration at the same time, then measuring the result. Why is that a weak experiment?",
     "options": [
       {
         "id": "A",
-        "body": "Fast mode changes to a smaller model behind the same ID"
+        "body": "Change one variable at a time so quality and latency effects can be attributed."
       },
       {
         "id": "B",
-        "body": "Fast mode trades away the model's supported features to reduce output latency"
+        "body": "Reasoning configuration never affects latency."
       },
       {
         "id": "C",
-        "body": "Fast mode uses a faster inference configuration for the same model"
+        "body": "Model tier and reasoning configuration are the same setting."
       },
       {
         "id": "D",
-        "body": "Fast mode achieves its speed by lowering the configured reasoning effort"
-      },
-      {
-        "id": "E",
-        "body": "Fast mode is offered at premium pricing"
+        "body": "A model tier cannot be evaluated on production-like requests."
       }
     ],
     "correctAnswers": [
-      "C",
-      "E"
+      "A"
     ],
-    "explanation": "Fast mode changes the inference configuration, not the model weights or capabilities, and carries premium pricing. It is a speed/cost choice on supported models.",
+    "explanation": "Model selection and reasoning mode are separate engineering choices. Changing one variable at a time produces evidence that can support a defensible trade-off.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/fast-mode"
+      "https://platform.claude.com/docs/en/about-claude/models/choosing-a-model",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -296,34 +288,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-009",
     "domain": "model-selection-optimization",
     "objective": "D5.1",
-    "conceptKey": "fast-mode-otps-not-ttft",
+    "conceptKey": "time-first-token-meaningful-output",
     "type": "single",
     "selectCount": 1,
-    "body": "An interactive product already streams responses. Its complaint is a long delay before the first token; once generation begins, the short answer appears quickly. A proposal cites fast mode's advertised output-token speedup as proof it will solve the complaint. What is the key flaw?",
+    "body": "An interactive application has a long wait before any output appears, but once generation begins the response streams quickly. Which latency metric should the team investigate first?",
     "options": [
       {
         "id": "A",
-        "body": "The documented fast-mode benefit targets output tokens per second, not time to first token"
+        "body": "Only the maximum context-window size."
       },
       {
         "id": "B",
-        "body": "Streaming cannot be used with fast mode"
+        "body": "Only output tokens per second."
       },
       {
         "id": "C",
-        "body": "Time to first token is always equal to output tokens per second"
+        "body": "Only total monthly token spend."
       },
       {
         "id": "D",
-        "body": "Fast mode is an asynchronous batch-delivery feature"
+        "body": "Time to first token or first meaningful output."
       }
     ],
     "correctAnswers": [
-      "A"
+      "D"
     ],
-    "explanation": "The cited speedup concerns generation throughput. It does not establish that the initial waiting period will improve enough to meet this product's need.",
+    "explanation": "Different latency metrics describe different user experiences. A delay before output begins is primarily a first-token/initial-response problem, not a generation-throughput problem.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/fast-mode"
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -331,35 +323,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-010",
     "domain": "model-selection-optimization",
     "objective": "D5.1",
-    "conceptKey": "next-token-does-not-preclude-planning",
+    "conceptKey": "count-model-visible-input-finite-context",
     "type": "single",
     "selectCount": 1,
-    "body": "A reviewer argues that because an autoregressive language model emits text sequentially, it cannot plan a sentence ending before emitting the beginning. Which conclusion is supported by Anthropic's explanation of next-word generation and its published planning research?",
+    "body": "A developer estimates context capacity by counting only the user's latest message. The request also contains a long system prompt, tool definitions, earlier messages, and a PDF. Why is the estimate wrong?",
     "options": [
       {
         "id": "A",
-        "body": "Any apparent planning proves that a complete matching sentence was retrieved verbatim"
+        "body": "Count all model-visible input in the finite context budget."
       },
       {
         "id": "B",
-        "body": "Sequential generation does not rule out computations that plan multiple words ahead"
+        "body": "Only generated output counts toward the context window."
       },
       {
         "id": "C",
-        "body": "Sequential output proves that each step can represent only the immediately following word"
+        "body": "Tool definitions and documents are stored outside the context window."
       },
       {
         "id": "D",
-        "body": "Planning ahead would require returning the whole response in one network packet"
+        "body": "System instructions are free once they are reused."
       }
     ],
     "correctAnswers": [
-      "B"
+      "A"
     ],
-    "explanation": "The order in which text is emitted does not bound the planning represented in the model's computation. Anthropic's research found planning for later words despite sequential output.",
+    "explanation": "The context window is a budget for the complete model input and generated output. Application design must account for all supplied content.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/about-claude/glossary",
-      "https://www.anthropic.com/research/tracing-thoughts-language-model"
+      "https://platform.claude.com/docs/en/build-with-claude/context-windows"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -472,34 +463,35 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-014",
     "domain": "model-selection-optimization",
     "objective": "D5.1",
-    "conceptKey": "thinking-display-not-thinking-disable",
+    "conceptKey": "compare-task-quality-latency-token",
     "type": "single",
     "selectCount": 1,
-    "body": "A Claude Opus 5 response includes a thinking block with a signature but an empty thinking string under the default display setting. The team concludes that no reasoning occurred. What is the documented interpretation?",
+    "body": "A team wants to know whether extended thinking improves a difficult extraction task. They inspect whether reasoning text is visible and use that alone as the success metric. What is the better evaluation?",
     "options": [
       {
         "id": "A",
-        "body": "The application should strip the signed block because an empty display field makes it invalid"
+        "body": "Choose whichever configuration displays the longest reasoning text."
       },
       {
         "id": "B",
-        "body": "Thinking content is omitted by default; display visibility does not establish whether reasoning occurred"
+        "body": "Ignore final-task accuracy because reasoning mode is the only variable that matters."
       },
       {
         "id": "C",
-        "body": "The signature must be user-visible reasoning encoded as plain text"
+        "body": "Assume visible thinking guarantees a correct answer."
       },
       {
         "id": "D",
-        "body": "An empty thinking string proves that thinking was disabled"
+        "body": "Compare task quality, latency, and token cost on representative cases under the relevant reasoning configurations."
       }
     ],
     "correctAnswers": [
-      "B"
+      "D"
     ],
-    "explanation": "On Opus 5, the default thinking display omits the thinking text. Empty displayed content is therefore not evidence that the model did no reasoning.",
+    "explanation": "Reasoning mode is an engineering lever, not a quality certificate. Evaluate the actual task outcomes and operational trade-offs rather than the visibility or length of thinking content.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/models/opus-5/migration-guide"
+      "https://platform.claude.com/docs/en/build-with-claude/thinking-steering-and-cost",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -582,34 +574,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-017",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-per-client-fetch-injection",
+    "conceptKey": "access-paths-underlying-claude-api",
     "type": "single",
     "selectCount": 1,
-    "body": "A Node process creates two Anthropic SDK clients. Only one must use an instrumented `fetch` implementation; the other and unrelated HTTP callers must remain unaffected. Which documented configuration most directly provides that scope?",
+    "body": "A team sends the same model, messages, and supported options once through an official SDK and once through correctly constructed raw REST. Which expectation is sound?",
     "options": [
       {
         "id": "A",
-        "body": "Replace `globalThis.fetch` for the entire process"
+        "body": "The SDK uses a different model with hidden extra context."
       },
       {
         "id": "B",
-        "body": "Patch the process-wide network module used by both clients"
+        "body": "REST calls cannot use the same Claude models as SDK calls."
       },
       {
         "id": "C",
-        "body": "Pass the instrumented `fetch` function in the constructor options of the selected client"
+        "body": "The two access paths use the same underlying Claude API semantics; the SDK mainly provides language-level convenience."
       },
       {
         "id": "D",
-        "body": "Pass the instrumentation settings as an extra Messages request body field"
+        "body": "Using an SDK automatically makes the conversation stateful."
       }
     ],
     "correctAnswers": [
       "C"
     ],
-    "explanation": "The TypeScript SDK accepts a custom fetch function per client. Passing it only to the intended client preserves the scope required by the stem.",
+    "explanation": "SDKs are convenience layers over the API. Choosing SDK versus REST changes developer ergonomics and transport handling, not the fundamental model operation being requested.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/typescript"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -617,39 +609,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-018",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-pagination-data-versus-iterator",
-    "type": "multiple",
-    "selectCount": 2,
-    "body": "A Python inventory job lists Message Batches through the SDK. It reads `first_page.data` once and reports only the first page, even though more pages exist. It must visit every batch. Which TWO changes are valid? Select TWO.",
+    "conceptKey": "integration-boilerplate-preserving-underlying-api",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A team has a supported language SDK for a straightforward Claude integration and no unusual transport requirements. Why would the SDK usually be the better starting point than hand-written HTTP?",
     "options": [
       {
         "id": "A",
-        "body": "Use `has_next_page()` and `get_next_page()` to advance until no page remains"
+        "body": "It guarantees deterministic model output."
       },
       {
         "id": "B",
-        "body": "Iterate the SDK list result using its documented auto-pagination iterator"
+        "body": "It gives the model a larger context window."
       },
       {
         "id": "C",
-        "body": "Treat the `limit` argument as a guarantee that the service returns every batch"
+        "body": "It removes the need to understand errors, rate limits, or application state."
       },
       {
         "id": "D",
-        "body": "Set a list page size once and assume that iterating `first_page.data` will fetch later pages"
-      },
-      {
-        "id": "E",
-        "body": "Repeat the same first-page request without advancing any cursor"
+        "body": "It reduces integration boilerplate while preserving the same underlying API semantics."
       }
     ],
     "correctAnswers": [
-      "A",
-      "B"
+      "D"
     ],
-    "explanation": "The SDK offers both automatic iteration across pages and explicit next-page methods. Reading a single page's data does not traverse the collection.",
+    "explanation": "An SDK reduces integration boilerplate, but it does not change Claude's core semantics or remove production responsibilities such as state, validation, and error handling.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -657,34 +644,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-019",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-raw-headers-with-parsed-body",
+    "conceptKey": "construct-documented-request-including-authentication",
     "type": "single",
     "selectCount": 1,
-    "body": "A Python application needs both a response header and the usual parsed Message from the same Claude request. It must avoid a second generation. Which approach uses the SDK's documented interface?",
+    "body": "A developer chooses raw REST instead of an SDK for a small integration. Which responsibility now belongs explicitly to their HTTP client?",
     "options": [
       {
         "id": "A",
-        "body": "Use `with_raw_response.create(...)`, inspect headers, then parse that response"
+        "body": "Persist the conversation automatically on Anthropic's servers."
       },
       {
         "id": "B",
-        "body": "Serialize the normal parsed Message to JSON and use that serialization to recover arbitrary HTTP headers"
+        "body": "Train the selected Claude model before each request."
       },
       {
         "id": "C",
-        "body": "Issue one normal request for the Message and another for the headers"
+        "body": "Construct the documented request, including authentication, API headers, JSON body, and response handling."
       },
       {
         "id": "D",
-        "body": "Read a `headers` property on the normal parsed Message and treat it as the raw HTTP response"
+        "body": "Convert synchronous calls into Message Batches."
       }
     ],
     "correctAnswers": [
-      "A"
+      "C"
     ],
-    "explanation": "The raw-response interface exposes transport metadata and can parse that same response into a Message. No second model call is required.",
+    "explanation": "Raw REST is a direct access path. The application must construct and handle the HTTP protocol details that an SDK would normally wrap.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -692,34 +679,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-020",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-stream-resource-cleanup",
+    "conceptKey": "normal-synchronous-request",
     "type": "single",
     "selectCount": 1,
-    "body": "A Python worker opens the SDK's `with_streaming_response` interface and may stop consuming after a local validation failure. It must release the response resource reliably. Which structure is documented for this interface?",
+    "body": "A command-line script makes one Claude request, waits for the complete result, prints it, and exits. There is no concurrent work and no need for partial output. Which access pattern is simplest?",
     "options": [
       {
         "id": "A",
-        "body": "Wait for eventual garbage collection of the response reference"
+        "body": "A normal synchronous request."
       },
       {
         "id": "B",
-        "body": "Use the interface as a context manager so leaving its scope closes the response"
+        "body": "An asynchronous event loop used only to wait for this one request."
       },
       {
         "id": "C",
-        "body": "Catch the validation exception and drop the local response variable without closing its scope"
+        "body": "A multi-worker agent solely to make the HTTP call."
       },
       {
         "id": "D",
-        "body": "Depend only on reaching the final stream event to release the resource"
+        "body": "A large Message Batch."
       }
     ],
     "correctAnswers": [
-      "B"
+      "A"
     ],
-    "explanation": "Use the required context manager around the streaming response. It ensures the response is closed when consumption completes or the scope exits early.",
+    "explanation": "Synchronous access is appropriate when the caller simply waits for one request and has no responsiveness or concurrency requirement. Async and streaming solve different needs.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -727,34 +714,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-021",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "python-null-versus-missing",
+    "conceptKey": "asynchronous-bounded-concurrency-appropriate-service",
     "type": "single",
     "selectCount": 1,
-    "body": "A Python adapter must distinguish an optional response field explicitly returned as `null` from the field being absent. Both appear as `None` when accessed. What extra information should it inspect?",
+    "body": "A web server must keep handling other users while several independent Claude requests are in flight. Its current handler blocks a worker on each network call. What should the team evaluate?",
     "options": [
       {
         "id": "A",
-        "body": "Whether the HTTP status was successful"
+        "body": "Making every request a single shared conversation."
       },
       {
         "id": "B",
-        "body": "Call `to_dict().get(field_name)` and compare the returned value to `None`"
+        "body": "Increasing output length so network calls finish together."
       },
       {
         "id": "C",
-        "body": "Whether the field name is present in the response model's `model_fields_set`"
+        "body": "Asynchronous I/O with bounded concurrency appropriate to the service and API limits."
       },
       {
         "id": "D",
-        "body": "Whether the same field appeared in a previous request"
+        "body": "Switching from JSON to plain text transport."
       }
     ],
     "correctAnswers": [
       "C"
     ],
-    "explanation": "The response model records which fields were actually supplied. Membership in `model_fields_set` distinguishes explicit null from omission when both attribute values are `None`.",
+    "explanation": "Async access lets a service remain responsive while network operations are pending. Concurrency should still be bounded by workload and rate-limit constraints.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -762,39 +749,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-022",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-model-serialization",
-    "type": "multiple",
-    "selectCount": 2,
-    "body": "A Python integration must send the complete parsed SDK Message to a JSON-based audit sink. It currently uses the object's debugging string representation. Which TWO documented conversions are appropriate? Select TWO.",
+    "conceptKey": "application-waits-changed-message-batches",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A developer changes a blocking Claude SDK call to an awaited asynchronous SDK call and expects the request to become cheaper batch processing. What actually changed?",
     "options": [
       {
         "id": "A",
-        "body": "Use only the first text block and call that the complete Message"
+        "body": "The request is now persisted as a batch job."
       },
       {
         "id": "B",
-        "body": "Use the response model's `to_json()` for JSON text"
+        "body": "Only how the application waits changed; Message Batches remain a separate API pattern."
       },
       {
         "id": "C",
-        "body": "Use `to_dict()` and let the sink's JSON serializer encode that dictionary"
+        "body": "The context window becomes larger."
       },
       {
         "id": "D",
-        "body": "Assume every object's `str(...)` is guaranteed to be valid JSON"
-      },
-      {
-        "id": "E",
-        "body": "Ask the model to generate a copy of its own response object"
+        "body": "The model automatically changes to the cheapest tier."
       }
     ],
     "correctAnswers": [
-      "B",
-      "C"
+      "B"
     ],
-    "explanation": "Use the SDK response model's JSON or dictionary conversion. These retain the structured response rather than substituting generated text or a debugging representation.",
+    "explanation": "Asynchronous client code and Message Batches solve different problems. Async improves application concurrency; batches are a distinct asynchronous bulk API with different delivery characteristics.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -802,34 +784,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-023",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "typescript-types-not-runtime-validation",
+    "conceptKey": "perceived-responsiveness-time-first-output",
     "type": "single",
     "selectCount": 1,
-    "body": "A JavaScript caller bypasses TypeScript checking and supplies an unsupported extra request property to the Anthropic TypeScript SDK. An engineer expects the SDK's request type to strip that property at runtime. Which statement matches the documented behavior?",
+    "body": "Users wait eight seconds for a long answer. The team enables streaming and users can now read the first sentence after one second, although the complete response still takes about eight seconds. What improved?",
     "options": [
       {
         "id": "A",
-        "body": "TypeScript request types silently remove unknown properties at runtime"
+        "body": "The model's context-window size."
       },
       {
         "id": "B",
-        "body": "The SDK does not runtime-validate the request against its TypeScript type, so extra values can be sent as supplied"
+        "body": "The request automatically received batch pricing."
       },
       {
         "id": "C",
-        "body": "The extra value is automatically moved into response metadata and never sent"
+        "body": "The factual accuracy of the answer by definition."
       },
       {
         "id": "D",
-        "body": "A TypeScript cast triggers request-schema validation inside the SDK before sending"
+        "body": "Perceived responsiveness/time to first output, not necessarily total inference time."
       }
     ],
     "correctAnswers": [
-      "B"
+      "D"
     ],
-    "explanation": "Type annotations are not runtime request validation. The SDK documents that extra values can be transmitted as supplied, so the application must not rely on types to sanitize dynamic inputs.",
+    "explanation": "Streaming exposes output as it is generated. It can substantially improve perceived latency even when the total generation duration is similar.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/typescript"
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -837,39 +819,40 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-024",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "typescript-stream-cancel",
+    "conceptKey": "track-received-content-partial-rather",
     "type": "multiple",
     "selectCount": 2,
-    "body": "A Node service uses `client.messages.create({ ... , stream: true })`. A user presses Stop while its `for await` loop is consuming events. Which TWO documented actions cancel this SDK stream? Select TWO.",
+    "body": "A streamed Claude response is interrupted before the terminal completion event. Which TWO behaviors should the client implement? Select TWO.",
     "options": [
       {
         "id": "A",
-        "body": "Stop rendering new text but keep consuming all SDK events"
+        "body": "Disable all future streaming requests."
       },
       {
         "id": "B",
-        "body": "Break out of the stream iteration loop"
+        "body": "Fabricate the remainder from the partial text."
       },
       {
         "id": "C",
-        "body": "Call `stream.controller.abort()`"
+        "body": "Track that the received content is partial rather than silently marking it complete."
       },
       {
         "id": "D",
-        "body": "Let the loop consume normally and mark its result canceled only after completion"
+        "body": "Apply the application's recovery policy, such as a safe retry or an explicit interrupted-response state."
       },
       {
         "id": "E",
-        "body": "Remove the event listener in the browser while the server continues its independent SDK loop"
+        "body": "Assume any received text proves normal completion."
       }
     ],
     "correctAnswers": [
-      "B",
-      "C"
+      "C",
+      "D"
     ],
-    "explanation": "The TypeScript SDK documents breaking from the event loop or calling its stream controller's abort method. Editing variables after sending the request does not cancel the active stream.",
+    "explanation": "Streaming clients need explicit completion state because partial output can arrive before a failure. Recovery should be intentional and observable.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/typescript"
+      "https://platform.claude.com/docs/en/build-with-claude/streaming",
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -877,34 +860,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-025",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "stream-iterator-memory-accumulation",
+    "conceptKey": "parse-stream-protocol-assemble-logical",
     "type": "single",
     "selectCount": 1,
-    "body": "A TypeScript relay forwards Claude events immediately and never needs a complete Message object. Many long streams run concurrently, so it wants to avoid SDK accumulation of each complete response. Which documented approach fits?",
+    "body": "A streaming client appends raw network chunks directly to the user's answer. Sometimes one logical event is split across chunks and parsing breaks. What should it do?",
     "options": [
       {
         "id": "A",
-        "body": "Use `create({ ..., stream: true })` and consume its async event iterable"
+        "body": "Assume each TCP chunk is one complete Claude content block."
       },
       {
         "id": "B",
-        "body": "Buffer every event in a process-wide array before forwarding"
+        "body": "Convert the request to a Message Batch."
       },
       {
         "id": "C",
-        "body": "Use a streaming helper and always await `finalMessage()` before forwarding anything"
+        "body": "Retry whenever a chunk does not contain a full English sentence."
       },
       {
         "id": "D",
-        "body": "Convert the workflow to a non-streaming request and retain every full response"
+        "body": "Parse the stream protocol and assemble logical events instead of treating network chunks as complete messages."
       }
     ],
     "correctAnswers": [
-      "A"
+      "D"
     ],
-    "explanation": "The event iterable from `create` does not build a final Message for you. It fits a relay that forwards events without requiring complete-response accumulation.",
+    "explanation": "Streaming has a defined event structure. Network chunk boundaries are not a reliable application message boundary, so the client should consume the protocol correctly.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/typescript"
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -912,34 +895,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-026",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-debug-log-not-stable-contract",
+    "conceptKey": "async-controls-application-waits-streaming",
     "type": "single",
     "selectCount": 1,
-    "body": "A production metric parser depends on the exact wording of Anthropic TypeScript SDK debug log lines. An SDK update changes those lines while API responses remain valid. Which assumption in the integration was unsound?",
+    "body": "An application uses asynchronous I/O and also enables response streaming. An engineer says one of these features makes the other redundant. What is the correct distinction?",
     "options": [
       {
         "id": "A",
-        "body": "API usage must be inferred from the model's prose"
+        "body": "Async and streaming are two names for the same API mode."
       },
       {
         "id": "B",
-        "body": "HTTP response objects can contain structured metadata"
+        "body": "Async controls how the application waits for I/O; streaming controls whether output is delivered incrementally."
       },
       {
         "id": "C",
-        "body": "SDK versions may add developer-facing diagnostics"
+        "body": "Streaming automatically runs all application code concurrently."
       },
       {
         "id": "D",
-        "body": "SDK debug log format is a stable machine-readable API contract"
+        "body": "Async always waits for a complete response before any data can be processed."
       }
     ],
     "correctAnswers": [
-      "D"
+      "B"
     ],
-    "explanation": "SDK diagnostic log format and content may change between releases. Production metrics should consume structured response data or application-owned events with a defined schema.",
+    "explanation": "Asynchronous execution and streaming are orthogonal. A service can use async with either streaming or non-streaming responses depending on its concurrency and UX needs.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/typescript"
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -947,34 +930,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-027",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-logger-upstream-filter",
+    "conceptKey": "task-unchanged-application-simply-gains",
     "type": "single",
     "selectCount": 1,
-    "body": "A TypeScript SDK client is configured with `logLevel: \"error\"` and a custom logger capable of storing debug messages. The logger never receives the SDK's debug messages. Which layer must be changed to allow those messages through?",
+    "body": "A team migrates from a synchronous SDK client to the asynchronous client while keeping the same model, prompt, and request options. What should it expect about the model task itself?",
     "options": [
       {
         "id": "A",
-        "body": "Lower only the custom logger's storage threshold to debug"
+        "body": "The task is unchanged; the application simply gains a non-blocking way to wait."
       },
       {
         "id": "B",
-        "body": "The SDK client's log level, because it filters messages before invoking the custom logger"
+        "body": "The async client automatically enables extended thinking."
       },
       {
         "id": "C",
-        "body": "Increase the retention period in the log destination"
+        "body": "The async client changes the request into a persistent conversation."
       },
       {
         "id": "D",
-        "body": "Set `ANTHROPIC_LOG=debug` while keeping the explicit `logLevel: \"error\"` option"
+        "body": "The async client guarantees responses finish in submission order."
       }
     ],
     "correctAnswers": [
-      "B"
+      "A"
     ],
-    "explanation": "The SDK log level controls which messages reach even a custom logger. A downstream logger cannot record debug messages the SDK never emits to it.",
+    "explanation": "Async SDK access changes application I/O behavior, not the semantic task sent to Claude. Model configuration remains a separate choice.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/typescript"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -982,34 +965,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-028",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-transport-proxy-layer",
+    "conceptKey": "documented-rest-api-directly-implement",
     "type": "single",
     "selectCount": 1,
-    "body": "A company requires its Node service to send Claude API traffic through an approved forward HTTP proxy that is not an alternate Claude API origin. The Claude request body and model must stay the same. Where does the documented TypeScript SDK put this configuration?",
+    "body": "A service is written in a language for which the team does not want to depend on an SDK. The Claude API is documented over HTTPS. What is a valid integration strategy?",
     "options": [
       {
         "id": "A",
-        "body": "Add the proxy URL as a custom model-request body field"
+        "body": "Use a Python SDK binary as a network protocol without running Python."
       },
       {
         "id": "B",
-        "body": "Replace the API base URL with the proxy address and send Messages paths as ordinary destination requests"
+        "body": "Call the documented REST API directly and implement the required HTTP/authentication/serialization handling."
       },
       {
         "id": "C",
-        "body": "In runtime-specific HTTP/fetch proxy options on the SDK client or request"
+        "body": "Send prompts through an MCP resource instead of the Claude API."
       },
       {
         "id": "D",
-        "body": "Send the proxy address in an arbitrary HTTP header while leaving the fetch transport unconfigured"
+        "body": "Assume Claude can be invoked only from languages with official SDKs."
       }
     ],
     "correctAnswers": [
-      "C"
+      "B"
     ],
-    "explanation": "Proxy routing belongs to the HTTP transport configuration. It does not require changing the model prompt or the Messages request's semantic content.",
+    "explanation": "REST is the underlying language-independent access path. SDKs are optional convenience layers when they fit the language and requirements.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/typescript"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1017,34 +1000,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-029",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-api-version-not-calendar",
+    "conceptKey": "sdk-still-needs-valid-credentials",
     "type": "single",
     "selectCount": 1,
-    "body": "A developer sees the Python SDK send `anthropic-version: 2023-06-01` and proposes replacing it with today's date in every request to make the integration current. What is the sound response?",
+    "body": "A developer says, 'Because the official SDK handles authentication headers for me, I do not need to provide or configure credentials.' What is wrong with that statement?",
     "options": [
       {
         "id": "A",
-        "body": "Use the installed SDK package version as the API-version header value"
+        "body": "The SDK provides its own shared credential automatically for every application."
       },
       {
         "id": "B",
-        "body": "Keep the documented SDK default unless deliberately targeting a supported API version; a calendar date is not an upgrade mechanism"
+        "body": "The SDK still needs valid credentials supplied through a secure configuration path."
       },
       {
         "id": "C",
-        "body": "The header should be removed because SDK calls do not use HTTP versioning"
+        "body": "The credential can be omitted when requests use a supported model identifier."
       },
       {
         "id": "D",
-        "body": "Any more recent date is automatically a supported API version"
+        "body": "Authentication is required only for raw REST, not for official SDK calls."
       }
     ],
     "correctAnswers": [
       "B"
     ],
-    "explanation": "The SDK uses a documented API-version header. Arbitrarily replacing it with a date can break compatibility with the API and SDK types.",
+    "explanation": "SDK convenience does not eliminate authentication. Credentials still need to be provisioned securely; the SDK simply helps send them correctly.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+      "https://support.claude.com/en/articles/9767949-api-key-best-practices-keeping-your-keys-safe-and-secure"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1052,34 +1035,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-030",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-extra-body-precedence",
+    "conceptKey": "interactive-deadline-favors-realtime-requests",
     "type": "single",
     "selectCount": 1,
-    "body": "A Python wrapper sets a safe request field normally, then passes an `extra_body` dictionary containing the same field name. The wrapper assumes the normal argument always wins. Which behavior must its author account for?",
+    "body": "A user-facing service receives many independent requests that each need an answer within seconds. The team considers Message Batches because the code is already asynchronous. Which requirement matters most?",
     "options": [
       {
         "id": "A",
-        "body": "The SDK's extra parameters can override documented parameters of the same name"
+        "body": "Realtime requests cannot be awaited asynchronously."
       },
       {
         "id": "B",
-        "body": "Duplicate names are always removed from both dictionaries"
+        "body": "Using async code requires Message Batches."
       },
       {
         "id": "C",
-        "body": "The model chooses the winner based on the prompt"
+        "body": "The interactive deadline favors realtime requests rather than delayed batch processing."
       },
       {
         "id": "D",
-        "body": "The extra dictionary is used only for client-side comments"
+        "body": "Batches are the only way to process requests concurrently."
       }
     ],
     "correctAnswers": [
-      "A"
+      "C"
     ],
-    "explanation": "The SDK documents that extra parameters override documented parameters with the same name. A wrapper must not forward untrusted overrides expecting the ordinary argument to remain authoritative.",
+    "explanation": "Application async and provider batch processing are independent decisions. An interactive deadline generally favors realtime requests even when the service handles them asynchronously.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+      "https://platform.claude.com/docs/en/build-with-claude/batch-processing"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1087,34 +1070,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-031",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-async-file-path",
+    "conceptKey": "asynchronous-code-still-needs-bounded",
     "type": "single",
     "selectCount": 1,
-    "body": "An asyncio worker uploads a large local file using the Python SDK's asynchronous client. It can supply a `PathLike` object and wants the SDK to read the file asynchronously rather than eagerly loading it in application code. Which option uses the documented behavior?",
+    "body": "An async service launches hundreds of Claude requests at once and immediately hits rate limits and downstream resource pressure. What did the team overlook?",
     "options": [
       {
         "id": "A",
-        "body": "Pass the path's string value as the uploaded file content"
+        "body": "Asynchronous code still needs bounded concurrency and respect for API/service capacity."
       },
       {
         "id": "B",
-        "body": "Read the entire file synchronously before every async call"
+        "body": "Streaming should be disabled because it causes all rate limits."
       },
       {
         "id": "C",
-        "body": "Pass the `PathLike` object to the async upload interface"
+        "body": "The model tier determines the number of application threads."
       },
       {
         "id": "D",
-        "body": "Base64-encode the path string instead of supplying the file contents"
+        "body": "Async requests are exempt from rate limits."
       }
     ],
     "correctAnswers": [
-      "C"
+      "A"
     ],
-    "explanation": "The async upload interface accepts a `PathLike` object and reads its contents asynchronously. This avoids an unnecessary eager synchronous file read in the caller.",
+    "explanation": "Async makes concurrency possible; it does not make unlimited concurrency safe. The application must bound in-flight work and handle service limits.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1122,35 +1105,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-032",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-timeout-language-units",
+    "conceptKey": "second-request-still-depends-value",
     "type": "single",
     "selectCount": 1,
-    "body": "A team ports a Python SDK configuration with `timeout=20.0` to the TypeScript SDK and writes `timeout: 20`. The intended timeout is twenty seconds. What is the specific porting error?",
+    "body": "A workflow has two Claude calls where the second prompt depends on a value extracted by the first. Can converting both functions to async make the two model calls safely run in parallel?",
     "options": [
       {
         "id": "A",
-        "body": "The TypeScript timeout is in milliseconds; use 20,000 for twenty seconds"
+        "body": "Yes. Async removes data dependencies."
       },
       {
         "id": "B",
-        "body": "Both SDKs interpret the numeric timeout identically, so investigate the model first"
+        "body": "Yes, if both calls use the same SDK client."
       },
       {
         "id": "C",
-        "body": "The TypeScript value is an absolute Unix timestamp rather than a duration"
+        "body": "No. The second request still depends on the value produced by the first."
       },
       {
         "id": "D",
-        "body": "The Python value is also milliseconds, so the original configuration already meant 20 milliseconds"
+        "body": "No, because Claude APIs never support concurrent requests."
       }
     ],
     "correctAnswers": [
-      "A"
+      "C"
     ],
-    "explanation": "Python's numeric timeout is in seconds, while the TypeScript SDK uses milliseconds. Copying the numeric value changes the duration by a factor of 1,000.",
+    "explanation": "Async scheduling does not remove logical dependencies. Independent calls can overlap; dependent calls must preserve the required ordering.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python",
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/typescript"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1193,40 +1175,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-034",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sse-not-bidirectional-channel",
-    "type": "multiple",
-    "selectCount": 2,
-    "body": "A browser receives events through an `EventSource` connection from the application backend. The team now wants the browser to send live control messages over that very same open channel. Which TWO statements distinguish the relevant transports? Select TWO.",
+    "conceptKey": "backend-adapt-provider-streaming-transport",
+    "type": "single",
+    "selectCount": 1,
+    "body": "A backend consumes a Claude SSE stream and forwards cleaned text deltas to a mobile app over the app's existing protocol. Is this architecture valid?",
     "options": [
       {
         "id": "A",
-        "body": "EventSource receives a server-sent event stream; upstream controls need a separate request path"
+        "body": "Yes. The backend can adapt the provider's streaming transport into the application's own downstream transport."
       },
       {
         "id": "B",
-        "body": "SSE guarantees that every arbitrary network chunk is a complete event"
+        "body": "No. Every network hop must expose raw SSE."
       },
       {
         "id": "C",
-        "body": "EventSource provides a send method for arbitrary upstream application messages"
+        "body": "No. Claude streaming works only when the model connects directly to the end-user device."
       },
       {
         "id": "D",
-        "body": "WebSocket supports bidirectional communication on an established connection"
-      },
-      {
-        "id": "E",
-        "body": "Both transports require all application messages to be JSON objects"
+        "body": "Yes, but only if the request is also submitted as a Message Batch."
       }
     ],
     "correctAnswers": [
-      "A",
-      "D"
+      "A"
     ],
-    "explanation": "EventSource consumes server-to-client events, while WebSocket supports communication in both directions. The existing SSE connection is not itself an upstream control channel.",
+    "explanation": "The provider-facing and client-facing transports do not have to match. The backend can parse Claude's stream and expose an application-specific event channel.",
     "sourceRefs": [
-      "https://html.spec.whatwg.org/multipage/server-sent-events.html",
-      "https://www.rfc-editor.org/rfc/rfc6455"
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1234,34 +1210,35 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-035",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-runtime-version-evidence",
+    "conceptKey": "application-miss-non-text-blocks-completion",
     "type": "single",
     "selectCount": 1,
-    "body": "An engineer upgrades the Anthropic Python package in one environment, but the running service still lacks an SDK feature. Before changing models or rewriting requests, what is the most direct check of which SDK code the service is actually using?",
+    "body": "An SDK returns a structured Message object containing several content blocks and metadata. A developer reads only the first text field and treats that as the entire API response. What risk does this create?",
     "options": [
       {
         "id": "A",
-        "body": "Run the package-manager version check only in the engineer's development shell"
+        "body": "The application can miss non-text blocks and completion/usage metadata needed for correct handling."
       },
       {
         "id": "B",
-        "body": "Read the SDK version from the selected Claude model's response ID"
+        "body": "Reading structured fields changes the model's output."
       },
       {
         "id": "C",
-        "body": "Assume the package manager output from another environment establishes the service version"
+        "body": "The SDK automatically converts every non-text block into the first string."
       },
       {
         "id": "D",
-        "body": "Inspect `anthropic.__version__` inside the running service environment"
+        "body": "Only plain text is ever returned by the Messages API."
       }
     ],
     "correctAnswers": [
-      "D"
+      "A"
     ],
-    "explanation": "Inspect the version in the process that exhibits the problem. Installing in another environment does not establish what the running service imports.",
+    "explanation": "SDK response objects preserve the structure of the underlying API. Applications should inspect the fields and content types relevant to their feature instead of assuming every response is a single string.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/python"
+      "https://platform.claude.com/docs/en/agents-and-tools/tool-use/overview",
+      "https://platform.claude.com/docs/en/build-with-claude/streaming"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1269,34 +1246,34 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-036",
     "domain": "model-selection-optimization",
     "objective": "D5.2",
-    "conceptKey": "sdk-minor-static-type-change",
+    "conceptKey": "sdk-convenience-apis-differ-follow",
     "type": "single",
     "selectCount": 1,
-    "body": "A TypeScript SDK minor update introduces stricter static types. The application now fails typechecking, although its previously valid API calls behave the same at runtime. Does this necessarily contradict the SDK's documented versioning policy?",
+    "body": "A team ports a Claude integration between two language SDKs. One SDK offers a convenience helper the other does not. What should the team conclude?",
     "options": [
       {
         "id": "A",
-        "body": "No; the policy explicitly allows some type-only incompatibilities without runtime behavior changes in minor releases"
+        "body": "The two SDKs must expose identical method names and helper types."
       },
       {
         "id": "B",
-        "body": "Yes; minor SDK releases can change logs but are explicitly prohibited from changing types"
+        "body": "The target language therefore cannot access that Claude capability."
       },
       {
         "id": "C",
-        "body": "Yes; any type-only change is explicitly forbidden in minor releases"
+        "body": "A different SDK helper implies a different model behavior."
       },
       {
         "id": "D",
-        "body": "No, because SDKs have no versioning policy at all"
+        "body": "SDK convenience APIs can differ; follow the target SDK or underlying REST operation."
       }
     ],
     "correctAnswers": [
-      "A"
+      "D"
     ],
-    "explanation": "The SDK documents exceptions to strict semantic-version expectations, including changes that only affect static types. Review the migration impact rather than assuming unchanged runtime behavior means typechecking cannot change.",
+    "explanation": "SDKs are language-specific interfaces over the same service and need not have identical convenience helpers. Port against the underlying API semantics and target-language documentation.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/cli-sdks-libraries/sdks/typescript"
+      "https://platform.claude.com/docs/en/api/errors"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1410,34 +1387,35 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-040",
     "domain": "model-selection-optimization",
     "objective": "D5.3",
-    "conceptKey": "dateless-model-id-is-pinned",
+    "conceptKey": "model-identifier-configuration-whose-upgrade",
     "type": "single",
     "selectCount": 1,
-    "body": "A deployment review rejects `claude-sonnet-4-6` solely because it has no date suffix, claiming it must be a moving alias. Which statement matches Anthropic's documented naming for the 4.6 generation and later?",
+    "body": "A production team wants model upgrades to happen only after an explicit evaluation. Which configuration property matters most?",
     "options": [
       {
         "id": "A",
-        "body": "The SDK randomly selects a dated snapshot behind any such ID"
+        "body": "Assume any short model name always points to a fixed version."
       },
       {
         "id": "B",
-        "body": "Every dateless Claude identifier is a moving alias"
+        "body": "Choose model IDs based on how many digits they contain."
       },
       {
         "id": "C",
-        "body": "A date suffix is required to make a model request valid"
+        "body": "Assume any long model name always moves automatically."
       },
       {
         "id": "D",
-        "body": "These versioned model IDs are pinned even though their format omits a date"
+        "body": "Use a model identifier/configuration whose upgrade behavior is understood and controlled, then promote changes deliberately."
       }
     ],
     "correctAnswers": [
       "D"
     ],
-    "explanation": "Starting with the 4.6 generation, versioned model IDs use a dateless format while identifying pinned versions. Do not infer alias behavior from the absence of a date alone.",
+    "explanation": "The durable principle is controlled model versioning, not memorizing a particular naming convention. Production should know whether an identifier is fixed or moving and manage upgrades accordingly.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/about-claude/models/model-ids-and-versions"
+      "https://platform.claude.com/docs/en/about-claude/models/choosing-a-model",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1445,34 +1423,35 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-041",
     "domain": "model-selection-optimization",
     "objective": "D5.3",
-    "conceptKey": "sampling-parameter-migration",
+    "conceptKey": "review-target-model-supported-controls",
     "type": "single",
     "selectCount": 1,
-    "body": "A direct REST integration migrates from an earlier Claude model to Claude Opus 5. It retains `temperature: 0`, and the API rejects the request. Which change addresses the documented migration issue?",
+    "body": "A team migrates to a newer Claude model and copies every old sampling and reasoning option unchanged. The new model rejects part of the request. What is the correct migration approach?",
     "options": [
       {
         "id": "A",
-        "body": "Switch to streaming because it makes all sampling parameters valid"
+        "body": "Change only the prompt wording and ignore request validation errors."
       },
       {
         "id": "B",
-        "body": "Omit the unsupported non-default sampling parameter and guide behavior with supported controls"
+        "body": "Review the target model's supported controls, remove obsolete assumptions, and re-evaluate behavior on representative cases."
       },
       {
         "id": "C",
-        "body": "Replace temperature with a non-default `top_p` setting"
+        "body": "Keep every old parameter because model upgrades guarantee request-level compatibility."
       },
       {
         "id": "D",
-        "body": "Keep `temperature: 0` but increase the output limit"
+        "body": "Add more unsupported parameters until one is accepted."
       }
     ],
     "correctAnswers": [
       "B"
     ],
-    "explanation": "Opus 5 rejects non-default sampling settings such as `temperature: 0`. The migration guide recommends omitting these parameters; temperature zero never guaranteed identical output on earlier models either.",
+    "explanation": "Model generations can differ in supported controls. Migration should follow current documented capabilities and empirical evaluation rather than blindly preserving configuration.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/models/opus-5/migration-guide"
+      "https://platform.claude.com/docs/en/about-claude/models/choosing-a-model",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1483,7 +1462,7 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "conceptKey": "tokenizer-migration-recount",
     "type": "multiple",
     "selectCount": 2,
-    "body": "An application migrates from Claude Opus 4.6 to Opus 5. Its admission checks reuse token counts measured on the old model for the same text. After migration, some requests consume more input tokens. Which TWO conclusions are supported? Select TWO.",
+    "body": "An application migrates to a newer Claude model. Its admission checks reuse token counts measured on the previous model for the same text. After migration, some requests consume more input tokens than the stored counts predicted. Which TWO conclusions are supported? Select TWO.",
     "options": [
       {
         "id": "A",
@@ -1495,7 +1474,7 @@ export const modelSelectionOptimization: BankQuestion[] = [
       },
       {
         "id": "C",
-        "body": "Only generated output can be affected by a tokenizer change"
+        "body": "Only generated output can be affected by a change in tokenization"
       },
       {
         "id": "D",
@@ -1503,17 +1482,16 @@ export const modelSelectionOptimization: BankQuestion[] = [
       },
       {
         "id": "E",
-        "body": "A changed tokenizer can alter input-token usage without changing the text"
+        "body": "A change in tokenization can alter input-token usage without changing the text"
       }
     ],
     "correctAnswers": [
       "D",
       "E"
     ],
-    "explanation": "Opus 5 uses the newer tokenizer introduced after Opus 4.6. Recount inputs for the target model rather than carrying over old token counts unchanged.",
+    "explanation": "Tokenization can differ between model releases, so the same text may consume a different number of input tokens after a migration. Token-sensitive checks should be measured against the model actually being called rather than carried over from the previous one.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/build-with-claude/token-counting",
-      "https://platform.claude.com/docs/en/models/opus-5/migration-guide"
+      "https://platform.claude.com/docs/en/build-with-claude/token-counting"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1557,34 +1535,35 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-044",
     "domain": "model-selection-optimization",
     "objective": "D5.3",
-    "conceptKey": "model-effort-comparison-cache-confound",
+    "conceptKey": "compare-configurations-equivalent-cache-workload",
     "type": "single",
     "selectCount": 1,
-    "body": "A team compares two effort levels on the same Claude model. It measures one after repeated identical-prefix requests and the other only immediately after changing top-level effort, then attributes the entire latency and cost difference to reasoning. What experimental flaw must be addressed?",
+    "body": "A benchmark compares two Claude configurations, but one run benefits from a warm prompt cache while the other processes the full prefix. The team attributes the entire cost and latency difference to model choice. What should it do?",
     "options": [
       {
         "id": "A",
-        "body": "The benchmark uses the same model for both effort levels"
+        "body": "Ignore caching because it never affects cost or latency."
       },
       {
         "id": "B",
-        "body": "Changing effort can invalidate cached prefixes, so cache conditions must be made comparable"
+        "body": "Choose whichever run happened second."
       },
       {
         "id": "C",
-        "body": "The test includes the actual application prompt"
+        "body": "Compare only answer length."
       },
       {
         "id": "D",
-        "body": "The responses are measured for both cost and latency"
+        "body": "Compare the configurations under equivalent cache and workload conditions."
       }
     ],
     "correctAnswers": [
-      "B"
+      "D"
     ],
-    "explanation": "An effort change can alter cache reuse, confounding the comparison. Measure each configuration under comparable cache conditions before attributing all differences to reasoning depth.",
+    "explanation": "Controlled comparisons require comparable surrounding conditions. Cache state can materially affect measured input processing, so it is a confounding variable in model/configuration benchmarks.",
     "sourceRefs": [
-      "https://platform.claude.com/docs/en/about-claude/models/optimizing-for-cost-and-intelligence"
+      "https://platform.claude.com/docs/en/build-with-claude/prompt-caching",
+      "https://platform.claude.com/docs/en/test-and-evaluate/develop-tests"
     ],
     "qualityStatus": "APPROVED"
   },
@@ -1592,32 +1571,32 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-045",
     "domain": "model-selection-optimization",
     "objective": "D5.4",
-    "conceptKey": "cache-ttl-refresh",
+    "conceptKey": "expected-reuse-pattern-supported-cache",
     "type": "single",
     "selectCount": 1,
-    "body": "A service reuses an identical cached prefix every two minutes. Each request completes quickly, and no other cache conditions change. A developer expects the default five-minute cache to expire five minutes after its first write regardless of those reads. Which behavior is documented?",
+    "body": "A large stable prompt prefix is reused frequently during active conversations but may sit idle for long periods. What should determine the caching strategy?",
     "options": [
       {
         "id": "A",
-        "body": "Cache reads refresh only the uncached suffix rather than the matched prefix"
+        "body": "Never cache anything that appears in a system prompt."
       },
       {
         "id": "B",
-        "body": "Reads never refresh a prefix; only changing the prompt does"
+        "body": "Treat caching as permanent storage."
       },
       {
         "id": "C",
-        "body": "Each cache use refreshes the lifetime, so the initial write time alone does not determine expiry"
+        "body": "Expected reuse pattern, supported cache lifetime options, and measured cost/latency benefit."
       },
       {
         "id": "D",
-        "body": "The cache becomes permanent after the third request"
+        "body": "Always use the longest possible cache lifetime regardless of reuse."
       }
     ],
     "correctAnswers": [
       "C"
     ],
-    "explanation": "A successful cache use refreshes its lifetime. Regular reuse within the default TTL can keep the prefix warm without rewriting it just because the original write is older than five minutes.",
+    "explanation": "Prompt caching is an optimization whose value depends on how often and when a stable prefix is reused. Choose a supported strategy from measured workload behavior.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
     ],
@@ -1627,32 +1606,32 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-046",
     "domain": "model-selection-optimization",
     "objective": "D5.4",
-    "conceptKey": "cache-ttl-gap-choice",
+    "conceptKey": "whether-supported-longer-lived-cache-option",
     "type": "single",
     "selectCount": 1,
-    "body": "A document assistant typically pauses for fifteen minutes between turns. Its large prefix remains identical, and retaining the latency benefit across that pause matters more than the additional cache-write price. Which change fits the documented caching options?",
+    "body": "A team marks a reusable prefix for caching, but typical follow-up requests arrive after the chosen cache entry is no longer reusable. What should it evaluate?",
     "options": [
       {
         "id": "A",
-        "body": "Set `ttl` to an arbitrary value of `15m`"
+        "body": "Whether putting changing user content before the prefix makes it live longer."
       },
       {
         "id": "B",
-        "body": "Add another five-minute checkpoint to make the two lifetimes add together"
+        "body": "Whether a cache can be used as permanent conversation memory."
       },
       {
         "id": "C",
-        "body": "Use the supported one-hour cache lifetime for the reusable prefix"
+        "body": "Whether increasing max_tokens extends the cache automatically."
       },
       {
         "id": "D",
-        "body": "Rely on the default five-minute TTL to guarantee reuse after fifteen minutes"
+        "body": "Whether a supported longer-lived cache option or a different workload design better matches the actual reuse interval."
       }
     ],
     "correctAnswers": [
-      "C"
+      "D"
     ],
-    "explanation": "Use the supported one-hour TTL when expected reuse falls beyond five minutes and within an hour. The longer cache write costs more, which the stem explicitly permits.",
+    "explanation": "Cache lifetime should fit the application's reuse interval. Output limits and message order do not turn a short-lived cache into durable state.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
     ],
@@ -1662,32 +1641,32 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-047",
     "domain": "model-selection-optimization",
     "objective": "D5.4",
-    "conceptKey": "cache-minimum-threshold",
+    "conceptKey": "current-model-caching-eligibility-thresholds",
     "type": "single",
     "selectCount": 1,
-    "body": "A request marks a 300-token reusable prefix for caching on a model whose documented minimum cacheable prefix is larger than 300 tokens. The request succeeds, but both cache creation and cache read usage are zero. What is the most direct explanation?",
+    "body": "A service tries to cache a very small prefix and sees no measurable cache benefit. What is the best next step?",
     "options": [
       {
         "id": "A",
-        "body": "A cache hit always reports zero in both cache counters."
+        "body": "Pad the prefix with irrelevant text until it is large enough to cache, without measuring the added input cost."
       },
       {
         "id": "B",
-        "body": "The returned usage fields are output-token counters"
+        "body": "Check the current model's caching eligibility/thresholds and measure whether the prefix is large enough to justify caching."
       },
       {
         "id": "C",
-        "body": "The cache is working because a success status proves a cache write"
+        "body": "Assume every marked string must create a billable cache entry."
       },
       {
         "id": "D",
-        "body": "The prefix is below the model's minimum and is processed without caching"
+        "body": "Treat lack of a cache hit as a model-quality failure."
       }
     ],
     "correctAnswers": [
-      "D"
+      "B"
     ],
-    "explanation": "A prefix below the model's minimum can be processed successfully without being cached. Check the model-specific threshold instead of interpreting request success as evidence of a cache write.",
+    "explanation": "Prompt caching has model-specific eligibility and economic considerations. The production question is whether the reusable prefix qualifies and creates real benefit, not memorizing one threshold value.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
     ],
@@ -1697,32 +1676,32 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-048",
     "domain": "model-selection-optimization",
     "objective": "D5.4",
-    "conceptKey": "cache-prefix-hierarchy-invalidation",
+    "conceptKey": "changing-early-cached-prefix-invalidate",
     "type": "single",
     "selectCount": 1,
-    "body": "A request has cached tool definitions, system instructions, and message context. The team changes a tool's input schema while leaving the system text and messages byte-identical. Under the documented prefix hierarchy, which cached portion can that change invalidate?",
+    "body": "A cached prompt begins with tool definitions and stable policy, followed by changing conversation text. A developer frequently edits the tool schema and is surprised that later cache reuse falls. What principle explains the behavior?",
     "options": [
       {
         "id": "A",
-        "body": "Only the tool schema, with every later prefix guaranteed reusable"
+        "body": "Tool definitions are never part of model input."
       },
       {
         "id": "B",
-        "body": "Only generated output from the previous request"
+        "body": "Only the final user message affects cache identity."
       },
       {
         "id": "C",
-        "body": "Only the newest user message"
+        "body": "Changing an early cached prefix can invalidate reuse of the content after it."
       },
       {
         "id": "D",
-        "body": "The tool prefix and all subsequent system/message prefixes"
+        "body": "Cache reuse depends only on the model's final answer."
       }
     ],
     "correctAnswers": [
-      "D"
+      "C"
     ],
-    "explanation": "The cache hierarchy is tools, then system, then messages. A tool-definition change alters the prefix on which all later cached portions depend.",
+    "explanation": "Prompt caching reuses matching prefixes. Changes near the beginning of that prefix can invalidate reuse for subsequent content, so stable material should remain stable when possible.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
     ],
@@ -1732,32 +1711,32 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-049",
     "domain": "model-selection-optimization",
     "objective": "D5.4",
-    "conceptKey": "cache-concurrent-write-availability",
+    "conceptKey": "cold-concurrent-requests-race-reusable",
     "type": "single",
     "selectCount": 1,
-    "body": "A service fires many requests with the same uncached prefix simultaneously and expects all but one to read a cache entry created by the first. It observes several writes. Which launch strategy better supports reuse for subsequent requests?",
+    "body": "A service launches a burst of identical large-prefix requests at exactly the same moment before any cache entry has been established. It expects only the first to pay the cache-write cost. Why should it measure the real behavior?",
     "options": [
       {
         "id": "A",
-        "body": "Give every request a different prefix to avoid contention"
+        "body": "Cold concurrent requests can race before the reusable cache entry is available."
       },
       {
         "id": "B",
-        "body": "Construct a single shared SDK client and assume that makes pending cache writes immediately visible"
+        "body": "A shared SDK object guarantees one network request for every identical prompt."
       },
       {
         "id": "C",
-        "body": "Allow the first request's response to begin before launching the others that should reuse its prefix"
+        "body": "Cache behavior is independent of request timing."
       },
       {
         "id": "D",
-        "body": "Launch more requests before the first response begins"
+        "body": "Prompt caching deduplicates all simultaneous requests into one model answer."
       }
     ],
     "correctAnswers": [
-      "C"
+      "A"
     ],
-    "explanation": "A cache entry becomes available after the first response begins. Staging later requests behind that point avoids assuming a still-pending write is already reusable.",
+    "explanation": "Caching reuses processed prefixes; it is not a general request-deduplication system. Bursty cold starts can behave differently from steady-state reuse, so measure the workload.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
     ],
@@ -1837,32 +1816,32 @@ export const modelSelectionOptimization: BankQuestion[] = [
     "id": "MO-052",
     "domain": "model-selection-optimization",
     "objective": "D5.4",
-    "conceptKey": "mixed-cache-ttl-order",
+    "conceptKey": "separate-stable-frequently-changing-material",
     "type": "single",
     "selectCount": 1,
-    "body": "A prompt has a long-lived shared manual followed by shorter-lived session material. The team wants one-hour and five-minute cache checkpoints in the same request. Which arrangement follows the documented TTL ordering rule?",
+    "body": "A prompt contains a company manual that changes monthly and session notes that change every few minutes. What caching design principle is strongest?",
     "options": [
       {
         "id": "A",
-        "body": "Place the one-hour checkpoint before the five-minute checkpoint"
+        "body": "Put the most volatile content first."
       },
       {
         "id": "B",
-        "body": "Use alternating one-hour and five-minute checkpoints without restrictions"
+        "body": "Separate stable and frequently changing material so cache boundaries reflect their different reuse patterns."
       },
       {
         "id": "C",
-        "body": "Use any order because TTL never affects checkpoint validity"
+        "body": "Use one cache setting and assume all content has the same lifecycle."
       },
       {
         "id": "D",
-        "body": "Place the five-minute checkpoint first and the one-hour checkpoint later"
+        "body": "Combine long-lived and short-lived material into one frequently changing prefix."
       }
     ],
     "correctAnswers": [
-      "A"
+      "B"
     ],
-    "explanation": "When TTLs are mixed, longer-lived cache entries must precede shorter-lived ones. Put the one-hour checkpoint before the five-minute checkpoint.",
+    "explanation": "Good caching follows content stability. Structuring long-lived and short-lived prefixes separately improves reuse and makes cache behavior easier to reason about without relying on an exact TTL-ordering fact.",
     "sourceRefs": [
       "https://platform.claude.com/docs/en/build-with-claude/prompt-caching"
     ],
