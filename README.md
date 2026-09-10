@@ -1,30 +1,53 @@
-# CCDV-F mock exam
+# CCDV-F Mock Exam
 
-A static React + TypeScript + Vite practice app. Choose Timed Exam (120 minutes) or Untimed Practice, answer 53 questions, submit, then review exact-set scoring and concise explanations. Light/dark themes, flags, navigator and confirmation flows are preserved.
+A free practice exam for the Claude Certified Developer – Foundations (CCDV-F) certification. Pick a mode, answer 53 questions, submit, and review every answer with an explanation.
 
-Each mock uses the verified eight-domain allocation from the July 2026 CCDV-F Exam Guide v1.0. The bank contains 318 new source-reviewed questions and 53 original questions, supporting seven disjoint completed mocks per rotation cycle. This is independent practice material, not an official exam or a scaled-score predictor. See the [legacy audit](research/LEGACY_QUESTION_AUDIT.md) for the review history of the 53 original questions, including six explicitly user-approved wording corrections.
+**Live app:** https://claude-mock-exam-chi.vercel.app
+
+> This is an independent, unofficial practice project. It is not affiliated with, endorsed by, or sponsored by Anthropic or Pearson VUE. The question bank contains original practice material and is not intended to reproduce questions from the certification exam.
+
+## Features
+
+- **371-question bank**, drawn into 53-question mocks that fill the exam's real eight-domain quota exactly — no domain over- or under-represented.
+- **No repeats within a mock, or across seven completed mocks.** Once a full rotation cycle is exhausted, a new one begins.
+- **Timed (120 minutes) and Untimed modes**, same question mix, different pace.
+- **Exact-set grading** for multi-response questions — a Select TWO/THREE question is only correct if you picked exactly the right set, not a superset or subset.
+- Flag questions for review, jump around with a question navigator, and get a full answer review (your answer, the correct answer, and an explanation) after submitting.
+- Light and dark themes, keyboard-operable throughout, works on mobile.
+- No backend, no accounts, no tracking. Everything runs client-side; only your theme choice and completed-mock rotation history are saved, in your own browser.
 
 ## Development
 
 ```sh
 npm ci
 npm run dev
-npm test
-npm run typecheck
-npm run lint
-npm run build
 ```
 
-## Content and evidence
+```sh
+npm test          # unit + component tests (Vitest)
+npm run typecheck  # tsc --noEmit
+npm run lint       # oxlint
+npm run build      # production build
+```
 
-- [Exam blueprint](research/EXAM_BLUEPRINT.md) — provenance for the domain/skill weights and format
-- [Question bank summary](research/QUESTION_BANK_SUMMARY.md) — current counts, domain allocation, and independent-review notes
-- [Legacy question audit](research/LEGACY_QUESTION_AUDIT.md) — disclosed precision caveats and content concerns on the 53 preserved originals
+All four run in CI on every pull request.
 
-`src/data/questions.ts` and `CCDV-F_Final_Mock_Exam.md` hold the 53 original questions; six (Q1, Q7, Q9, Q31, Q40, Q42) carry explicitly user-approved wording corrections (see the legacy audit), the other 47 are unchanged from the original content. New questions live in `src/data/questions/new/`, grouped one file per domain, and are hand-maintained directly — there is no separate draft/approval/generation step. Each question carries its own `sourceRefs` (authoritative first-party URLs); `npm test` validates IDs, answer keys, `selectCount`, domain/skill counts against `src/data/blueprint.ts`, and original-content preservation. The detailed drafting and review trail behind the current bank is preserved in Git history rather than in the working tree.
+## How it works
 
-## Rotation and persistence
+See [docs/architecture.md](docs/architecture.md) for the app's structure (state, rotation, grading, testing, deployment), and [docs/question-bank-methodology.md](docs/question-bank-methodology.md) for how the question bank itself is sourced, reviewed, and maintained.
 
-The pure selector in `src/lib/examForm.ts` enforces 53 unique IDs and exact domain quotas. It favors varied concepts and skills and balances authored response types/answer positions when priorities tie. Only submission consumes questions. Exhaustion resets the entire cycle before the next selection, avoiding the preceding form where possible.
+## Contributing
 
-Only `ccdv-f-theme-preference` and `ccdv-f-question-history-v2` use localStorage. History stores bankVersion, cycle, usedQuestionIds and lastCompletedFormIds. Active answers, flags, form, position, timer, mode and results remain memory-only. Leaving/reloading discards the unfinished attempt after the standard warning. Use one exam tab for sequential rotation; concurrent history changes and unavailable storage produce a notice without blocking scoring.
+Bug reports, feature ideas, and new practice questions are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md). Question contributions must be original and sourced against public documentation; real, recalled, or reconstructed certification exam questions are never accepted.
+
+## Security
+
+See [SECURITY.md](SECURITY.md) for how to report a vulnerability.
+
+## License
+
+The application source code is licensed under the [MIT License](LICENSE).
+
+The 318-question expanded question bank (`src/data/questions/new/`) — stems, options, answer keys, and explanations — is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); see [CONTENT_LICENSE](CONTENT_LICENSE).
+
+The 53 original questions (`src/data/questions.ts`, `CCDV-F_Final_Mock_Exam.md`) predate this project and their provenance has not been independently established; they are **not** covered by the CC BY 4.0 grant above. See [CONTENT_LICENSE](CONTENT_LICENSE) for details.
