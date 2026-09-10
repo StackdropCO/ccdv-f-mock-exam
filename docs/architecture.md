@@ -29,7 +29,7 @@ Every question (`src/data/bankTypes.ts`) has a stable `id`, a `domain` and `obje
 The bank (`src/data/questionBank.ts`) combines two sources:
 
 - `src/data/questions.ts` — the 53 original questions, prefixed `LEGACY-001`…`LEGACY-053`
-- `src/data/questions/new/*.ts` — 318 questions, one file per domain, each with a stable ID like `AW-013` or `TM-034`
+- `src/data/questions/domains/*.ts` — 318 questions, one file per domain, each with a stable ID like `AW-013` or `TM-034`
 
 `src/data/validateBank.ts` enforces structural invariants at test time: no duplicate IDs or stems, no duplicate option sets, every answer key points at a real option, `selectCount` matches the number of correct answers, and every multi-select question states "Select TWO/THREE" in its own stem.
 

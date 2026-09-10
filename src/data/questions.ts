@@ -1,7 +1,7 @@
 import type { Question } from "./types";
 
 // The 53 original practice questions. This file is the maintained production
-// source for them; see research/LEGACY_QUESTION_AUDIT.md for their audit history.
+// source for them; see docs/audits/legacy-question-audit.md for their audit history.
 
 export const QUESTIONS: Question[] = [
   {

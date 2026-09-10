@@ -48,4 +48,4 @@ See [SECURITY.md](SECURITY.md) for how to report a vulnerability.
 
 The application source code is licensed under the [MIT License](LICENSE).
 
-The practice-question content — all 371 questions, including the original 53 in `src/data/questions.ts` and the 318 expanded-bank questions in `src/data/questions/new/` — is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); see [CONTENT_LICENSE](CONTENT_LICENSE) for provenance and attribution details.
+The practice-question content — all 371 questions, including the original 53 in `src/data/questions.ts` and the 318 expanded-bank questions in `src/data/questions/domains/` — is licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/); see [CONTENT_LICENSE](CONTENT_LICENSE) for provenance and attribution details.

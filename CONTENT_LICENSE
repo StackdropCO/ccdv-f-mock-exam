@@ -4,13 +4,13 @@ This file covers the question-bank *content* (question stems, options, answer ke
 
 ## License
 
-The complete practice-question bank — all 371 questions, including the 53 original questions in `src/data/questions.ts` and the 318 expanded-bank questions in `src/data/questions/new/` — is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
+The complete practice-question bank — all 371 questions, including the 53 original questions in `src/data/questions.ts` and the 318 expanded-bank questions in `src/data/questions/domains/` — is licensed under [Creative Commons Attribution 4.0 International (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/).
 
 If you reuse this content, attribute it to the **ccdv-f-mock-exam project** and link back to this repository.
 
 ## Provenance
 
-The 53 original questions were generated with ChatGPT at the maintainer's direction as the project's initial practice set, establishing its original format and style. They were not sourced from an actual certification exam, a third-party question bank, a course, or any other existing practice material. They were subsequently independently audited for technical accuracy against current first-party documentation and maintained as part of this project going forward; see `research/LEGACY_QUESTION_AUDIT.md` for that audit record.
+The 53 original questions were generated with ChatGPT at the maintainer's direction as the project's initial practice set, establishing its original format and style. They were not sourced from an actual certification exam, a third-party question bank, a course, or any other existing practice material. They were subsequently independently audited for technical accuracy against current first-party documentation and maintained as part of this project going forward; see `docs/audits/legacy-question-audit.md` for that audit record.
 
 The 318 expanded-bank questions were authored and reviewed separately, each against current first-party technical documentation (see [docs/question-bank-methodology.md](docs/question-bank-methodology.md) for the process, and `sourceRefs` on each question for the specific sources).
 

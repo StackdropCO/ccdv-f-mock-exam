@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { QUESTION_BANK } from "../src/data/questionBank";
-import { NEW_QUESTIONS } from "../src/data/questions/new";
+import { DOMAIN_QUESTIONS } from "../src/data/questions/domains";
 import { BLUEPRINT, BANK_VERSION, FORM_SIZE } from "../src/data/blueprint";
 import { assertForm } from "../src/data/validateBank";
 import { completeExamForm, emptyHistory, normalizeHistory, selectExamForm } from "../src/lib/examForm";
@@ -32,7 +32,7 @@ describe("replacement pack coverage", () => {
 
   it("leaves the other 132 approved questions and all 53 legacy questions outside the change set", () => {
     const changed = new Set([...REPLACED, ...CORRECTED]);
-    expect(NEW_QUESTIONS.filter((q) => !changed.has(q.id))).toHaveLength(132);
+    expect(DOMAIN_QUESTIONS.filter((q) => !changed.has(q.id))).toHaveLength(132);
     expect(QUESTION_BANK.filter((q) => q.qualityStatus === "LEGACY_RETAINED")).toHaveLength(53);
     expect(QUESTION_BANK.filter((q) => changed.has(q.id) && q.qualityStatus !== "APPROVED")).toEqual([]);
   });
@@ -41,7 +41,7 @@ describe("replacement pack coverage", () => {
     // Domain/objective drive the blueprint quotas, so a replacement may not move between them.
     for (const d of BLUEPRINT) {
       expect(QUESTION_BANK.filter((q) => q.domain === d.id)).toHaveLength(d.quota * 7);
-      for (const o of d.objectives) expect(NEW_QUESTIONS.filter((q) => q.objective === o.id)).toHaveLength(o.newTarget);
+      for (const o of d.objectives) expect(DOMAIN_QUESTIONS.filter((q) => q.objective === o.id)).toHaveLength(o.newTarget);
     }
   });
 
@@ -49,7 +49,7 @@ describe("replacement pack coverage", () => {
     // Matches the production validator's rule: the instruction must appear in the stem, in any
     // phrasing. Pre-existing items say "Select TWO architectural controls..."; the imported pack
     // carries it as a trailing sentence.
-    for (const q of NEW_QUESTIONS.filter((q) => q.type === "multiple")) {
+    for (const q of DOMAIN_QUESTIONS.filter((q) => q.type === "multiple")) {
       expect(q.body.toLowerCase()).toContain(q.selectCount === 2 ? "select two" : "select three");
       expect(q.correctAnswers).toHaveLength(q.selectCount);
     }
